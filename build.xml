@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MX" default="compile" basedir=".">
+  <!-- properties -->
+  <property name="full-name" value="MX Tools for Cheminformatics" />
+  <property name="unix-name" value="mx" />
+  <property name="version" value="0.104.0" />
+  <property name="source.dir" location="src" />
+  <property name="lib.dir" location="lib" />
+  <property name="build.dir" location="build" />
+  <property name="class.dir" location="${build.dir}/classes" />
+  <property name="jar.dir" location="${build.dir}/jar" />
+  <property name="tgz.dir" location="${build.dir}/tgz" />
+  <property name="doc.dir" location="${build.dir}/doc" />
+  <property name="dist.dir" location="${build.dir}/dist" />
+  <property name="lib-licenses.file" location="${lib.dir}/LICENSES.txt" />
+  <property name="license.file" location="LICENSE.txt" />
+  <property name="junit.lib" value="${lib.dir}/junit-4.5.jar" />
+  <property name="test.class" value = "com.metamolecular.mx.test.MXTest" />
+  <!-- filesets -->
+  <fileset dir="${lib.dir}" id="libs">
+    <include name="**/*.jar" />
+  </fileset>
+  <!-- targets -->
+  <target name="init" description="Create build directories." >
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${class.dir}" />
+    <mkdir dir="${jar.dir}" />
+    <mkdir dir="${doc.dir}" />
+    <mkdir dir="${tgz.dir}" />
+  </target>
+  <target name="clean" description="Remove build directories.">
+    <delete dir="${build.dir}" />
+    <delete dir="${doc.dir}" />
+  </target>
+  <target name="compile" depends="init" description="Compile sources.">
+    <javac srcdir="${source.dir}" destdir="${class.dir}" includes="com/metamolecular/mx/**/*.java" debug="on" source="1.5" target="1.5">
+      <classpath>
+        <fileset refid="libs" />
+      </classpath>
+    </javac>
+  </target>
+  <target name="test" depends="compile" description="Run JUnit tests.">
+    <java classname="${test.class}" fork = "true" dir="${build.dir}">
+      <classpath>
+        <pathelement path="${class.dir}" />
+        <fileset refid="libs" />
+      </classpath>
+    </java>
+  </target>
+  <target name="doc" depends="compile" description="Create Java Doc.">
+    <javadoc sourcepath="${source.dir}" packagenames="*" destdir="${doc.dir}" windowtitle="${full-name} API" excludepackagenames="com.metamolecular.mx.test">
+      <doctitle>${full-name} v${version}</doctitle>
+      <header>${full-name} v${version}</header>
+      <classpath>
+        <fileset refid="libs" />
+      </classpath>
+      <bottom><![CDATA[<i>Copyright &copy; 2007, 2008 <a href="http://metamolecular.com">Metamolecular, LLC</a>. All Rights Reserved.</i>]]>
+      </bottom>
+    </javadoc>
+  </target>
+  <target name="jar" depends="compile" description="Create the jarfile.">
+    <jar jarfile="${jar.dir}/${unix-name}-${version}.jar" basedir="${class.dir}" excludes="com/metamolecular/mx/test/**" >
+    </jar>
+  </target>
+  <target name="dist" depends="init,compile,doc" description="Create the source distribution.">
+    <mkdir dir="${dist.dir}/lib" />
+    <mkdir dir="${dist.dir}/src" />
+    <mkdir dir="${dist.dir}/doc" />
+    <copy file="${junit.lib}" todir="${dist.dir}/lib" />
+    <copy file="${lib-licenses.file}" todir="${dist.dir}/lib" />
+    <copy file="${license.file}" todir="${dist.dir}" />
+    <copy todir="${dist.dir}/src">
+      <fileset dir="${source.dir}" includes="com/metamolecular/mx/**/*.java" />
+    </copy>
+    <copy todir="${dist.dir}/doc">
+      <fileset dir="${doc.dir}" />
+    </copy>
+    <copy file="build.xml" todir="${dist.dir}" />
+  </target>
+  <target name="tgz" depends="dist" description="Create a compressed distribution tarfile.">
+    <tar destfile="${tgz.dir}/${unix-name}-${version}-src.tar.gz" compression="gzip">
+      <tarfileset dir="${dist.dir}" prefix="${unix-name}-${version}-src">
+      </tarfileset>
+    </tar>
+  </target>
+</project>
