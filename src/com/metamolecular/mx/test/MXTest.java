@@ -45,6 +45,7 @@ public class MXTest
     suite.addTestSuite(StateTest.class);
     suite.addTestSuite(MapperTest.class);
     suite.addTestSuite(MolfileReaderTest.class);
+    suite.addTestSuite(DepthFirstStateTest.class);
 
     TestRunner.run(suite);
   }

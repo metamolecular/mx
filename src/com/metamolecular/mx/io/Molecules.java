@@ -37,6 +37,14 @@ public class Molecules
   private Molecules()
   {
   }
+  
+  public static Molecule createMethane()
+  {
+    Molecule result = new DefaultMolecule();
+    Atom c0 = result.addAtom("C");
+    
+    return result;
+  }
 
   public static Molecule createPropane()
   {
