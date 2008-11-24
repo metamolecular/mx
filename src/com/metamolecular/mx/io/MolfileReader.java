@@ -268,7 +268,7 @@ public class MolfileReader
   
   private void setRadicalProperty(Molecule mol, Atom atom, int radical)
   {
-    
+    atom.setRadical(radical);
   }
   
   private void setIsotopeProperty(Molecule mol, Atom atom, int isotope)

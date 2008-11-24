@@ -44,6 +44,7 @@ public class MXTest
     suite.addTestSuite(BondTest.class);
     suite.addTestSuite(StateTest.class);
     suite.addTestSuite(MapperTest.class);
+    suite.addTestSuite(MolfileReaderTest.class);
 
     TestRunner.run(suite);
   }
