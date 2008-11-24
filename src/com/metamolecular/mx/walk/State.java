@@ -5,6 +5,7 @@
 package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
+import java.util.Set;
 
 /**
  *
@@ -12,11 +13,13 @@ import com.metamolecular.mx.model.Atom;
  */
 public interface State
 {
-  public boolean hasNextBranch();
+  public boolean hasNextAtom();
   
-  public Atom nextBranch();
+  public Atom nextAtom();
   
-  public boolean isValidBranch(Atom atom);
+  public boolean canVisit(Atom atom);
   
   public State nextState(Atom atom);
+  
+  public Set<Atom> getVisitedAtoms();
 }

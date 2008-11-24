@@ -6,7 +6,9 @@ package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Richard L. Apodaca
@@ -16,16 +18,16 @@ public class DepthFirstState implements State
   private Atom root;
   private List<Atom> neighbors;
   private List<Atom> path;
-  private List<Atom> walked;
+  private Set<Atom> visited;
 
   public DepthFirstState(Atom root)
   {
     this.root = root;
     this.path = new ArrayList<Atom>();
-    this.walked = new ArrayList<Atom>();
+    this.visited = new HashSet<Atom>();
 
     path.add(root);
-    walked.add(root);
+    visited.add(root);
 
     this.neighbors = loadNeighbors();
   }
@@ -34,19 +36,24 @@ public class DepthFirstState implements State
   {
     this.root = root;
     this.path = new ArrayList<Atom>(state.path);
-    this.walked = state.walked;
+    this.visited = state.visited;
 
     path.add(root);
-    walked.add(root);
+    visited.add(root);
 
     this.neighbors = loadNeighbors();
   }
 
-  public boolean hasNextBranch()
+  public Set<Atom> getVisitedAtoms()
+  {
+    return visited;
+  }
+
+  public boolean hasNextAtom()
   {
     for (Atom neighbor : neighbors)
     {
-      if (!walked.contains(neighbor))
+      if (!visited.contains(neighbor))
       {
         return true;
       }
@@ -55,12 +62,12 @@ public class DepthFirstState implements State
     return false;
   }
 
-  public Atom nextBranch()
+  public Atom nextAtom()
   {
     return neighbors.remove(neighbors.size() - 1);
   }
 
-  public boolean isValidBranch(Atom atom)
+  public boolean canVisit(Atom atom)
   {
     if (!getHead().isConnectedTo(atom))
     {

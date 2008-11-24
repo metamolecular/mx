@@ -51,20 +51,20 @@ public class DepthFirstStateTest extends TestCase
   {
     State state = new DepthFirstState(benzene.getAtom(0));
 
-    assertTrue(state.hasNextBranch());
+    assertTrue(state.hasNextAtom());
   }
 
   public void testItShouldNotHaveANextAtomWhenRootHasNoNeighbors()
   {
     State state = new DepthFirstState(methane.getAtom(0));
 
-    assertFalse(state.hasNextBranch());
+    assertFalse(state.hasNextAtom());
   }
 
   public void testItShouldGiveANextAtomThatIsANeighborOfRoot()
   {
     State state = new DepthFirstState(benzene.getAtom(0));
-    Atom next = state.nextBranch();
+    Atom next = state.nextAtom();
 
     assertTrue(benzene.getAtom(0).isConnectedTo(next));
   }
@@ -72,9 +72,9 @@ public class DepthFirstStateTest extends TestCase
   public void testItShouldAdvanceToNeigbhorOfRoot()
   {
     State state = new DepthFirstState(benzene.getAtom(0));
-    Atom next = state.nextBranch();
+    Atom next = state.nextAtom();
 
-    assertTrue(state.isValidBranch(next));
+    assertTrue(state.canVisit(next));
   }
 
   public void testItShouldGiveNextStateForNeighborAtom()
@@ -90,12 +90,12 @@ public class DepthFirstStateTest extends TestCase
     State state0 = new DepthFirstState(benzene.getAtom(0));
     State state1 = state0.nextState(benzene.getAtom(1));
 
-    assertTrue(state1.hasNextBranch());
+    assertTrue(state1.hasNextAtom());
 
-    Atom next = state1.nextBranch();
+    Atom next = state1.nextAtom();
 
     assertNotSame(next, benzene.getAtom(0));
-    assertFalse(state1.hasNextBranch());
+    assertFalse(state1.hasNextAtom());
   }
 
   public void testItShouldStopAtARingClosure()
@@ -107,10 +107,23 @@ public class DepthFirstStateTest extends TestCase
     State state4 = state3.nextState(benzene.getAtom(4));
     State state5 = state4.nextState(benzene.getAtom(5));
 
-    assertFalse(state5.hasNextBranch());
+    assertFalse(state5.hasNextAtom());
   }
 
-  public void testPredecessorsShouldStopWhenNoUnwalkedAtomsAvailable()
+  public void testItShouldNotHaveANextAtomAfterAChildVisitsLastAtom()
+  {
+    State ancestor = new DepthFirstState(benzene.getAtom(0));
+    State child1 = ancestor.nextState(benzene.getAtom(1));
+    State child2 = child1.nextState(benzene.getAtom(2));
+    State child3 = child2.nextState(benzene.getAtom(3));
+    State child4 = child3.nextState(benzene.getAtom(4));
+    State child5 = child4.nextState(benzene.getAtom(5));
+
+    assertFalse(child5.hasNextAtom());
+    assertFalse(ancestor.hasNextAtom());
+  }
+
+  public void testItShouldKnowAllAtomsVisitedByChildren()
   {
     State state0 = new DepthFirstState(benzene.getAtom(0));
     State state1 = state0.nextState(benzene.getAtom(1));
@@ -119,7 +132,6 @@ public class DepthFirstStateTest extends TestCase
     State state4 = state3.nextState(benzene.getAtom(4));
     State state5 = state4.nextState(benzene.getAtom(5));
     
-    assertFalse(state5.hasNextBranch());
-    assertFalse(state0.hasNextBranch());
+    assertEquals(6, state0.getVisitedAtoms().size());
   }
 }
