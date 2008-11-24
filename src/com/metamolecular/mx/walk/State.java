@@ -12,7 +12,7 @@ import com.metamolecular.mx.model.Atom;
  */
 public interface State
 {
-  public boolean hasNextAtom();
+  public boolean hasNextBranch();
   
   public Atom nextBranch();
   

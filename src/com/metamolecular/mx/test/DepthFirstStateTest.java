@@ -51,14 +51,14 @@ public class DepthFirstStateTest extends TestCase
   {
     State state = new DepthFirstState(benzene.getAtom(0));
 
-    assertTrue(state.hasNextAtom());
+    assertTrue(state.hasNextBranch());
   }
 
   public void testItShouldNotHaveANextAtomWhenRootHasNoNeighbors()
   {
     State state = new DepthFirstState(methane.getAtom(0));
 
-    assertFalse(state.hasNextAtom());
+    assertFalse(state.hasNextBranch());
   }
 
   public void testItShouldGiveANextAtomThatIsANeighborOfRoot()
@@ -81,34 +81,32 @@ public class DepthFirstStateTest extends TestCase
   {
     State state0 = new DepthFirstState(benzene.getAtom(0));
     State state1 = state0.nextState(benzene.getAtom(1));
-    
+
     assertNotNull(state1);
   }
-  
+
   public void testItShouldNotBacktrackAsSecondaryState()
   {
     State state0 = new DepthFirstState(benzene.getAtom(0));
     State state1 = state0.nextState(benzene.getAtom(1));
     
-    int nextAtomCount = 0;
+    assertTrue(state1.hasNextBranch());
     
-    while (state1.hasNextAtom())
-    {
-      Atom next = state1.nextBranch();
-      
-      if (next.equals(benzene.getAtom(0)))
-      {
-        assertFalse(state1.isValidBranch(next));
-      }
-      
-      else
-      {
-        assertTrue(state1.isValidBranch(next));
-      }
-      
-      nextAtomCount++;
-    }
+    Atom next = state1.nextBranch();
     
-    assertEquals(2, nextAtomCount);
+    assertNotSame(next, benzene.getAtom(0));
+    assertFalse(state1.hasNextBranch());
+  }
+
+  public void testItShouldStopAtARingClosure()
+  {
+    State state0 = new DepthFirstState(benzene.getAtom(0));
+    State state1 = state0.nextState(benzene.getAtom(1));
+    State state2 = state1.nextState(benzene.getAtom(2));
+    State state3 = state2.nextState(benzene.getAtom(3));
+    State state4 = state3.nextState(benzene.getAtom(4));
+    State state5 = state4.nextState(benzene.getAtom(5));
+    
+    assertFalse(state5.hasNextBranch());
   }
 }

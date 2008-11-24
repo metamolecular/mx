@@ -20,22 +20,24 @@ public class DepthFirstState implements State
   public DepthFirstState(Atom root)
   {
     this.root = root;
-    this.neighbors = createNeighbors();
     this.path = new ArrayList<Atom>();
 
     path.add(root);
+
+    this.neighbors = loadNeighbors();
   }
-  
+
   private DepthFirstState(DepthFirstState state, Atom root)
   {
     this.root = root;
-    this.neighbors = createNeighbors();
     this.path = new ArrayList<Atom>(state.path);
-    
+
     path.add(root);
+
+    this.neighbors = loadNeighbors();
   }
 
-  public boolean hasNextAtom()
+  public boolean hasNextBranch()
   {
     return !neighbors.isEmpty();
   }
@@ -51,12 +53,12 @@ public class DepthFirstState implements State
     {
       return false;
     }
-    
+
     if (path.size() >= 2 && path.get(path.size() - 2).equals(atom))
     {
       return false;
     }
-    
+
     return true;
   }
 
@@ -70,25 +72,18 @@ public class DepthFirstState implements State
     return path.get(path.size() - 1);
   }
 
-  private List<Atom> createNeighbors()
+  private List<Atom> loadNeighbors()
   {
     List result = new ArrayList();
 
     for (Atom atom : root.getNeighbors())
     {
-      result.add(atom);
+      if (!path.contains(atom))
+      {
+        result.add(atom);
+      }
     }
 
     return result;
-  }
-
-  private void assertValidBranch(Atom atom)
-  {
-    if (getHead().isConnectedTo(atom))
-    {
-      return;
-    }
-    
-    throw new IllegalStateException("Atom doesn't connect to head.");
   }
 }
