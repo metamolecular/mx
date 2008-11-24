@@ -5,6 +5,7 @@
 package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,4 +23,6 @@ public interface State
   public State nextState(Atom atom);
   
   public Set<Atom> getVisitedAtoms();
+  
+  public List<Atom> getPath();
 }

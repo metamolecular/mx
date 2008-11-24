@@ -44,6 +44,11 @@ public class DepthFirstState implements State
     this.neighbors = loadNeighbors();
   }
 
+  public List<Atom> getPath()
+  {
+    return path;
+  }
+
   public Set<Atom> getVisitedAtoms()
   {
     return visited;
