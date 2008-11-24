@@ -16,13 +16,16 @@ public class DepthFirstState implements State
   private Atom root;
   private List<Atom> neighbors;
   private List<Atom> path;
+  private List<Atom> walked;
 
   public DepthFirstState(Atom root)
   {
     this.root = root;
     this.path = new ArrayList<Atom>();
+    this.walked = new ArrayList<Atom>();
 
     path.add(root);
+    walked.add(root);
 
     this.neighbors = loadNeighbors();
   }
@@ -31,15 +34,25 @@ public class DepthFirstState implements State
   {
     this.root = root;
     this.path = new ArrayList<Atom>(state.path);
+    this.walked = state.walked;
 
     path.add(root);
+    walked.add(root);
 
     this.neighbors = loadNeighbors();
   }
 
   public boolean hasNextBranch()
   {
-    return !neighbors.isEmpty();
+    for (Atom neighbor : neighbors)
+    {
+      if (!walked.contains(neighbor))
+      {
+        return true;
+      }
+    }
+    
+    return false;
   }
 
   public Atom nextBranch()
@@ -54,12 +67,7 @@ public class DepthFirstState implements State
       return false;
     }
 
-    if (path.size() >= 2 && path.get(path.size() - 2).equals(atom))
-    {
-      return false;
-    }
-
-    return true;
+    return !path.contains(atom);
   }
 
   public State nextState(Atom atom)

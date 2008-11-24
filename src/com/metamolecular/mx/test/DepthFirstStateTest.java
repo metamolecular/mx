@@ -89,11 +89,11 @@ public class DepthFirstStateTest extends TestCase
   {
     State state0 = new DepthFirstState(benzene.getAtom(0));
     State state1 = state0.nextState(benzene.getAtom(1));
-    
+
     assertTrue(state1.hasNextBranch());
-    
+
     Atom next = state1.nextBranch();
-    
+
     assertNotSame(next, benzene.getAtom(0));
     assertFalse(state1.hasNextBranch());
   }
@@ -106,7 +106,20 @@ public class DepthFirstStateTest extends TestCase
     State state3 = state2.nextState(benzene.getAtom(3));
     State state4 = state3.nextState(benzene.getAtom(4));
     State state5 = state4.nextState(benzene.getAtom(5));
+
+    assertFalse(state5.hasNextBranch());
+  }
+
+  public void testPredecessorsShouldStopWhenNoUnwalkedAtomsAvailable()
+  {
+    State state0 = new DepthFirstState(benzene.getAtom(0));
+    State state1 = state0.nextState(benzene.getAtom(1));
+    State state2 = state1.nextState(benzene.getAtom(2));
+    State state3 = state2.nextState(benzene.getAtom(3));
+    State state4 = state3.nextState(benzene.getAtom(4));
+    State state5 = state4.nextState(benzene.getAtom(5));
     
     assertFalse(state5.hasNextBranch());
+    assertFalse(state0.hasNextBranch());
   }
 }
