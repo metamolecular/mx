@@ -14,9 +14,9 @@ public interface State
 {
   public boolean hasNextAtom();
   
-  public Atom nextAtom();
+  public Atom nextBranch();
   
-  public boolean canAdvanceTo(Atom atom);
+  public boolean isValidBranch(Atom atom);
   
   public State nextState(Atom atom);
 }

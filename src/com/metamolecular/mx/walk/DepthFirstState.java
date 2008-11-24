@@ -31,6 +31,8 @@ public class DepthFirstState implements State
     this.root = root;
     this.neighbors = createNeighbors();
     this.path = new ArrayList<Atom>(state.path);
+    
+    path.add(root);
   }
 
   public boolean hasNextAtom()
@@ -38,20 +40,28 @@ public class DepthFirstState implements State
     return !neighbors.isEmpty();
   }
 
-  public Atom nextAtom()
+  public Atom nextBranch()
   {
     return neighbors.remove(neighbors.size() - 1);
   }
 
-  public boolean canAdvanceTo(Atom atom)
+  public boolean isValidBranch(Atom atom)
   {
-    return getHead().isConnectedTo(atom);
+    if (!getHead().isConnectedTo(atom))
+    {
+      return false;
+    }
+    
+    if (path.size() >= 2 && path.get(path.size() - 2).equals(atom))
+    {
+      return false;
+    }
+    
+    return true;
   }
 
   public State nextState(Atom atom)
   {
-    assertValidBranch(atom);
-
     return new DepthFirstState(this, atom);
   }
 

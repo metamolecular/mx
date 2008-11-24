@@ -64,7 +64,7 @@ public class DepthFirstStateTest extends TestCase
   public void testItShouldGiveANextAtomThatIsANeighborOfRoot()
   {
     State state = new DepthFirstState(benzene.getAtom(0));
-    Atom next = state.nextAtom();
+    Atom next = state.nextBranch();
 
     assertTrue(benzene.getAtom(0).isConnectedTo(next));
   }
@@ -72,30 +72,43 @@ public class DepthFirstStateTest extends TestCase
   public void testItShouldAdvanceToNeigbhorOfRoot()
   {
     State state = new DepthFirstState(benzene.getAtom(0));
-    Atom next = state.nextAtom();
+    Atom next = state.nextBranch();
 
-    assertTrue(state.canAdvanceTo(next));
-  }
-
-  public void testItShouldThrowForNonNeighborNextState()
-  {
-    State state = new DepthFirstState(benzene.getAtom(0));
-
-    try
-    {
-      state.nextState(benzene.getAtom(3));
-
-      fail();
-    }
-    catch (IllegalStateException ignore)
-    {
-    }
+    assertTrue(state.isValidBranch(next));
   }
 
   public void testItShouldGiveNextStateForNeighborAtom()
   {
-    State state = new DepthFirstState(benzene.getAtom(0));
+    State state0 = new DepthFirstState(benzene.getAtom(0));
+    State state1 = state0.nextState(benzene.getAtom(1));
     
-    state.nextState(benzene.getAtom(1));
+    assertNotNull(state1);
+  }
+  
+  public void testItShouldNotBacktrackAsSecondaryState()
+  {
+    State state0 = new DepthFirstState(benzene.getAtom(0));
+    State state1 = state0.nextState(benzene.getAtom(1));
+    
+    int nextAtomCount = 0;
+    
+    while (state1.hasNextAtom())
+    {
+      Atom next = state1.nextBranch();
+      
+      if (next.equals(benzene.getAtom(0)))
+      {
+        assertFalse(state1.isValidBranch(next));
+      }
+      
+      else
+      {
+        assertTrue(state1.isValidBranch(next));
+      }
+      
+      nextAtomCount++;
+    }
+    
+    assertEquals(2, nextAtomCount);
   }
 }
