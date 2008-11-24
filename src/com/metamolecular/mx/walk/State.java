@@ -25,4 +25,6 @@ public interface State
   public Set<Atom> getVisitedAtoms();
   
   public List<Atom> getPath();
+  
+  public void backTrack();
 }

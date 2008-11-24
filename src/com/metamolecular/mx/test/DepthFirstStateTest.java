@@ -31,6 +31,7 @@ import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.walk.DepthFirstState;
 import com.metamolecular.mx.walk.State;
 import java.util.List;
+import java.util.Set;
 import junit.framework.TestCase;
 
 /**
@@ -137,7 +138,26 @@ public class DepthFirstStateTest extends TestCase
   }
 
   public void testItShouldStoreAllPreviousAtomsInPathInOrder()
-  { 
+  {
+    State state0 = new DepthFirstState(benzene.getAtom(0));
+    State state1 = state0.nextState(benzene.getAtom(1));
+    State state2 = state1.nextState(benzene.getAtom(2));
+    State state3 = state2.nextState(benzene.getAtom(3));
+    State state4 = state3.nextState(benzene.getAtom(4));
+    State state5 = state4.nextState(benzene.getAtom(5));
+
+    List<Atom> path = state5.getPath();
+
+    assertEquals(6, path.size());
+
+    for (int i = 0; i < path.size(); i++)
+    {
+      assertEquals(benzene.getAtom(i), path.get(i));
+    }
+  }
+
+  public void testItShouldClearAtomsVisitedByChildrenWhenBacktracked()
+  {
     State state0 = new DepthFirstState(benzene.getAtom(0));
     State state1 = state0.nextState(benzene.getAtom(1));
     State state2 = state1.nextState(benzene.getAtom(2));
@@ -145,13 +165,20 @@ public class DepthFirstStateTest extends TestCase
     State state4 = state3.nextState(benzene.getAtom(4));
     State state5 = state4.nextState(benzene.getAtom(5));
     
-    List<Atom> path = state5.getPath();
+    assertEquals(6, state4.getVisitedAtoms().size());
     
-    assertEquals(6, path.size());
+    state4.backTrack();
     
-    for (int i = 0; i < path.size(); i++)
-    {
-      assertEquals(benzene.getAtom(i), path.get(i));
-    }
+    assertEquals(5, state4.getVisitedAtoms().size());
+    assertEquals(5, state3.getVisitedAtoms().size());
+    
+    state3.backTrack();
+    
+    assertEquals(4, state3.getVisitedAtoms().size());
+    assertEquals(4, state2.getVisitedAtoms().size());
+    
+    state2.backTrack();
+    
+    assertEquals(3, state2.getVisitedAtoms().size());
   }
 }
