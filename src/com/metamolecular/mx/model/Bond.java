@@ -26,6 +26,9 @@
 
 package com.metamolecular.mx.model;
 
+/**
+ * @author Richard L. Apodaca
+ */
 public interface Bond
 {
   public int getIndex();

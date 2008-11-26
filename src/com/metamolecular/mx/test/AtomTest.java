@@ -34,7 +34,6 @@ import javax.swing.event.ChangeListener;
 import junit.framework.TestCase;
 
 /**
- *
  * @author Richard L. Apodaca
  */
 public class AtomTest extends TestCase

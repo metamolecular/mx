@@ -28,6 +28,9 @@ package com.metamolecular.mx.model;
 
 import javax.swing.event.ChangeListener;
 
+/**
+ * @author Richard L. Apodaca
+ */
 public interface Molecule
 {  
   public int countAtoms();

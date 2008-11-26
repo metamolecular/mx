@@ -30,7 +30,6 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 /**
- *
  * @author Richard L. Apodaca
  */
 public class MXTest

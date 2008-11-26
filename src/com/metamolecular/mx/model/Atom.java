@@ -26,6 +26,9 @@
 
 package com.metamolecular.mx.model;
 
+/**
+ * @author Richard L. Apodaca
+ */
 public interface Atom
 {
   public String getSymbol();
