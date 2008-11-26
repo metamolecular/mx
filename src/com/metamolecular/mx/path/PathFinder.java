@@ -44,32 +44,32 @@ public class PathFinder
   
   public List<List<Atom>> findAllPaths(Atom atom)
   {
-    Step state = new DefaultStep(atom);
+    Step step = new DefaultStep(atom);
     
     paths.clear();
-    walk(state);
+    walk(step);
     
     return paths;
   }
   
-  public void walk(Step state)
+  public void walk(Step step)
   {
-    if (!state.hasNextBranch())
+    if (!step.hasNextBranch())
     {
-      paths.add(new ArrayList<Atom>(state.getPath()));
+      paths.add(new ArrayList<Atom>(step.getPath()));
       
       return;
     }
     
-    while(state.hasNextBranch())
+    while(step.hasNextBranch())
     {
-      Atom next = state.nextBranch();
+      Atom next = step.nextBranch();
       
-      if (state.isBranchFeasible(next))
+      if (step.isBranchFeasible(next))
       {
-        walk(state.nextStep(next));
+        walk(step.nextStep(next));
         
-        state.backTrack();
+        step.backTrack();
       }
     }
   }

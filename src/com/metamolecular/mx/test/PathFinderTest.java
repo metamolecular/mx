@@ -42,6 +42,7 @@ public class PathFinderTest extends TestCase
   private Molecule acetone;
   private Molecule cyclohexane;
   private Molecule neopentane;
+  private Molecule phenol;
 
   @Override
   protected void setUp() throws Exception
@@ -50,6 +51,7 @@ public class PathFinderTest extends TestCase
     acetone = Molecules.createAcetone();
     cyclohexane = Molecules.createCyclohexane();
     neopentane = Molecules.createNeopentane();
+    phenol = Molecules.createPhenol();
   }
 
   public void testItShouldFindOneHexanePathsStartingFromPrimaryCarbon()
@@ -159,5 +161,37 @@ public class PathFinderTest extends TestCase
     List<List<Atom>> paths = finder.findAllPaths(neopentane.getAtom(0));
 
     assertEquals(4, paths.size());
+  }
+
+  public void testItShouldFindBothPathsStartingFromPhenolOxygen()
+  {
+    PathFinder finder = new PathFinder();
+    List<List<Atom>> paths = finder.findAllPaths(phenol.getAtom(6));
+
+    assertEquals(2, paths.size());
+
+    List<Atom> test = new ArrayList<Atom>();
+
+    test.add(phenol.getAtom(6));
+    test.add(phenol.getAtom(0));
+    test.add(phenol.getAtom(1));
+    test.add(phenol.getAtom(2));
+    test.add(phenol.getAtom(3));
+    test.add(phenol.getAtom(4));
+    test.add(phenol.getAtom(5));
+
+    assertTrue(paths.contains(test));
+
+    test.clear();
+
+    test.add(phenol.getAtom(6));
+    test.add(phenol.getAtom(0));
+    test.add(phenol.getAtom(5));
+    test.add(phenol.getAtom(4));
+    test.add(phenol.getAtom(3));
+    test.add(phenol.getAtom(2));
+    test.add(phenol.getAtom(1));
+    
+    assertTrue(paths.contains(test));
   }
 }
