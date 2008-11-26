@@ -31,7 +31,6 @@ import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.walk.DepthFirstState;
 import com.metamolecular.mx.walk.State;
 import java.util.List;
-import java.util.Set;
 import junit.framework.TestCase;
 
 /**
