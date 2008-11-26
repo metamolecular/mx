@@ -40,12 +40,14 @@ public class DepthFirstStateTest extends TestCase
 {
   private Molecule benzene = null;
   private Molecule methane = null;
+  private Molecule hexane = null;
 
   @Override
   protected void setUp() throws Exception
   {
     benzene = Molecules.createBenzene();
     methane = Molecules.createMethane();
+    hexane = Molecules.createHexane();
   }
 
   public void testItShouldHaveANextAtomWhenRootHasNeighbors()
@@ -180,4 +182,19 @@ public class DepthFirstStateTest extends TestCase
     
     assertEquals(3, state2.getVisitedAtoms().size());
   }
+  
+//  public void testItShouldAllowBothBranchesOfASecondaryCarbonToBeVisited()
+//  {
+//    State root = new DepthFirstState(hexane.getAtom(1));
+//    int branchCount = 0;
+//    
+//    while(root.hasNextAtom())
+//    {
+//      Atom next = root.nextAtom();
+//    }
+//    
+//    assertTrue(root.hasNextAtom());
+//    
+//    State state1 = state0.nextState(hexane.getAtom(0));
+//  }
 }

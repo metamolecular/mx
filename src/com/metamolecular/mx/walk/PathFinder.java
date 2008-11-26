@@ -46,7 +46,7 @@ public class PathFinder
       
       if (state.canVisit(next))
       {
-        walk(state);
+        walk(state.nextState(next));
         
         state.backTrack();
       }
