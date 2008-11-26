@@ -92,22 +92,7 @@ public class VirtualHydrogenCounter
       return 0;
     }
 
-    int radicalElectronCount = 0;
-
-    switch (atom.getRadical())
-    {
-      case 1:
-        radicalElectronCount = 1;
-        break;
-      case 2:
-        radicalElectronCount = 2;
-        break;
-      case 3:
-        radicalElectronCount = 2;
-        break;
-    }
-    
-    return (atom.getValence() > 4) ? 0 : 4 - (atom.getValence() + Math.abs(atom.getCharge() + radicalElectronCount));
+    return (atom.getValence() > 4) ? 0 : 4 - (atom.getValence() + Math.abs(atom.getCharge() + countRadicalElectrons(atom)));
   }
 
   private int countGroup15VirtualHydrogens(Atom atom)
@@ -121,21 +106,7 @@ public class VirtualHydrogenCounter
       return 0;
     }
 
-    int radicalElectronCount = 0;
-
-    switch (atom.getRadical())
-    {
-      case 1:
-        radicalElectronCount = 1;
-        break;
-      case 2:
-        radicalElectronCount = 2;
-        break;
-      case 3:
-        radicalElectronCount = 2;
-        break;
-    }
-    return 3 - (atom.getValence() - atom.getCharge() + radicalElectronCount);
+    return 3 - (atom.getValence() - atom.getCharge() + countRadicalElectrons(atom));
   }
 
   private int countGroup16VirtualHydrogens(Atom atom)
@@ -149,22 +120,7 @@ public class VirtualHydrogenCounter
       return 0;
     }
 
-    int radicalElectronCount = 0;
-
-    switch (atom.getRadical())
-    {
-      case 1:
-        radicalElectronCount = 1;
-        break;
-      case 2:
-        radicalElectronCount = 2;
-        break;
-      case 3:
-        radicalElectronCount = 2;
-        break;
-    }
-
-    return 2 - (atom.getValence() - atom.getCharge() + radicalElectronCount);
+    return 2 - (atom.getValence() - atom.getCharge() + countRadicalElectrons(atom));
   }
 
   private int countGroup17VirtualHydrogens(Atom atom)
@@ -173,7 +129,7 @@ public class VirtualHydrogenCounter
     {
       return 0;
     }
-    return (atom.getValence() > 1) ? 0 : 1 - (atom.getValence() - atom.getCharge());
+    return (atom.getValence() > 1) ? 0 : 1 - (atom.getValence() - atom.getCharge() + countRadicalElectrons(atom));
   }
 
   private void buildGroups()
@@ -221,5 +177,25 @@ public class VirtualHydrogenCounter
     Object result = groups.get(atom.getSymbol());
 
     return (result == null) ? -1 : ((Integer) result).intValue();
+  }
+
+  private int countRadicalElectrons(Atom atom)
+  {
+    int result = 0;
+
+    switch (atom.getRadical())
+    {
+      case 1:
+        result = 1;
+        break;
+      case 2:
+        result = 2;
+        break;
+      case 3:
+        result = 2;
+        break;
+    }
+
+    return result;
   }
 }
