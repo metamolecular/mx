@@ -118,4 +118,16 @@ public class VirtualHydrogenCounterTest extends TestCase
 
     assertEquals(0, counter.countVirtualHydrogens(cl));
   }
+
+  public void testItShouldSayMethylamineAnionNitrogenHasOneHydrogen()
+  {
+    Molecule molecule = new DefaultMolecule();
+    Atom c = molecule.addAtom("C");
+    Atom n = molecule.addAtom("N");
+
+    n.setCharge(-1);
+    molecule.connect(c, n, 1);
+
+    assertEquals(1, counter.countVirtualHydrogens(n));
+  }
 }
