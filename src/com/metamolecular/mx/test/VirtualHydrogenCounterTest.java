@@ -46,6 +46,17 @@ public class VirtualHydrogenCounterTest extends TestCase
     assertEquals(2, counter.countVirtualHydrogens(n));
   }
 
+  public void testEthaneCarbonShouldHaveThreeVirtualHydrogens()
+  {
+    Molecule molecule = new DefaultMolecule();
+    Atom c1 = molecule.addAtom("C");
+    Atom c2 = molecule.addAtom("C");
+
+    molecule.connect(c1, c2, 1);
+
+    assertEquals(3, counter.countVirtualHydrogens(c1));
+  }
+
   public void testHydroxylSingletRadicalShouldHaveOneVirtualHydrogen()
   {
     Molecule molecule = new DefaultMolecule();
@@ -66,5 +77,27 @@ public class VirtualHydrogenCounterTest extends TestCase
     molecule.connect(c, n, 1);
 
     assertEquals(1, counter.countVirtualHydrogens(n));
+  }
+
+  public void testEthylRadicalCarbonShouldHaveTwoHydrogens()
+  {
+    Molecule molecule = new DefaultMolecule();
+    Atom c1 = molecule.addAtom("C");
+    Atom c2 = molecule.addAtom("C");
+
+    c2.setRadical(1);
+    molecule.connect(c1, c2, 1);
+
+    assertEquals(2, counter.countVirtualHydrogens(c2));
+  }
+  
+  public void testMethylDoubletRadicalCarbonShouldHaveTwoHydrogens()
+  {
+    Molecule molecule = new DefaultMolecule();
+    Atom c = molecule.addAtom("C");
+    
+    c.setRadical(2);
+    
+    assertEquals(2, counter.countVirtualHydrogens(c));
   }
 }

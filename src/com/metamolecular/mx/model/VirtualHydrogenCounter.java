@@ -91,7 +91,23 @@ public class VirtualHydrogenCounter
     {
       return 0;
     }
-    return (atom.getValence() > 4) ? 0 : 4 - (atom.getValence() + Math.abs(atom.getCharge()));
+
+    int radicalElectronCount = 0;
+
+    switch (atom.getRadical())
+    {
+      case 1:
+        radicalElectronCount = 1;
+        break;
+      case 2:
+        radicalElectronCount = 2;
+        break;
+      case 3:
+        radicalElectronCount = 2;
+        break;
+    }
+    
+    return (atom.getValence() > 4) ? 0 : 4 - (atom.getValence() + Math.abs(atom.getCharge() + radicalElectronCount));
   }
 
   private int countGroup15VirtualHydrogens(Atom atom)
