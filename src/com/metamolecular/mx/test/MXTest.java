@@ -46,6 +46,7 @@ public class MXTest
     suite.addTestSuite(MolfileReaderTest.class);
     suite.addTestSuite(StepTest.class);
     suite.addTestSuite(PathFinderTest.class);
+    suite.addTestSuite(VirtualHydrogenCounterTest.class);
 
     TestRunner.run(suite);
   }

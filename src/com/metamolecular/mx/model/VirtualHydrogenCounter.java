@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.model;
 
 import java.util.HashMap;
@@ -105,7 +104,22 @@ public class VirtualHydrogenCounter
     {
       return 0;
     }
-    return 3 - (atom.getValence() - atom.getCharge());
+
+    int radicalElectronCount = 0;
+
+    switch (atom.getRadical())
+    {
+      case 1:
+        radicalElectronCount = 1;
+        break;
+      case 2:
+        radicalElectronCount = 2;
+        break;
+      case 3:
+        radicalElectronCount = 2;
+        break;
+    }
+    return 3 - (atom.getValence() - atom.getCharge() + radicalElectronCount);
   }
 
   private int countGroup16VirtualHydrogens(Atom atom)
@@ -118,7 +132,23 @@ public class VirtualHydrogenCounter
     {
       return 0;
     }
-    return 2 - (atom.getValence() - atom.getCharge());
+
+    int radicalElectronCount = 0;
+
+    switch (atom.getRadical())
+    {
+      case 1:
+        radicalElectronCount = 1;
+        break;
+      case 2:
+        radicalElectronCount = 2;
+        break;
+      case 3:
+        radicalElectronCount = 2;
+        break;
+    }
+
+    return 2 - (atom.getValence() - atom.getCharge() + radicalElectronCount);
   }
 
   private int countGroup17VirtualHydrogens(Atom atom)
