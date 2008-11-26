@@ -6,8 +6,9 @@ Download:            http://code.google.com/p/mx-java
 Blog:                http://depth-first.com
 
 MX is a suite of lightweight, general purpose tools for cheminformatics. It
-currently supports molfile input and output, as well as substructure
-search and atom mapping through a Java-centric set of implementations.
+currently supports molfile input and output. It also supports graph operations
+such as substructure search, atom mapping, and depth-first traversal through
+a Java-centric approach.
 
 System requirements:
 
