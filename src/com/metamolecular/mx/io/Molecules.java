@@ -91,6 +91,26 @@ public class Molecules
 
     return result;
   }
+  
+    public static Molecule createCyclohexane()
+  {
+    Molecule result = new DefaultMolecule();
+    Atom c0 = result.addAtom("C");
+    Atom c1 = result.addAtom("C");
+    Atom c2 = result.addAtom("C");
+    Atom c3 = result.addAtom("C");
+    Atom c4 = result.addAtom("C");
+    Atom c5 = result.addAtom("C");
+
+    result.connect(c0, c1, 1);
+    result.connect(c1, c2, 1);
+    result.connect(c2, c3, 1);
+    result.connect(c3, c4, 1);
+    result.connect(c4, c5, 1);
+    result.connect(c5, c0, 1);
+
+    return result;
+  }
 
   public static Molecule createBenzene()
   {

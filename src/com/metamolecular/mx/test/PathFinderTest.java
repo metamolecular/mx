@@ -20,12 +20,14 @@ public class PathFinderTest extends TestCase
 {
   private Molecule hexane;
   private Molecule acetone;
+  private Molecule cyclohexane;
 
   @Override
   protected void setUp() throws Exception
   {
     hexane = Molecules.createHexane();
     acetone = Molecules.createAcetone();
+    cyclohexane = Molecules.createCyclohexane();
   }
 
   public void testItShouldFindOneHexanePathsStartingFromPrimaryCarbon()
@@ -79,23 +81,53 @@ public class PathFinderTest extends TestCase
     assertEquals(3, paths.size());
 
     List<Atom> test = new ArrayList<Atom>();
-    
+
     test.add(acetone.getAtom(1));
     test.add(acetone.getAtom(0));
-    
+
     assertTrue(paths.contains(test));
-    
+
     test.clear();
     test.add(acetone.getAtom(1));
     test.add(acetone.getAtom(2));
-    
+
     assertTrue(paths.contains(test));
-    
+
     test.clear();
-    
+
     test.add(acetone.getAtom(1));
     test.add(acetone.getAtom(3));
-    
+
+    assertTrue(paths.contains(test));
+  }
+
+  public void testItShouldFindTwoCyclohexanePaths()
+  {
+    PathFinder finder = new PathFinder();
+    List<List<Atom>> paths = finder.findAllPaths(cyclohexane.getAtom(0));
+
+    assertEquals(2, paths.size());
+
+    List<Atom> test = new ArrayList<Atom>();
+
+    test.add(cyclohexane.getAtom(0));
+    test.add(cyclohexane.getAtom(1));
+    test.add(cyclohexane.getAtom(2));
+    test.add(cyclohexane.getAtom(3));
+    test.add(cyclohexane.getAtom(4));
+    test.add(cyclohexane.getAtom(5));
+
+    assertTrue(paths.contains(test));
+
+    test.clear();
+
+    test.add(cyclohexane.getAtom(0));
+    test.add(cyclohexane.getAtom(5));
+    test.add(cyclohexane.getAtom(4));
+    test.add(cyclohexane.getAtom(3));
+    test.add(cyclohexane.getAtom(2));
+    test.add(cyclohexane.getAtom(1));
+
     assertTrue(paths.contains(test));
   }
 }
