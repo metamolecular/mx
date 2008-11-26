@@ -19,11 +19,13 @@ import junit.framework.TestCase;
 public class PathFinderTest extends TestCase
 {
   private Molecule hexane;
+  private Molecule acetone;
 
   @Override
   protected void setUp() throws Exception
   {
     hexane = Molecules.createHexane();
+    acetone = Molecules.createAcetone();
   }
 
   public void testItShouldFindOneHexanePathsStartingFromPrimaryCarbon()
@@ -42,7 +44,7 @@ public class PathFinderTest extends TestCase
       assertEquals(hexane.getAtom(i).getIndex(), path.get(i).getIndex());
     }
   }
-  
+
   public void testItShouldFindBothHexanePathsStartingFromSecondaryCarbon()
   {
     PathFinder finder = new PathFinder();
@@ -50,21 +52,49 @@ public class PathFinderTest extends TestCase
     List<List<Atom>> paths = finder.findAllPaths(hexane.getAtom(1));
 
     assertEquals(2, paths.size());
-    
+
     List<Atom> test = new ArrayList<Atom>();
-    
+
     test.add(hexane.getAtom(1));
     test.add(hexane.getAtom(0));
-    
+
     assertTrue(paths.contains(test));
-    
+
     test.clear();
-    
+
     test.add(hexane.getAtom(1));
     test.add(hexane.getAtom(2));
     test.add(hexane.getAtom(3));
     test.add(hexane.getAtom(4));
     test.add(hexane.getAtom(5));
+
+    assertTrue(paths.contains(test));
+  }
+
+  public void testItShouldFindAllThreeAcetonePathsStartingFromCarbonylCarbon()
+  {
+    PathFinder finder = new PathFinder();
+    List<List<Atom>> paths = finder.findAllPaths(acetone.getAtom(1));
+
+    assertEquals(3, paths.size());
+
+    List<Atom> test = new ArrayList<Atom>();
+    
+    test.add(acetone.getAtom(1));
+    test.add(acetone.getAtom(0));
+    
+    assertTrue(paths.contains(test));
+    
+    test.clear();
+    test.add(acetone.getAtom(1));
+    test.add(acetone.getAtom(2));
+    
+    assertTrue(paths.contains(test));
+    
+    test.clear();
+    
+    test.add(acetone.getAtom(1));
+    test.add(acetone.getAtom(3));
     
     assertTrue(paths.contains(test));
   }
