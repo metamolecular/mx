@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
@@ -42,6 +41,7 @@ public class PathFinderTest extends TestCase
   private Molecule hexane;
   private Molecule acetone;
   private Molecule cyclohexane;
+  private Molecule neopentane;
 
   @Override
   protected void setUp() throws Exception
@@ -49,6 +49,7 @@ public class PathFinderTest extends TestCase
     hexane = Molecules.createHexane();
     acetone = Molecules.createAcetone();
     cyclohexane = Molecules.createCyclohexane();
+    neopentane = Molecules.createNeopentane();
   }
 
   public void testItShouldFindOneHexanePathsStartingFromPrimaryCarbon()
@@ -150,5 +151,13 @@ public class PathFinderTest extends TestCase
     test.add(cyclohexane.getAtom(1));
 
     assertTrue(paths.contains(test));
+  }
+
+  public void testItShouldFindFourNeopentanePaths()
+  {
+    PathFinder finder = new PathFinder();
+    List<List<Atom>> paths = finder.findAllPaths(neopentane.getAtom(0));
+
+    assertEquals(4, paths.size());
   }
 }

@@ -239,4 +239,21 @@ public class Molecules
 
     return result;
   }
+  
+  public static Molecule createNeopentane()
+  {
+    Molecule result = new DefaultMolecule();
+    Atom c0 = result.addAtom("C");
+    Atom c1 = result.addAtom("C");
+    Atom c2 = result.addAtom("C");
+    Atom c3 = result.addAtom("C");
+    Atom c4 = result.addAtom("C");
+    
+    result.connect(c0, c1, 1);
+    result.connect(c0, c2, 1);
+    result.connect(c0, c3, 1);
+    result.connect(c0, c4, 1);
+    
+    return result;
+  }
 }
