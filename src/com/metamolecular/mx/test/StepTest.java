@@ -28,8 +28,8 @@ package com.metamolecular.mx.test;
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.walk.DefaultStep;
-import com.metamolecular.mx.walk.Step;
+import com.metamolecular.mx.path.DefaultStep;
+import com.metamolecular.mx.path.Step;
 import java.util.List;
 import junit.framework.TestCase;
 

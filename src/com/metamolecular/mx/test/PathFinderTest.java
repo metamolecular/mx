@@ -7,7 +7,7 @@ package com.metamolecular.mx.test;
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.walk.PathFinder;
+import com.metamolecular.mx.path.PathFinder;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
