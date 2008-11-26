@@ -23,7 +23,7 @@ public class PathFinder
   
   public List<List<Atom>> findAllPaths(Atom atom)
   {
-    State state = new DepthFirstState(atom);
+    Step state = new DefaultStep(atom);
     
     paths.clear();
     walk(state);
@@ -31,22 +31,22 @@ public class PathFinder
     return paths;
   }
   
-  public void walk(State state)
+  public void walk(Step state)
   {
-    if (!state.hasNextAtom())
+    if (!state.hasNextBranch())
     {
       paths.add(new ArrayList<Atom>(state.getPath()));
       
       return;
     }
     
-    while(state.hasNextAtom())
+    while(state.hasNextBranch())
     {
-      Atom next = state.nextAtom();
+      Atom next = state.nextBranch();
       
-      if (state.canVisit(next))
+      if (state.isBranchFeasible(next))
       {
-        walk(state.nextState(next));
+        walk(state.nextStep(next));
         
         state.backTrack();
       }

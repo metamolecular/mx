@@ -13,14 +13,14 @@ import java.util.Set;
 /**
  * @author Richard L. Apodaca
  */
-public class DepthFirstState implements State
+public class DefaultStep implements Step
 {
   private Atom root;
   private List<Atom> neighbors;
   private List<Atom> path;
   private Set<Atom> visited;
 
-  public DepthFirstState(Atom root)
+  public DefaultStep(Atom root)
   {
     this.root = root;
     this.path = new ArrayList<Atom>();
@@ -32,7 +32,7 @@ public class DepthFirstState implements State
     this.neighbors = loadNeighbors();
   }
 
-  private DepthFirstState(DepthFirstState state, Atom root)
+  private DefaultStep(DefaultStep state, Atom root)
   {
     this.root = root;
     this.path = new ArrayList<Atom>(state.path);
@@ -61,12 +61,12 @@ public class DepthFirstState implements State
     return path;
   }
 
-  public Set<Atom> getVisitedAtoms()
+  public Set<Atom> getSteppedAtoms()
   {
     return visited;
   }
 
-  public boolean hasNextAtom()
+  public boolean hasNextBranch()
   {
     for (Atom neighbor : neighbors)
     {
@@ -79,12 +79,12 @@ public class DepthFirstState implements State
     return false;
   }
 
-  public Atom nextAtom()
+  public Atom nextBranch()
   {
     return neighbors.remove(neighbors.size() - 1);
   }
 
-  public boolean canVisit(Atom atom)
+  public boolean isBranchFeasible(Atom atom)
   {
     if (!getHead().isConnectedTo(atom))
     {
@@ -94,9 +94,9 @@ public class DepthFirstState implements State
     return !path.contains(atom);
   }
 
-  public State nextState(Atom atom)
+  public Step nextStep(Atom atom)
   {
-    return new DepthFirstState(this, atom);
+    return new DefaultStep(this, atom);
   }
 
   private Atom getHead()

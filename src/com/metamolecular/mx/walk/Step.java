@@ -12,17 +12,17 @@ import java.util.Set;
  *
  * @author rich
  */
-public interface State
+public interface Step
 {
-  public boolean hasNextAtom();
+  public boolean hasNextBranch();
   
-  public Atom nextAtom();
+  public Atom nextBranch();
   
-  public boolean canVisit(Atom atom);
+  public boolean isBranchFeasible(Atom branch);
   
-  public State nextState(Atom atom);
+  public Step nextStep(Atom branch);
   
-  public Set<Atom> getVisitedAtoms();
+  public Set<Atom> getSteppedAtoms();
   
   public List<Atom> getPath();
   
