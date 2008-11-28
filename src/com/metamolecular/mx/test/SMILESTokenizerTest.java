@@ -23,32 +23,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.io.smiles.SMILESTokenizer;
+import java.util.ArrayList;
+import java.util.List;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class SMILESTokenizerTest extends TestCase
 {
-
-  public static void main(String[] args)
+  private List<String> tokens;
+  
+  @Override
+  protected void setUp() throws Exception
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-
-    TestRunner.run(suite);
+    tokens = new ArrayList<String>();
+  }
+  
+  public void testItShouldFindSixCarbonsForHexane()
+  {
+    SMILESTokenizer tokenizer = new SMILESTokenizer("CCCCCC");
+    
+    tokens.clear();
+    
+    while (tokenizer.hasNextToken())
+    {
+      tokens.add(tokenizer.nextToken());
+    }
+    
+    assertEquals(6, tokens.size());
+    
+    for (String token : tokens)
+    {
+      assertEquals("C", token);
+    }
   }
 }
