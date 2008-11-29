@@ -25,32 +25,41 @@
  */
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.io.smiles.SMILESBuilder;
+import com.metamolecular.mx.model.DefaultMolecule;
+import com.metamolecular.mx.model.Molecule;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class SMILESBuilderTest extends TestCase
 {
 
-  public static void main(String[] args)
+  public void testItShouldConnectTwoCarbons()
   {
-    TestSuite suite = new TestSuite();
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
 
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
+    builder.addHead("C");
+    builder.addHead("C");
 
-    TestRunner.run(suite);
+    assertEquals(2, result.countAtoms());
+    assertEquals(1, result.countBonds());
+    assertEquals(1, result.getBond(result.getAtom(0), result.getAtom(1)).getType());
+  }
+
+  public void testItShouldConnectTwoCarbonsThroughADoubleBond()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+
+    builder.addHead("C");
+    builder.addBond(2);
+    builder.addHead("C");
+
+    assertEquals(2, result.countAtoms());
+    assertEquals(1, result.countBonds());
+    assertEquals(2, result.getBond(result.getAtom(0), result.getAtom(1)).getType());
   }
 }

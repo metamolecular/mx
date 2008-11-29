@@ -23,34 +23,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.io.smiles.SMILESReader;
+import com.metamolecular.mx.model.DefaultMolecule;
+import com.metamolecular.mx.model.Molecule;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class SMILESReaderTest extends TestCase
 {
+  private SMILESReader reader;
 
-  public static void main(String[] args)
+  @Override
+  protected void setUp() throws Exception
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-
-    TestRunner.run(suite);
+    reader = new SMILESReader();
+  }
+  
+  public void testItShouldReadALinearChain()
+  {
+//    Molecule input = new DefaultMolecule();
+//    
+//    reader.read(input, "C1CCCCC1");
+//    
+//    assertEquals(6, input.countAtoms());
   }
 }

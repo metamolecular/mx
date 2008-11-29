@@ -23,34 +23,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+package com.metamolecular.mx.io.smiles;
+
+import com.metamolecular.mx.model.Molecule;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class SMILESReader
 {
-
-  public static void main(String[] args)
+  public SMILESReader()
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-
-    TestRunner.run(suite);
+    
+  }
+  
+  public void read(Molecule molecule, String smiles)
+  {
+//    SMILESTokenizer tokenizer = new SMILESTokenizer(smiles);
+//    
+//    while(tokenizer.hasNextToken())
+//    {
+//      String token = tokenizer.nextToken();
+//      
+//      handleToken
+//    }
   }
 }
