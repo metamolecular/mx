@@ -36,7 +36,7 @@ import junit.framework.TestCase;
 public class SMILESBuilderTest extends TestCase
 {
 
-  public void testItShouldConnectTwoCarbons()
+  public void testItShouldConnectTwoAtoms()
   {
     Molecule result = new DefaultMolecule();
     SMILESBuilder builder = new SMILESBuilder(result);
@@ -49,7 +49,7 @@ public class SMILESBuilderTest extends TestCase
     assertEquals(1, result.getBond(result.getAtom(0), result.getAtom(1)).getType());
   }
 
-  public void testItShouldConnectTwoCarbonsThroughADoubleBond()
+  public void testItShouldConnectTwoAtomsThroughADoubleBond()
   {
     Molecule result = new DefaultMolecule();
     SMILESBuilder builder = new SMILESBuilder(result);
@@ -61,5 +61,40 @@ public class SMILESBuilderTest extends TestCase
     assertEquals(2, result.countAtoms());
     assertEquals(1, result.countBonds());
     assertEquals(2, result.getBond(result.getAtom(0), result.getAtom(1)).getType());
+  }
+  
+  public void testItShouldBranchAtSecondaryAtom()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+    
+    builder.addHead("C");
+    builder.addHead("C");
+    builder.openBranch();
+    builder.addHead("C");
+    builder.closeBranch();
+    builder.addHead("C");
+    
+    assertEquals(4, result.countAtoms());
+    assertEquals(3, result.countBonds());
+    assertEquals(3, result.getAtom(1).countNeighbors());
+  }
+  
+  public void testItShouldThrowWhenClosingANonexistantBranch()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+    
+    try
+    {
+      builder.closeBranch();
+      
+      fail();
+    }
+    
+    catch (IllegalStateException ignore)
+    {
+      
+    }
   }
 }

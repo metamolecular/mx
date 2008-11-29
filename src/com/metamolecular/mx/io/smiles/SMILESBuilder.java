@@ -23,43 +23,72 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.io.smiles;
 
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Richard L. Apodaca
  */
 public class SMILESBuilder
 {
+
   private Atom head;
   private int bondType;
   private Molecule molecule;
+  private List<Atom> branchPoints;
 
   public SMILESBuilder(Molecule molecule)
   {
     this.molecule = molecule;
-    this.bondType = 1;
+    this.branchPoints = new ArrayList<Atom>();
     head = null;
+
+    resetBond();
   }
 
   public void addHead(String token)
   {
     Atom atom = molecule.addAtom(token);
-    
+
     if (head != null)
     {
       molecule.connect(head, atom, bondType);
     }
-    
+
     head = atom;
-    bondType = 1;
+
+    resetBond();
   }
-  
+
   public void addBond(int type)
   {
     this.bondType = type;
+  }
+
+  public void openBranch()
+  {
+    branchPoints.add(head);
+  }
+
+  public void closeBranch()
+  {
+    try
+    {
+    head = branchPoints.remove(branchPoints.size() - 1);
+    }
+    
+    catch (ArrayIndexOutOfBoundsException e)
+    {
+      throw new IllegalStateException("Attempting to close branch when no branches are open.", e);
+    }
+  }
+
+  private void resetBond()
+  {
+    this.bondType = 1;
   }
 }
