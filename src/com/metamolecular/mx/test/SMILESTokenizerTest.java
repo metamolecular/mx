@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.smiles.SMILESTokenizer;
@@ -36,30 +35,47 @@ import junit.framework.TestCase;
  */
 public class SMILESTokenizerTest extends TestCase
 {
+
   private List<String> tokens;
-  
+
   @Override
   protected void setUp() throws Exception
   {
     tokens = new ArrayList<String>();
   }
-  
-  public void testItShouldFindSixCarbonsForHexane()
+
+  public void testItShouldFindAllTokensInALinearChain()
   {
     SMILESTokenizer tokenizer = new SMILESTokenizer("CCCCCC");
-    
+
     tokens.clear();
-    
+
     while (tokenizer.hasNextToken())
     {
       tokens.add(tokenizer.nextToken());
     }
-    
+
     assertEquals(6, tokens.size());
-    
+
     for (String token : tokens)
     {
       assertEquals("C", token);
+    }
+  }
+
+  public void testItShouldFindAllTokensInACycle()
+  {
+    SMILESTokenizer tokenizer = new SMILESTokenizer("C1CCCCC1");
+    String[] tokens = new String[]{"C", "1", "C", "C", "C", "C", "C", "1"};
+    int index = 0;
+    
+    while (tokenizer.hasNextToken())
+    {
+      String token = tokenizer.nextToken();
+      
+      assertEquals(tokens[index], token);
+      
+      index++;
     }
   }
 }
