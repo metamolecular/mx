@@ -36,45 +36,92 @@ import junit.framework.TestCase;
 public class SMILESTokenizerTest extends TestCase
 {
 
-  private List<String> tokens;
-
   @Override
   protected void setUp() throws Exception
   {
-    tokens = new ArrayList<String>();
   }
 
   public void testItShouldFindAllTokensInALinearChain()
   {
     SMILESTokenizer tokenizer = new SMILESTokenizer("CCCCCC");
-
-    tokens.clear();
+    String[] tokens = new String[]
+    {
+      "C", "C", "C", "C", "C", "C"
+    };
+    int index = 0;
 
     while (tokenizer.hasNextToken())
     {
-      tokens.add(tokenizer.nextToken());
-    }
+      assertEquals(tokens[index], tokenizer.nextToken());
 
-    assertEquals(6, tokens.size());
-
-    for (String token : tokens)
-    {
-      assertEquals("C", token);
+      index++;
     }
   }
 
   public void testItShouldFindAllTokensInACycle()
   {
     SMILESTokenizer tokenizer = new SMILESTokenizer("C1CCCCC1");
-    String[] tokens = new String[]{"C", "1", "C", "C", "C", "C", "C", "1"};
+    String[] tokens = new String[]
+    {
+      "C", "1", "C", "C", "C", "C", "C", "1"
+    };
     int index = 0;
-    
+
     while (tokenizer.hasNextToken())
     {
-      String token = tokenizer.nextToken();
-      
-      assertEquals(tokens[index], token);
-      
+      assertEquals(tokens[index], tokenizer.nextToken());
+
+      index++;
+    }
+  }
+
+  public void testItShouldFindAllTokensInABranch()
+  {
+    SMILESTokenizer tokenizer = new SMILESTokenizer("C(C)C");
+    String[] tokens = new String[]
+    {
+      "C", "(", "C", ")", "C"
+    };
+    int index = 0;
+
+    while (tokenizer.hasNextToken())
+    {
+      assertEquals(tokens[index], tokenizer.nextToken());
+
+      index++;
+    }
+  }
+
+  public void testItShouldFindAllTokensInANestedBranch()
+  {
+    SMILESTokenizer tokenizer = new SMILESTokenizer("C(C(C))C");
+    String[] tokens = new String[]
+    {
+      "C", "(", "C", "(", "C", ")", ")", "C"
+    };
+    int index = 0;
+
+    while (tokenizer.hasNextToken())
+    {
+      assertEquals(tokens[index], tokenizer.nextToken());
+
+      index++;
+    }
+  }
+
+  public void testItShouldFindAllTokensInANestedCyclicBranch()
+  {
+    SMILESTokenizer tokenizer = new SMILESTokenizer("C(C1CCCCCC1)C");
+    String[] tokens = new String[]
+    {
+      "C", "(", "C", "1", "C", "C", "C", "C", "C", "C", "1", ")", "C"
+    };
+    int index = 0;
+
+    while (tokenizer.hasNextToken())
+    {
+      assertEquals(tokens[index], tokenizer.nextToken());
+
       index++;
     }
   }
