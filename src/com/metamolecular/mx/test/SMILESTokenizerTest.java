@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.smiles.SMILESTokenizer;
@@ -122,6 +121,33 @@ public class SMILESTokenizerTest extends TestCase
       assertEquals(tokens[index], tokenizer.nextToken());
 
       index++;
+    }
+  }
+
+  public void testItShouldThrowWhenInvalidTokensArePresent()
+  {
+    try
+    {
+      new SMILESTokenizer("C!C");
+      
+      fail();
+    }
+    
+    catch (Exception ignore)
+    {
+      
+    }
+    
+    try
+    {
+      new SMILESTokenizer("*");
+      
+      fail();
+    }
+    
+    catch (Exception ignore)
+    {
+      
     }
   }
 }

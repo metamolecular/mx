@@ -48,8 +48,34 @@ public class SMILESReaderTest extends TestCase
   {
     Molecule input = new DefaultMolecule();
     
+    reader.read(input, "CCCCCC");
+    
+    assertEquals(6, input.countAtoms());
+    assertEquals(5, input.countBonds());
+  }
+  
+  public void testItShouldReadACycle()
+  {
+    Molecule input = new DefaultMolecule();
+    
     reader.read(input, "C1CCCCC1");
     
     assertEquals(6, input.countAtoms());
+    assertEquals(6, input.countBonds());
+  }
+  
+  public void testItShouldThrowWhenGivenIllegalAtomSymbol()
+  {
+    Molecule input = new DefaultMolecule();
+    
+    try
+    {
+      reader.read(input, "C!C");
+      fail();
+    }
+    
+    catch (IllegalArgumentException ignore)
+    {
+    }
   }
 }

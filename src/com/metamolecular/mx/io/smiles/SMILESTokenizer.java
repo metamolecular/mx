@@ -44,11 +44,14 @@ public class SMILESTokenizer
   private static String parens = "[\\(\\)]";
   private static String regex = element + or + bracket + or + bond + or + ring + or + parens;
   private static Pattern pattern = Pattern.compile(regex);
+  private static Pattern blacklist = Pattern.compile(".*[^A-Za-z0-9\\(\\)\\[\\]\\-=#:\\.\\%].*");
   
   private Iterator<String> iterator;
 
   public SMILESTokenizer(String smiles)
   {
+    assertNoBlacklistedCharacters(smiles);
+    
     List<String> tokens = fragment(smiles);
     
     this.iterator = tokens.iterator();
@@ -94,5 +97,13 @@ public class SMILESTokenizer
     }
 
     return result;
+  }
+  
+  private void assertNoBlacklistedCharacters(String smiles)
+  {
+    if (blacklist.matcher(smiles).matches())
+    {
+      throw new IllegalArgumentException("Invalid SMILES character in \"" + smiles + "\"");
+    }
   }
 }

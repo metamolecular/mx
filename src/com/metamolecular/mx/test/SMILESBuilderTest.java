@@ -121,17 +121,14 @@ public class SMILESBuilderTest extends TestCase
     assertEquals(3, result.getAtom(1).countNeighbors());
     assertEquals(3, result.getAtom(2).countNeighbors());
     assertEquals(1, result.getAtom(5).countNeighbors());
-    
+
     try
     {
       builder.closeBranch();
-      
+
       fail();
-    }
-    
-    catch (IllegalStateException ignore)
+    } catch (IllegalStateException ignore)
     {
-      
     }
   }
 
@@ -148,5 +145,42 @@ public class SMILESBuilderTest extends TestCase
     } catch (IllegalStateException ignore)
     {
     }
+  }
+
+  public void testItShouldCloseACycle()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+
+    builder.addHead("C");
+    builder.ring("1");
+    builder.addHead("C");
+    builder.addHead("C");
+    builder.ring("1");
+
+    assertEquals(3, result.countAtoms());
+    assertEquals(3, result.countBonds());
+  }
+
+  public void testItShouldReuseARingLabel()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+
+    builder.addHead("C"); //0
+    builder.ring("1");
+    builder.addHead("C"); //1
+    builder.addHead("C"); //2
+    builder.ring("1");
+    builder.addHead("C"); //3
+    builder.ring("1");
+    builder.addHead("C"); //4
+    builder.addHead("C"); //5
+    builder.ring("1");
+
+    assertEquals(6, result.countAtoms());
+    assertEquals(7, result.countBonds());
+    assertEquals(3, result.getAtom(2).countNeighbors());
+    assertEquals(3, result.getAtom(3).countNeighbors());
   }
 }

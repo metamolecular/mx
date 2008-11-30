@@ -28,7 +28,9 @@ package com.metamolecular.mx.io.smiles;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Richard L. Apodaca
@@ -40,11 +42,13 @@ public class SMILESBuilder
   private int bondType;
   private Molecule molecule;
   private List<Atom> branchPoints;
+  private Map<String, Atom> ringClosures;
 
   public SMILESBuilder(Molecule molecule)
   {
     this.molecule = molecule;
     this.branchPoints = new ArrayList<Atom>();
+    this.ringClosures = new HashMap<String, Atom>();
     head = null;
 
     resetBond();
@@ -78,12 +82,27 @@ public class SMILESBuilder
   {
     try
     {
-    head = branchPoints.remove(branchPoints.size() - 1);
-    }
-    
-    catch (ArrayIndexOutOfBoundsException e)
+      head = branchPoints.remove(branchPoints.size() - 1);
+    } catch (ArrayIndexOutOfBoundsException e)
     {
       throw new IllegalStateException("Attempting to close branch when no branches are open.", e);
+    }
+  }
+
+  public void ring(String id)
+  {
+    Atom atom = ringClosures.get(id);
+    
+    if (atom == null)
+    {
+      ringClosures.put(id, head);
+    }
+    
+    else
+    {
+      molecule.connect(head, atom, bondType);
+      resetBond();
+      ringClosures.remove(id);
     }
   }
 
