@@ -23,30 +23,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.io.smiles;
 
 import com.metamolecular.mx.model.Molecule;
+import java.util.regex.Pattern;
 
 /**
  * @author Richard L. Apodaca
  */
 public class SMILESReader
 {
+  private static Pattern atomPattern = Pattern.compile("^(([A-Z][a-z]?)|[a-z])");
+
   public SMILESReader()
   {
-    
   }
-  
+
   public void read(Molecule molecule, String smiles)
   {
-//    SMILESTokenizer tokenizer = new SMILESTokenizer(smiles);
-//    
-//    while(tokenizer.hasNextToken())
-//    {
-//      String token = tokenizer.nextToken();
-//      
-//      handleToken
-//    }
+    SMILESTokenizer tokenizer = new SMILESTokenizer(smiles);
+    SMILESBuilder builder = new SMILESBuilder(molecule);
+
+    while (tokenizer.hasNextToken())
+    {
+      String token = tokenizer.nextToken();
+
+      handleToken(token, builder);
+    }
+  }
+
+  private void handleToken(String token, SMILESBuilder builder)
+  {
+    if (atomPattern.matcher(token).matches())
+    {
+      handleAtom(token, builder);
+    }
+  }
+  
+  private void handleAtom(String token, SMILESBuilder builder)
+  {
+    builder.addHead(token);
   }
 }

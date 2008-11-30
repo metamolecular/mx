@@ -46,10 +46,10 @@ public class SMILESReaderTest extends TestCase
   
   public void testItShouldReadALinearChain()
   {
-//    Molecule input = new DefaultMolecule();
-//    
-//    reader.read(input, "C1CCCCC1");
-//    
-//    assertEquals(6, input.countAtoms());
+    Molecule input = new DefaultMolecule();
+    
+    reader.read(input, "C1CCCCC1");
+    
+    assertEquals(6, input.countAtoms());
   }
 }
