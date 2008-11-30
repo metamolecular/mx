@@ -26,7 +26,7 @@
 
 package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.io.smiles.SMILESReader;
+import com.metamolecular.mx.io.daylight.SMILESReader;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;

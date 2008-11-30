@@ -25,7 +25,7 @@
  */
 package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.io.smiles.SMILESBuilder;
+import com.metamolecular.mx.io.daylight.SMILESBuilder;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import junit.framework.TestCase;

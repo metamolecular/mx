@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.io.smiles;
+package com.metamolecular.mx.io.daylight;
 
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;

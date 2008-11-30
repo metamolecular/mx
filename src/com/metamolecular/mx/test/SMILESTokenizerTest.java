@@ -25,7 +25,7 @@
  */
 package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.io.smiles.SMILESTokenizer;
+import com.metamolecular.mx.io.daylight.SMILESTokenizer;
 import junit.framework.TestCase;
 
 /**
