@@ -121,6 +121,18 @@ public class SMILESBuilderTest extends TestCase
     assertEquals(3, result.getAtom(1).countNeighbors());
     assertEquals(3, result.getAtom(2).countNeighbors());
     assertEquals(1, result.getAtom(5).countNeighbors());
+    
+    try
+    {
+      builder.closeBranch();
+      
+      fail();
+    }
+    
+    catch (IllegalStateException ignore)
+    {
+      
+    }
   }
 
   public void testItShouldThrowWhenClosingANonexistantBranch()
