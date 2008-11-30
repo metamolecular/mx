@@ -64,6 +64,15 @@ public class SMILESReaderTest extends TestCase
     assertEquals(6, input.countBonds());
   }
   
+  public void testItShouldReadCubane()
+  {
+    Molecule input = new DefaultMolecule();
+    
+    reader.read(input, "C12C3C4C1C5C4C3C25");
+    
+    assertEquals(8, input.countAtoms());
+  }
+  
   public void testItShouldThrowWhenGivenIllegalAtomSymbol()
   {
     Molecule input = new DefaultMolecule();
