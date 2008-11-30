@@ -62,39 +62,56 @@ public class SMILESBuilderTest extends TestCase
     assertEquals(1, result.countBonds());
     assertEquals(2, result.getBond(result.getAtom(0), result.getAtom(1)).getType());
   }
-  
+
   public void testItShouldBranchAtSecondaryAtom()
   {
     Molecule result = new DefaultMolecule();
     SMILESBuilder builder = new SMILESBuilder(result);
-    
+
     builder.addHead("C");
     builder.addHead("C");
     builder.openBranch();
     builder.addHead("C");
     builder.closeBranch();
     builder.addHead("C");
-    
+
     assertEquals(4, result.countAtoms());
     assertEquals(3, result.countBonds());
     assertEquals(3, result.getAtom(1).countNeighbors());
   }
-  
+
+  public void testItShouldBranchAtTertiaryAtom()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+
+    builder.addHead("C");
+    builder.addHead("C");
+    builder.openBranch();
+    builder.addHead("C");
+    builder.closeBranch();
+    builder.openBranch();
+    builder.addHead("C");
+    builder.closeBranch();
+    builder.addHead("C");
+
+    assertEquals(5, result.countAtoms());
+    assertEquals(4, result.countBonds());
+    assertEquals(4, result.getAtom(1).countNeighbors());
+  }
+
   public void testItShouldThrowWhenClosingANonexistantBranch()
   {
     Molecule result = new DefaultMolecule();
     SMILESBuilder builder = new SMILESBuilder(result);
-    
+
     try
     {
       builder.closeBranch();
-      
+
       fail();
-    }
-    
-    catch (IllegalStateException ignore)
+    } catch (IllegalStateException ignore)
     {
-      
     }
   }
 }
