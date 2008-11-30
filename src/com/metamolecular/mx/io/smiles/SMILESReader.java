@@ -25,10 +25,7 @@
  */
 package com.metamolecular.mx.io.smiles;
 
-import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -39,11 +36,9 @@ public class SMILESReader
   private static Pattern atomPattern = Pattern.compile("^(([A-Z][a-z]?)|[a-z])");
   private static Pattern ringIdentifierPattern = Pattern.compile("[1-9]|\\%[1-9][0-9]");
   
-  private Map<String, Atom> ringClosures;
-  
   public SMILESReader()
   {
-    ringClosures = new HashMap<String, Atom>();
+
   }
 
   public void read(Molecule molecule, String smiles)
