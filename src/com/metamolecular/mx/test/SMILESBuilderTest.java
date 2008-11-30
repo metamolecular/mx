@@ -100,6 +100,29 @@ public class SMILESBuilderTest extends TestCase
     assertEquals(4, result.getAtom(1).countNeighbors());
   }
 
+  public void testItShouldCreateANestedBranch()
+  {
+    Molecule result = new DefaultMolecule();
+    SMILESBuilder builder = new SMILESBuilder(result);
+
+    builder.addHead("C"); //0
+    builder.addHead("C"); //1
+    builder.openBranch();
+    builder.addHead("C"); //2
+    builder.openBranch();
+    builder.addHead("C"); //3
+    builder.closeBranch();
+    builder.addHead("C"); //4
+    builder.closeBranch();
+    builder.addHead("C"); //5
+
+    assertEquals(6, result.countAtoms());
+    assertEquals(5, result.countBonds());
+    assertEquals(3, result.getAtom(1).countNeighbors());
+    assertEquals(3, result.getAtom(2).countNeighbors());
+    assertEquals(1, result.getAtom(5).countNeighbors());
+  }
+
   public void testItShouldThrowWhenClosingANonexistantBranch()
   {
     Molecule result = new DefaultMolecule();
