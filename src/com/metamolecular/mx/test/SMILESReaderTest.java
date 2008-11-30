@@ -27,6 +27,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.smiles.SMILESReader;
+import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import junit.framework.TestCase;
@@ -71,6 +72,14 @@ public class SMILESReaderTest extends TestCase
     reader.read(input, "C12C3C4C1C5C4C3C25");
     
     assertEquals(8, input.countAtoms());
+    assertEquals(12, input.countBonds());
+    
+    for (int i = 0; i < input.countAtoms(); i++)
+    {
+      Atom atom = input.getAtom(i);
+      
+      assertEquals(3, atom.countNeighbors());
+    }
   }
   
   public void testItShouldThrowWhenGivenIllegalAtomSymbol()
