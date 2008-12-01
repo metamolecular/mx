@@ -35,6 +35,8 @@ public class SMILESReader
 {
   private static Pattern atomPattern = Pattern.compile("^(([A-Z][a-z]?)|[a-z])");
   private static Pattern ringIdentifierPattern = Pattern.compile("[1-9]|\\%[1-9][0-9]");
+  private static String openParen = "(";
+  private static String closeParen = ")";
   
   public SMILESReader()
   {
@@ -66,6 +68,20 @@ public class SMILESReader
     if (ringIdentifierPattern.matcher(token).matches())
     {
       handleRingIdentifier(token, builder);
+      
+      return;
+    }
+    
+    if (openParen.equals(token))
+    {
+      builder.openBranch();
+      
+      return;
+    }
+    
+    if (closeParen.equals(token))
+    {
+      builder.closeBranch();
       
       return;
     }
