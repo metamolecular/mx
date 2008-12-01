@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-package com.metamolecular.mx.io;
+package com.metamolecular.mx.io.mdl;
 
 import java.io.LineNumberReader;
 import java.io.StringReader;

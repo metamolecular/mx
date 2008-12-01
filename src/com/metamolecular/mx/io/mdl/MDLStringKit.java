@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-package com.metamolecular.mx.io;
+package com.metamolecular.mx.io.mdl;
 
 /**
  * @author Richard L. Apodaca

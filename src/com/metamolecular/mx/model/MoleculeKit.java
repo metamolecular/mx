@@ -29,8 +29,8 @@ package com.metamolecular.mx.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.metamolecular.mx.io.MolfileReader;
-import com.metamolecular.mx.io.MolfileWriter;
+import com.metamolecular.mx.io.mdl.MolfileReader;
+import com.metamolecular.mx.io.mdl.MolfileWriter;
 
 /**
  * @author Richard L. Apodaca
