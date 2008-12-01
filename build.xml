@@ -5,6 +5,7 @@
   <property name="unix-name" value="mx" />
   <property name="version" value="0.105.0" />
   <property name="source.dir" location="src" />
+  <property name="resource.dir" location="resources" />
   <property name="lib.dir" location="lib" />
   <property name="build.dir" location="build" />
   <property name="class.dir" location="${build.dir}/classes" />
@@ -38,6 +39,7 @@
         <fileset refid="libs" />
       </classpath>
     </javac>
+    <copy file="${resource.dir}/atomic_system.xml" todir="${class.dir}/com/metamolecular/mx/model" />
   </target>
   <target name="test" depends="compile" description="Run JUnit tests.">
     <java classname="${test.class}" fork = "true" dir="${build.dir}">

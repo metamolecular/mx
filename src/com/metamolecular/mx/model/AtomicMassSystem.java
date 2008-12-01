@@ -23,33 +23,82 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.model;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Richard L. Apodaca
  */
 public class AtomicMassSystem
 {
+
   private static AtomicMassSystem instance;
-  
+  private Document document;
+  private Map<String, Entry> entries;
+
   private AtomicMassSystem()
   {
+    this.document = null;
+    this.entries = new HashMap<String, Entry>();
     
+    loadFile();
   }
-  
+
   public int getAtomicNumber(String atomicSymbol)
   {
-    return 0;
+    return entries.get(atomicSymbol).atomicNumber;
   }
-  
+
   public static AtomicMassSystem getInstance()
   {
     if (instance == null)
     {
       instance = new AtomicMassSystem();
     }
-    
+
     return instance;
+  }
+
+  private void loadFile()
+  {
+    InputStream in = getClass().getResourceAsStream("atomic_system.xml");
+    
+    try
+    {
+      this.document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+    }
+    
+    catch (Exception e)
+    {
+      throw new RuntimeException("Error reading atomic_system.xml.");
+    }
+    
+    NodeList nodes = document.getElementsByTagName("entry");
+    
+    for (int i = 0; i < nodes.getLength(); i++)
+    {
+      Node node = nodes.item(i);
+      
+      String symbol = node.getAttributes().getNamedItem("symbol").getNodeValue();
+      
+      entries.put(symbol, new Entry(node));
+    }
+  }
+  
+  private class Entry
+  {
+    private int atomicNumber;
+    
+    private Entry(Node node)
+    {
+      this.atomicNumber = Integer.parseInt(node.getAttributes().getNamedItem("atomic-number").getNodeValue());
+    }
   }
 }
