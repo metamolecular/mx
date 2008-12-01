@@ -86,6 +86,18 @@ public class SMILESReaderTest extends TestCase
     assertEquals(4, input.countBonds());
     assertEquals(4, input.getAtom(1).countNeighbors());
   }
+  
+  public void testItShouldReadANestedBranch()
+  {
+    Molecule input = new DefaultMolecule();
+    
+    reader.read(input, "CC(C(C)C)C");
+    
+    assertEquals(6, input.countAtoms());
+    assertEquals(5, input.countBonds());
+    assertEquals(3, input.getAtom(1).countNeighbors());
+    assertEquals(3, input.getAtom(2).countNeighbors());
+  }
 
   public void testItShouldReadCubane()
   {
