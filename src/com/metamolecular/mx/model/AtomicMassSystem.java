@@ -23,35 +23,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+package com.metamolecular.mx.model;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class AtomicMassSystem
 {
-
-  public static void main(String[] args)
+  private static AtomicMassSystem instance;
+  
+  private AtomicMassSystem()
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicMassSystemTest.class);
-
-    TestRunner.run(suite);
+    
+  }
+  
+  public int getAtomicNumber(String atomicSymbol)
+  {
+    return 0;
+  }
+  
+  public static AtomicMassSystem getInstance()
+  {
+    if (instance == null)
+    {
+      instance = new AtomicMassSystem();
+    }
+    
+    return instance;
   }
 }

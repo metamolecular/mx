@@ -23,35 +23,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.model.AtomicMassSystem;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class AtomicMassSystemTest extends TestCase
 {
+  private AtomicMassSystem system;
 
-  public static void main(String[] args)
+  @Override
+  protected void setUp() throws Exception
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicMassSystemTest.class);
-
-    TestRunner.run(suite);
+    system = AtomicMassSystem.getInstance();
+  }
+  
+  public void testItShouldFindAtomicNumber1ForHydrogen()
+  {
+    int atomicNumber = system.getAtomicNumber("H");
+    
+    assertEquals(1, atomicNumber);
   }
 }
