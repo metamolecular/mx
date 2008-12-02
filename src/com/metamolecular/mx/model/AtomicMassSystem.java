@@ -52,6 +52,11 @@ public class AtomicMassSystem
 
     loadFile();
   }
+  
+  public boolean hasSymbol(String atomicSymbol)
+  {
+    return entries.containsKey(atomicSymbol);
+  }
 
   public int getAtomicNumber(String atomicSymbol)
   {

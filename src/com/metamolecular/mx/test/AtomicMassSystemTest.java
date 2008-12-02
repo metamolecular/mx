@@ -36,7 +36,6 @@ import junit.framework.TestCase;
  */
 public class AtomicMassSystemTest extends TestCase
 {
-
   private AtomicMassSystem system;
 
   @Override
