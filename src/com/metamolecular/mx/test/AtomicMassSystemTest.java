@@ -25,7 +25,7 @@
  */
 package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.model.AtomicMassSystem;
+import com.metamolecular.mx.model.AtomicSystem;
 import com.metamolecular.mx.model.Isotope;
 import com.metamolecular.mx.model.Measurement;
 import java.util.List;
@@ -36,12 +36,12 @@ import junit.framework.TestCase;
  */
 public class AtomicMassSystemTest extends TestCase
 {
-  private AtomicMassSystem system;
+  private AtomicSystem system;
 
   @Override
   protected void setUp() throws Exception
   {
-    system = AtomicMassSystem.getInstance();
+    system = AtomicSystem.getInstance();
   }
 
   public void testItShouldFindAnAtomicNumber()
