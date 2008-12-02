@@ -26,7 +26,9 @@
 package com.metamolecular.mx.model;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -54,6 +56,13 @@ public class AtomicMassSystem
   public int getAtomicNumber(String atomicSymbol)
   {
     return entries.get(atomicSymbol).atomicNumber;
+  }
+  
+  public List<Isotope> getIsotopes(String atomicNumber)
+  {
+    Entry entry = entries.get(atomicNumber);
+    
+    return entry.getIsotopes();
   }
 
   public static AtomicMassSystem getInstance()
@@ -95,10 +104,46 @@ public class AtomicMassSystem
   private class Entry
   {
     private int atomicNumber;
+    private List<Isotope> isotopes;
     
     private Entry(Node node)
     {
       this.atomicNumber = Integer.parseInt(node.getAttributes().getNamedItem("atomic-number").getNodeValue());
+      this.isotopes = new ArrayList<Isotope>();
+      
+      loadIsotopes(node);
     }
+    
+    public List<Isotope> getIsotopes()
+    {
+      return isotopes;
+    }
+    
+    private void loadIsotopes(Node node)
+    {
+      //Node abundance = node.getFirstChild();
+      NodeList children = node.getChildNodes();
+      
+      System.out.println(node.getNodeName());
+      System.out.println(children.getLength());
+      
+//      while (sibbling != null)
+//      {
+//        System.out.println(sibbling.getNodeName());
+//        if (!sibbling.getNodeName().equals("isotope"))
+//        {
+//          continue;
+//        }
+//        
+//        isotopes.add(new IsotopeImpl());
+//        
+//        sibbling = abundance.getNextSibling();
+//      }
+    }
+  }
+  
+  private class IsotopeImpl implements Isotope
+  {
+    
   }
 }

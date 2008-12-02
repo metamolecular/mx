@@ -23,38 +23,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package com.metamolecular.mx.test;
-
-import com.metamolecular.mx.model.AtomicMassSystem;
-import com.metamolecular.mx.model.Isotope;
-import java.util.List;
-import junit.framework.TestCase;
+package com.metamolecular.mx.model;
 
 /**
+ *
  * @author Richard L. Apodaca
  */
-public class AtomicMassSystemTest extends TestCase
+public interface Isotope
 {
-  private AtomicMassSystem system;
-
-  @Override
-  protected void setUp() throws Exception
-  {
-    system = AtomicMassSystem.getInstance();
-  }
-  
-  public void testItShouldFindAtomicNumber1ForHydrogen()
-  {
-    int atomicNumber = system.getAtomicNumber("H");
-    
-    assertEquals(1, atomicNumber);
-  }
-  
-  public void testItShouldFindTwoIsotopesForHydrogen()
-  {
-    List<Isotope> isotopes = system.getIsotopes("H");
-    
-    assertEquals(2, isotopes.size());
-  }
 }
