@@ -55,36 +55,28 @@ public class AtomicMassSystem
 
   public int getAtomicNumber(String atomicSymbol)
   {
-    Entry entry = entries.get(atomicSymbol);
+    Entry entry = getEntry(atomicSymbol);
 
-    assertEntryNotNull(atomicSymbol, entry);
-
-    return entries.get(atomicSymbol).atomicNumber;
+    return entry.atomicNumber;
   }
 
   public List<Isotope> getIsotopes(String atomicSymbol)
   {
-    Entry entry = entries.get(atomicSymbol);
-    
-    assertEntryNotNull(atomicSymbol, entry);
+    Entry entry = getEntry(atomicSymbol);
 
     return entry.getIsotopes();
   }
 
   public Isotope getIsotope(String atomicSymbol, int massNumber)
   {
-    Entry entry = entries.get(atomicSymbol);
-    
-    assertEntryNotNull(atomicSymbol, entry);
+    Entry entry = getEntry(atomicSymbol);
 
     return entry.getIsotope(massNumber);
   }
 
   public Measurement getAverageMass(String atomicSymbol)
   {
-    Entry entry = entries.get(atomicSymbol);
-    
-    assertEntryNotNull(atomicSymbol, entry);
+    Entry entry = getEntry(atomicSymbol);
 
     return entry.getAverageMass();
   }
@@ -123,12 +115,16 @@ public class AtomicMassSystem
     }
   }
 
-  private void assertEntryNotNull(String symbol, Entry entry)
+  private Entry getEntry(String symbol)
   {
+    Entry entry = entries.get(symbol);
+
     if (entry == null)
     {
       throw new IllegalArgumentException("No such element: " + symbol);
     }
+
+    return entry;
   }
 
   private class Entry
