@@ -177,12 +177,7 @@ public class AtomicMassSystem
 
     private void recordMass(Node mass)
     {
-      NamedNodeMap attributes = mass.getAttributes();
-
-      double value = Double.parseDouble(attributes.getNamedItem("value").getNodeValue());
-      double error = Double.parseDouble(attributes.getNamedItem("error").getNodeValue());
-
-      this.averageMass = new MeasurementImpl(value, error, "u");
+      this.averageMass = new MeasurementImpl(mass, "u");
     }
 
     private Node findNaturalAbundance(Node entry)
@@ -210,10 +205,10 @@ public class AtomicMassSystem
     private double error;
     private String units;
 
-    private MeasurementImpl(double value, double error, String units)
+    private MeasurementImpl(Node measurement, String units)
     {
-      this.value = value;
-      this.error = error;
+      this.value = Double.parseDouble(measurement.getAttributes().getNamedItem("value").getNodeValue());
+      this.error = Double.parseDouble(measurement.getAttributes().getNamedItem("error").getNodeValue());
       this.units = units;
     }
 
@@ -272,30 +267,14 @@ public class AtomicMassSystem
 
         if ("mass".equals(child.getNodeName()))
         {
-          parseMass(child);
+          this.mass = new MeasurementImpl(child, "u");
         }
 
         if ("abundance".equals(child.getNodeName()))
         {
-          parseAbundance(child);
+          this.abundance = new MeasurementImpl(child, "percent");
         }
       }
-    }
-
-    private void parseMass(Node massNode)
-    {
-      double value = Double.parseDouble(massNode.getAttributes().getNamedItem("value").getNodeValue());
-      double error = Double.parseDouble(massNode.getAttributes().getNamedItem("error").getNodeValue());
-
-      this.mass = new MeasurementImpl(value, error, "u");
-    }
-
-    private void parseAbundance(Node abundanceNode)
-    {
-      double value = Double.parseDouble(abundanceNode.getAttributes().getNamedItem("value").getNodeValue());
-      double error = Double.parseDouble(abundanceNode.getAttributes().getNamedItem("error").getNodeValue());
-
-      this.abundance = new MeasurementImpl(value, error, "percent");
     }
   }
 
