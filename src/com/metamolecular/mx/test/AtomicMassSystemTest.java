@@ -51,6 +51,16 @@ public class AtomicMassSystemTest extends TestCase
     assertEquals(1, atomicNumber);
   }
   
+  public void testItShouldFindAVaidAtomicSymbol()
+  {
+    assertTrue(system.hasElement("C"));
+  }
+  
+  public void testitShouldNotFindAnInvalidAtomicSymbol()
+  {
+    assertFalse(system.hasElement("R"));
+  }
+  
   public void testItShouldThrowWhenRequestingAnInvalidAtomicSymbol()
   {
     try

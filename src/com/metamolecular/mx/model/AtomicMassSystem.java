@@ -53,7 +53,7 @@ public class AtomicMassSystem
     loadFile();
   }
   
-  public boolean hasSymbol(String atomicSymbol)
+  public boolean hasElement(String atomicSymbol)
   {
     return entries.containsKey(atomicSymbol);
   }
