@@ -45,11 +45,6 @@ public class AtomicSystem
     loadSymbols();
   }
   
-  public String[] getSymbols()
-  {
-    return (String[]) symbols.toArray(new String[0]);
-  }
-  
   public boolean validateSymbol(String symbol)
   {
     return symbols.contains(symbol);

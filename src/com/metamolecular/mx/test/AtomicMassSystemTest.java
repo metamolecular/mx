@@ -51,12 +51,42 @@ public class AtomicMassSystemTest extends TestCase
 
     assertEquals(1, atomicNumber);
   }
+  
+  public void testItShouldThrowWhenRequestingAnInvalidAtomicSymbol()
+  {
+    try
+    {
+      system.getAtomicNumber("VV");
+      
+      fail();
+    }
+    
+    catch(IllegalArgumentException ignore)
+    {
+      
+    }
+  }
 
   public void testItShouldFindAllIsotopes()
   {
     List<Isotope> isotopes = system.getIsotopes("H");
 
     assertEquals(2, isotopes.size());
+  }
+  
+  public void testItShouldThrowWhenFindingIsotopesForInvalidAtomSymbol()
+  {
+    try
+    {
+      system.getIsotopes("VV");
+      
+      fail();
+    }
+    
+    catch (IllegalArgumentException ignore)
+    {
+      
+    }
   }
   
   public void testItShouldFindAnAverageMass()
@@ -66,6 +96,21 @@ public class AtomicMassSystemTest extends TestCase
     assertEquals(1.00794, averageMass.getValue());
     assertEquals(0.00007, averageMass.getError());
     assertEquals("u", averageMass.getUnits());
+  }
+  
+  public void testItShouldThrowWhenFindingAverageMassForInvalidAtomicSymbol()
+  {
+    try
+    {
+      system.getAverageMass("VV");
+      
+      fail();
+    }
+    
+    catch (IllegalArgumentException ignore)
+    {
+      
+    }
   }
   
   public void testItShouldFindAnIsotopeWithAllProperties()
@@ -87,5 +132,20 @@ public class AtomicMassSystemTest extends TestCase
     assertEquals(0.999885, abundance.getValue());
     assertEquals(0.000070, abundance.getError());
     assertEquals("percent", abundance.getUnits());
+  }
+  
+  public void testItShouldThrowWhenFindingValidSymbolWithInvalidIsotope()
+  {
+    try
+    {
+      system.getIsotope("C", 20);
+      
+      fail();
+    }
+    
+    catch(IllegalArgumentException ignore)
+    {
+      
+    }
   }
 }
