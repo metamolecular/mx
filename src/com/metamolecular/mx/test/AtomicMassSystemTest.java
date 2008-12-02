@@ -23,11 +23,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.model.AtomicMassSystem;
 import com.metamolecular.mx.model.Isotope;
+import com.metamolecular.mx.model.Measurement;
 import java.util.List;
 import junit.framework.TestCase;
 
@@ -36,6 +36,7 @@ import junit.framework.TestCase;
  */
 public class AtomicMassSystemTest extends TestCase
 {
+
   private AtomicMassSystem system;
 
   @Override
@@ -43,18 +44,48 @@ public class AtomicMassSystemTest extends TestCase
   {
     system = AtomicMassSystem.getInstance();
   }
-  
-  public void testItShouldFindAtomicNumber1ForHydrogen()
+
+  public void testItShouldFindAnAtomicNumber()
   {
     int atomicNumber = system.getAtomicNumber("H");
-    
+
     assertEquals(1, atomicNumber);
   }
-  
-  public void testItShouldFindTwoIsotopesForHydrogen()
+
+  public void testItShouldFindAllIsotopes()
   {
     List<Isotope> isotopes = system.getIsotopes("H");
-    
+
     assertEquals(2, isotopes.size());
+  }
+  
+  public void testItShouldFindAnAverageMass()
+  {
+    Measurement averageMass = system.getAverageMass("H");
+    
+    assertEquals(1.00794, averageMass.getValue());
+    assertEquals(0.00007, averageMass.getError());
+    assertEquals("u", averageMass.getUnits());
+  }
+  
+  public void testItShouldFindAnIsotopeWithAllProperties()
+  {
+    Isotope isotope = system.getIsotope("H", 1);
+    
+    assertEquals(1, isotope.getMassNumber());
+    
+    Measurement mass = isotope.getMass();
+    
+    assertNotNull(mass);
+    assertEquals(1.0078250319, mass.getValue());
+    assertEquals(0.00000000006, mass.getError());
+    assertEquals("u", mass.getUnits());
+    
+    Measurement abundance = isotope.getAbundance();
+    
+    assertNotNull(abundance);
+    assertEquals(0.999885, abundance.getValue());
+    assertEquals(0.000070, abundance.getError());
+    assertEquals("percent", abundance.getUnits());
   }
 }

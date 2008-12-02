@@ -31,4 +31,9 @@ package com.metamolecular.mx.model;
  */
 public interface Isotope
 {
+  public int getMassNumber();
+  
+  public Measurement getMass();
+  
+  public Measurement getAbundance();
 }

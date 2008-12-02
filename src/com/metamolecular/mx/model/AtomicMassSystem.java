@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -49,7 +50,7 @@ public class AtomicMassSystem
   {
     this.document = null;
     this.entries = new HashMap<String, Entry>();
-    
+
     loadFile();
   }
 
@@ -57,12 +58,26 @@ public class AtomicMassSystem
   {
     return entries.get(atomicSymbol).atomicNumber;
   }
-  
-  public List<Isotope> getIsotopes(String atomicNumber)
+
+  public List<Isotope> getIsotopes(String atomicSymbol)
   {
-    Entry entry = entries.get(atomicNumber);
-    
+    Entry entry = entries.get(atomicSymbol);
+
     return entry.getIsotopes();
+  }
+
+  public Isotope getIsotope(String atomicSymbol, int massNumber)
+  {
+    Entry entry = entries.get(atomicSymbol);
+
+    return entry.getIsotope(massNumber);
+  }
+
+  public Measurement getAverageMass(String atomicSymbol)
+  {
+    Entry entry = entries.get(atomicSymbol);
+
+    return entry.getAverageMass();
   }
 
   public static AtomicMassSystem getInstance()
@@ -78,72 +93,210 @@ public class AtomicMassSystem
   private void loadFile()
   {
     InputStream in = getClass().getResourceAsStream("atomic_system.xml");
-    
+
     try
     {
       this.document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
-    }
-    
-    catch (Exception e)
+    } catch (Exception e)
     {
       throw new RuntimeException("Error reading atomic_system.xml.");
     }
-    
+
     NodeList nodes = document.getElementsByTagName("entry");
-    
+
     for (int i = 0; i < nodes.getLength(); i++)
     {
       Node node = nodes.item(i);
-      
+
       String symbol = node.getAttributes().getNamedItem("symbol").getNodeValue();
-      
+
       entries.put(symbol, new Entry(node));
     }
   }
-  
+
   private class Entry
   {
+
     private int atomicNumber;
     private List<Isotope> isotopes;
-    
+    private Measurement averageMass;
+
     private Entry(Node node)
     {
       this.atomicNumber = Integer.parseInt(node.getAttributes().getNamedItem("atomic-number").getNodeValue());
       this.isotopes = new ArrayList<Isotope>();
-      
-      loadIsotopes(node);
+
+      parseEntry(node);
     }
-    
+
     public List<Isotope> getIsotopes()
     {
       return isotopes;
     }
-    
-    private void loadIsotopes(Node node)
+
+    public Isotope getIsotope(int massNumber)
     {
-      //Node abundance = node.getFirstChild();
-      NodeList children = node.getChildNodes();
-      
-      System.out.println(node.getNodeName());
-      System.out.println(children.getLength());
-      
-//      while (sibbling != null)
-//      {
-//        System.out.println(sibbling.getNodeName());
-//        if (!sibbling.getNodeName().equals("isotope"))
-//        {
-//          continue;
-//        }
-//        
-//        isotopes.add(new IsotopeImpl());
-//        
-//        sibbling = abundance.getNextSibling();
-//      }
+      for (Isotope isotope : isotopes)
+      {
+        if (isotope.getMassNumber() == massNumber)
+        {
+          return isotope;
+        }
+      }
+
+      return null;
+    }
+
+    public Measurement getAverageMass()
+    {
+      return averageMass;
+    }
+
+    private void parseEntry(Node entry)
+    {
+      Node abundance = findNaturalAbundance(entry);
+      NodeList children = abundance.getChildNodes();
+
+      for (int i = 0; i < children.getLength(); i++)
+      {
+        Node test = children.item(i);
+
+        if ("isotope".equals(test.getNodeName()))
+        {
+          IsotopeImpl isotope = new IsotopeImpl(test);
+
+          isotopes.add(isotope);
+        }
+
+        if ("mass".equals(test.getNodeName()))
+        {
+          recordMass(test);
+        }
+      }
+    }
+
+    private void recordMass(Node mass)
+    {
+      NamedNodeMap attributes = mass.getAttributes();
+
+      double value = Double.parseDouble(attributes.getNamedItem("value").getNodeValue());
+      double error = Double.parseDouble(attributes.getNamedItem("error").getNodeValue());
+
+      this.averageMass = new MeasurementImpl(value, error, "u");
+    }
+
+    private Node findNaturalAbundance(Node entry)
+    {
+      NodeList children = entry.getChildNodes();
+
+      for (int i = 0; i < children.getLength(); i++)
+      {
+        Node test = children.item(i);
+
+        if ("natural-abundance".equals(test.getNodeName()))
+        {
+          return test;
+        }
+      }
+
+      return null;
     }
   }
-  
+
+  private class MeasurementImpl implements Measurement
+  {
+
+    private double value;
+    private double error;
+    private String units;
+
+    private MeasurementImpl(double value, double error, String units)
+    {
+      this.value = value;
+      this.error = error;
+      this.units = units;
+    }
+
+    public double getError()
+    {
+      return error;
+    }
+
+    public String getUnits()
+    {
+      return units;
+    }
+
+    public double getValue()
+    {
+      return value;
+    }
+  }
+
   private class IsotopeImpl implements Isotope
   {
-    
+
+    private int massNumber;
+    private Measurement abundance;
+    private Measurement mass;
+
+    private IsotopeImpl(Node isotopeNode)
+    {
+      this.massNumber = Integer.parseInt(isotopeNode.getAttributes().getNamedItem("mass-number").getNodeValue());
+
+      parseNode(isotopeNode);
+    }
+
+    public int getMassNumber()
+    {
+      return massNumber;
+    }
+
+    public Measurement getAbundance()
+    {
+      return abundance;
+    }
+
+    public Measurement getMass()
+    {
+      return mass;
+    }
+
+    private void parseNode(Node isotope)
+    {
+      NodeList children = isotope.getChildNodes();
+
+      for (int i = 0; i < children.getLength(); i++)
+      {
+        Node child = children.item(i);
+
+        if ("mass".equals(child.getNodeName()))
+        {
+          parseMass(child);
+        }
+
+        if ("abundance".equals(child.getNodeName()))
+        {
+          parseAbundance(child);
+        }
+      }
+    }
+
+    private void parseMass(Node massNode)
+    {
+      double value = Double.parseDouble(massNode.getAttributes().getNamedItem("value").getNodeValue());
+      double error = Double.parseDouble(massNode.getAttributes().getNamedItem("error").getNodeValue());
+
+      this.mass = new MeasurementImpl(value, error, "u");
+    }
+
+    private void parseAbundance(Node abundanceNode)
+    {
+      double value = Double.parseDouble(abundanceNode.getAttributes().getNamedItem("value").getNodeValue());
+      double error = Double.parseDouble(abundanceNode.getAttributes().getNamedItem("error").getNodeValue());
+
+      this.abundance = new MeasurementImpl(value, error, "percent");
+    }
   }
+
 }
