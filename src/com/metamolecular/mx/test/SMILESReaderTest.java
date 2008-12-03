@@ -163,4 +163,11 @@ public class SMILESReaderTest extends TestCase
     {
     }
   }
+  
+  public void testItShouldReadASMILESThroughAStaticMethod()
+  {
+    Molecule result = SMILESReader.read("C1=CC=CC=C1");
+    
+    assertEquals(6, result.countAtoms());
+  }
 }

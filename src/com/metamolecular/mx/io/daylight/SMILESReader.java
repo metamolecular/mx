@@ -25,6 +25,7 @@
  */
 package com.metamolecular.mx.io.daylight;
 
+import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import java.util.regex.Pattern;
 
@@ -33,6 +34,7 @@ import java.util.regex.Pattern;
  */
 public class SMILESReader
 {
+  private static SMILESReader staticReader = new SMILESReader();
   private static String SINGLE_BOND = "-";
   private static String DOUBLE_BOND = "=";
   private static String TRIPLE_BOND = "#";
@@ -58,6 +60,15 @@ public class SMILESReader
 
       handleToken(token, builder);
     }
+  }
+  
+  public static Molecule read(String smiles)
+  {
+    Molecule result = new DefaultMolecule();
+    
+    staticReader.read(result, smiles);
+    
+    return result;
   }
 
   private void handleToken(String token, SMILESBuilder builder)
