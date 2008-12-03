@@ -33,7 +33,11 @@ import java.util.regex.Pattern;
  */
 public class SMILESReader
 {
+  private static String SINGLE_BOND = "-";
+  private static String DOUBLE_BOND = "=";
+  private static String TRIPLE_BOND = "#";
   private static Pattern atomPattern = Pattern.compile("^(([A-Z][a-z]?)|[a-z])");
+  private static Pattern bondPattern = Pattern.compile("[-=#:\\.]");
   private static Pattern ringIdentifierPattern = Pattern.compile("[1-9]|\\%[1-9][0-9]");
   private static String openParen = "(";
   private static String closeParen = ")";
@@ -86,12 +90,41 @@ public class SMILESReader
       return;
     }
     
+    if (bondPattern.matcher(token).matches())
+    {
+      handleBond(token, builder);
+      
+      return;
+    }
+    
     throw new IllegalArgumentException("Unknown SMILES token \"" + token + "\"");
   }
   
   private void handleAtom(String token, SMILESBuilder builder)
   {
     builder.addHead(token);
+  }
+  
+  private void handleBond(String token, SMILESBuilder builder)
+  {
+    int type = 0;
+    
+    if (SINGLE_BOND.equals(token))
+    {
+      type = 1;
+    }
+    
+    if (DOUBLE_BOND.equals(token))
+    {
+      type = 2;
+    }
+    
+    if (TRIPLE_BOND.equals(token))
+    {
+      type = 3;
+    }
+    
+    builder.addBond(type);
   }
   
   private void handleRingIdentifier(String token, SMILESBuilder builder)

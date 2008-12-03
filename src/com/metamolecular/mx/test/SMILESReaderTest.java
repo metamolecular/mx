@@ -115,6 +115,41 @@ public class SMILESReaderTest extends TestCase
       assertEquals(3, atom.countNeighbors());
     }
   }
+  
+  public void testItShouldReadADoubleBond()
+  {
+    Molecule input = new DefaultMolecule();
+    
+    reader.read(input, "C=CC");
+    
+    assertEquals(3, input.countAtoms());
+    assertEquals(2, input.getBond(0).getType());
+  }
+  
+  public void testItShouldReadKekuleBenzene()
+  {
+    Molecule input = new DefaultMolecule();
+    
+    reader.read(input, "C1=CC=CC=C1");
+    
+    assertEquals(6, input.countAtoms());
+    
+    for (int i = 0; i < input.countAtoms(); i++)
+    {
+      assertEquals(2, input.getAtom(i).countNeighbors());
+      assertEquals(1, input.getAtom(i).countVirtualHydrogens());
+    }
+  }
+  
+  public void testItShouldReadATripleBond()
+  {
+    Molecule input = new DefaultMolecule();
+    
+    reader.read(input, "C#CC");
+    
+    assertEquals(3, input.countAtoms());
+    assertEquals(3, input.getBond(0).getType());
+  }
 
   public void testItShouldThrowWhenGivenIllegalAtomSymbol()
   {
