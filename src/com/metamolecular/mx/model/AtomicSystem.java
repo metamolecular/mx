@@ -25,6 +25,7 @@
  */
 package com.metamolecular.mx.model;
 
+import com.metamolecular.mx.calc.DefaultMeasurement;
 import com.metamolecular.mx.calc.Measurement;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class AtomicSystem
 
     loadFile();
   }
-  
+
   public boolean hasElement(String atomicSymbol)
   {
     return entries.containsKey(atomicSymbol);
@@ -133,6 +134,14 @@ public class AtomicSystem
     return entry;
   }
 
+  private Measurement createMeasurement(Node node, String units)
+  {
+    double value = Double.parseDouble(node.getAttributes().getNamedItem("value").getNodeValue());
+    double error = Double.parseDouble(node.getAttributes().getNamedItem("error").getNodeValue());
+    
+    return new DefaultMeasurement(value, error, units);
+  }
+
   private class Entry
   {
 
@@ -196,7 +205,7 @@ public class AtomicSystem
 
     private void recordMass(Node mass)
     {
-      this.averageMass = new MeasurementImpl(mass, "u");
+      this.averageMass = createMeasurement(mass, "u");
     }
 
     private Node findNaturalAbundance(Node entry)
@@ -214,36 +223,6 @@ public class AtomicSystem
       }
 
       return null;
-    }
-  }
-
-  private class MeasurementImpl implements Measurement
-  {
-
-    private double value;
-    private double error;
-    private String units;
-
-    private MeasurementImpl(Node measurement, String units)
-    {
-      this.value = Double.parseDouble(measurement.getAttributes().getNamedItem("value").getNodeValue());
-      this.error = Double.parseDouble(measurement.getAttributes().getNamedItem("error").getNodeValue());
-      this.units = units;
-    }
-
-    public double getError()
-    {
-      return error;
-    }
-
-    public String getUnits()
-    {
-      return units;
-    }
-
-    public double getValue()
-    {
-      return value;
     }
   }
 
@@ -286,12 +265,12 @@ public class AtomicSystem
 
         if ("mass".equals(child.getNodeName()))
         {
-          this.mass = new MeasurementImpl(child, "u");
+          this.mass = createMeasurement(child, "u");
         }
 
         if ("abundance".equals(child.getNodeName()))
         {
-          this.abundance = new MeasurementImpl(child, "percent");
+          this.abundance = createMeasurement(child, "percent");
         }
       }
     }
