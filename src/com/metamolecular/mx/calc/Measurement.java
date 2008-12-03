@@ -23,36 +23,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
-
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+package com.metamolecular.mx.calc;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public interface Measurement
 {
-
-  public static void main(String[] args)
-  {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicMassSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-
-    TestRunner.run(suite);
-  }
+  public double getValue();
+  
+  public double getError();
+  
+  public String getUnits();
 }

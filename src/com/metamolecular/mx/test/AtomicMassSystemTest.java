@@ -27,7 +27,7 @@ package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.model.AtomicSystem;
 import com.metamolecular.mx.model.Isotope;
-import com.metamolecular.mx.model.Measurement;
+import com.metamolecular.mx.calc.Measurement;
 import java.util.List;
 import junit.framework.TestCase;
 

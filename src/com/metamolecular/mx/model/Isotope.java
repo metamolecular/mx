@@ -25,6 +25,8 @@
  */
 package com.metamolecular.mx.model;
 
+import com.metamolecular.mx.calc.Measurement;
+
 /**
  *
  * @author Richard L. Apodaca

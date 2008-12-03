@@ -25,6 +25,7 @@
  */
 package com.metamolecular.mx.model;
 
+import com.metamolecular.mx.calc.Measurement;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -23,36 +23,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
-
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+package com.metamolecular.mx.calc;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class DefaultMeasurement implements Measurement
 {
-
-  public static void main(String[] args)
+  private double value;
+  private double error;
+  private String units;
+  
+  public DefaultMeasurement(double value, double error, String units)
   {
-    TestSuite suite = new TestSuite();
+    this.value = value;
+    this.error = error;
+    this.units = units;
+  }
+  
+  public double getError()
+  {
+    return error;
+  }
 
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicMassSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
+  public String getUnits()
+  {
+    return units;
+  }
 
-    TestRunner.run(suite);
+  public double getValue()
+  {
+    return value;
   }
 }

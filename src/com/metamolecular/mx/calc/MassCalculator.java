@@ -23,16 +23,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.model;
+package com.metamolecular.mx.calc;
+
+import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.AtomicSystem;
+import com.metamolecular.mx.model.Molecule;
 
 /**
  * @author Richard L. Apodaca
  */
-public interface Measurement
+public class MassCalculator
 {
-  public double getValue();
-  
-  public double getError();
-  
-  public String getUnits();
+  /**
+   * Throws away error determinations.
+   * 
+   * @param molecule the molecule to be measured
+   * @return the averaged moleclar mass of molecule
+   */
+  public double findAveragedMass(Molecule molecule)
+  {
+    double result = 0;
+    
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+      
+      if (atom.hasSingleIsotope())
+      {
+        
+      }
+      
+      else
+      {
+        result += AtomicSystem.getInstance().getAverageMass(atom.getSymbol()).getValue();
+      }
+      
+      result += atom.countVirtualHydrogens() * AtomicSystem.getInstance().getAverageMass("H").getValue();
+    }
+    
+    return result;
+  }
 }
