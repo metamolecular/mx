@@ -50,7 +50,7 @@ public class MXTest
     suite.addTestSuite(SMILESTokenizerTest.class);
     suite.addTestSuite(SMILESReaderTest.class);
     suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicMassSystemTest.class);
+    suite.addTestSuite(AtomicSystemTest.class);
     suite.addTestSuite(MassCalculatorTest.class);
 
     TestRunner.run(suite);

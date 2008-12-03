@@ -34,7 +34,7 @@ import junit.framework.TestCase;
 /**
  * @author Richard L. Apodaca
  */
-public class AtomicMassSystemTest extends TestCase
+public class AtomicSystemTest extends TestCase
 {
   private AtomicSystem system;
 
