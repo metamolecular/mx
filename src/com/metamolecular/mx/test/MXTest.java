@@ -50,6 +50,7 @@ public class MXTest
     suite.addTestSuite(SMILESTokenizerTest.class);
     suite.addTestSuite(SMILESReaderTest.class);
     suite.addTestSuite(SMILESBuilderTest.class);
+    suite.addTestSuite(RingFinderTest.class);
 
     TestRunner.run(suite);
   }
