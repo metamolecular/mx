@@ -23,36 +23,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.ring.PathGraph;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class PathGraphTest extends TestCase
 {
-
-  public static void main(String[] args)
+  public void testItShouldHaveNextAtomAfterCreation()
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(RingFinderTest.class);
-    suite.addTestSuite(PathGraphTest.class);
-
-    TestRunner.run(suite);
+    Molecule benzene = Molecules.createBenzene();
+    PathGraph pGraph = new PathGraph(benzene);
+    
+    assertEquals(true, pGraph.hasNextAtom());
   }
 }

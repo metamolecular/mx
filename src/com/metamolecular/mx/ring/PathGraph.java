@@ -23,36 +23,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
+package com.metamolecular.mx.ring;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.model.Molecule;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class PathGraph
 {
-
-  public static void main(String[] args)
+  public PathGraph(Molecule molecule)
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(RingFinderTest.class);
-    suite.addTestSuite(PathGraphTest.class);
-
-    TestRunner.run(suite);
+    
+  }
+  
+  public boolean hasNextAtom()
+  {
+    return false;
   }
 }
