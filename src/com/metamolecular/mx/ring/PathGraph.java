@@ -25,20 +25,58 @@
  */
 package com.metamolecular.mx.ring;
 
+import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Richard L. Apodaca
  */
 public class PathGraph
 {
+
+  private List<Atom> atoms;
+  //private List<Edge> edges;
+
   public PathGraph(Molecule molecule)
   {
-    
+    atoms = new ArrayList<Atom>();
+
+    loadAtoms(molecule);
+    //loadEdges(molecule);
   }
-  
+
   public boolean hasNextAtom()
   {
-    return false;
+    return !atoms.isEmpty();
+  }
+
+  public Atom nextAtom()
+  {
+    return null;
+  }
+
+  private void loadAtoms(Molecule molecule)
+  {
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      atoms.add(molecule.getAtom(i));
+    }
+  }
+
+  private void loadEdges(Molecule molecule)
+  {
+//    for (int i = 0; i < molecule.countBonds(); i++)
+//    {
+//      Bond pair = molecule.getBond(i);
+//      PathEdge edge = new PathEdge();
+//
+//      edge.source = pair.getSource();
+//      edge.target = pair.getTarget();
+//      edge.add(graph.getAtomPair(i));
+//      edges.add(edge);
+//    }
   }
 }

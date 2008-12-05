@@ -52,6 +52,7 @@ public class MXTest
     suite.addTestSuite(SMILESBuilderTest.class);
     suite.addTestSuite(RingFinderTest.class);
     suite.addTestSuite(PathGraphTest.class);
+    suite.addTestSuite(PathEdgeTest.class);
 
     TestRunner.run(suite);
   }

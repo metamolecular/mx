@@ -23,10 +23,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.ring.PathGraph;
 import junit.framework.TestCase;
@@ -36,11 +36,19 @@ import junit.framework.TestCase;
  */
 public class PathGraphTest extends TestCase
 {
+
   public void testItShouldHaveNextAtomAfterCreation()
   {
     Molecule benzene = Molecules.createBenzene();
-    PathGraph pGraph = new PathGraph(benzene);
-    
-    assertEquals(true, pGraph.hasNextAtom());
+    PathGraph pathGraph = new PathGraph(benzene);
+
+    assertEquals(true, pathGraph.hasNextAtom());
+  }
+
+  public void testItShouldReturnNextAtomAfterCreation()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    PathGraph pathGraph = new PathGraph(benzene);
+    Atom next = pathGraph.nextAtom();
   }
 }
