@@ -75,6 +75,13 @@ public class MapperTest extends TestCase
     cyclopropane = Molecules.createCyclopropane();
   }
   
+  public void testItShouldNotMatchHexaneToBenzene()
+  {
+    Mapper mapper = new DefaultMapper(hexane);
+    
+    assertFalse(mapper.hasMap(benzene));
+  }
+  
   public void testItShouldNotMatchPyridazineToNaphthalene()
   {
     Mapper mapper = new DefaultMapper(pyridazine);
