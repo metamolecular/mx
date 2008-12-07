@@ -27,6 +27,7 @@
 package com.metamolecular.mx.ring;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,11 @@ public class PathEdge
   private List<Atom> path;
   private Atom source;
   private Atom target;
+  
+  public PathEdge(Bond bond)
+  {
+    this(bond.getSource(), bond.getTarget());
+  }
 
   public PathEdge(Atom source, Atom target)
   {

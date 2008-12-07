@@ -26,6 +26,7 @@
 package com.metamolecular.mx.ring;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +38,15 @@ public class PathGraph
 {
 
   private List<Atom> atoms;
-  //private List<Edge> edges;
+  private List<PathEdge> edges;
 
   public PathGraph(Molecule molecule)
   {
     atoms = new ArrayList<Atom>();
+    edges = new ArrayList<PathEdge>();
 
     loadAtoms(molecule);
-    //loadEdges(molecule);
+    loadEdges(molecule);
   }
 
   public boolean hasNextAtom()
@@ -67,15 +69,12 @@ public class PathGraph
 
   private void loadEdges(Molecule molecule)
   {
-//    for (int i = 0; i < molecule.countBonds(); i++)
-//    {
-//      Bond pair = molecule.getBond(i);
-//      PathEdge edge = new PathEdge();
-//
-//      edge.source = pair.getSource();
-//      edge.target = pair.getTarget();
-//      edge.add(graph.getAtomPair(i));
-//      edges.add(edge);
-//    }
+    for (int i = 0; i < molecule.countBonds(); i++)
+    {
+      Bond bond = molecule.getBond(i);
+      PathEdge edge = new PathEdge(bond);
+      
+      edges.add(edge);
+    }
   }
 }
