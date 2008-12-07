@@ -49,4 +49,10 @@ public class MassCalculatorTest extends TestCase
     
     assertEquals(78.11184, calculator.findAveragedMass(benzene));
   }
+  
+  public void testItShouldFindTheAverageMolecularMassOfPhenol()
+  {
+    Molecule phenol = Molecules.createPhenol();
+    assertEquals(94.11124, calculator.findAveragedMass(phenol), 0.00001);
+  }
 }
