@@ -118,4 +118,28 @@ public class PathEdgeTest extends TestCase
       assertEquals(benzene.getAtom(i).getIndex(), edge5.getPath().get(i).getIndex());
     }
   }
+  
+    public void testItShouldCreateALoopByCollapsingSixEdges()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    PathEdge edge1 = new PathEdge(benzene.getAtom(1), benzene.getAtom(0));
+    PathEdge edge2 = new PathEdge(benzene.getAtom(1), benzene.getAtom(2));
+    PathEdge edge3 = new PathEdge(benzene.getAtom(2), benzene.getAtom(3));
+    PathEdge edge4 = new PathEdge(benzene.getAtom(3), benzene.getAtom(4));
+    PathEdge edge5 = new PathEdge(benzene.getAtom(4), benzene.getAtom(5));
+    PathEdge edge6 = new PathEdge(benzene.getAtom(5), benzene.getAtom(0));
+    PathEdge edge012 = new PathEdge(edge1, edge2);
+    PathEdge edge0123 = new PathEdge(edge012, edge3);
+    PathEdge edge01234 = new PathEdge(edge0123, edge4);
+    PathEdge edge012345 = new PathEdge(edge01234, edge5);
+    PathEdge edge0123450 = new PathEdge(edge012345, edge6);
+    
+    assertEquals(7, edge0123450.getPath().size());
+    assertEquals(true, edge0123450.isLoop());
+    
+    for (int i = 0; i < edge0123450.getPath().size() - 1; i++)
+    {
+      assertTrue(edge0123450.getPath().get(i).isConnectedTo(edge0123450.getPath().get(i+1)));
+    }
+  }
 }
