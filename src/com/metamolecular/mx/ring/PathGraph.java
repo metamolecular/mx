@@ -26,7 +26,6 @@
 package com.metamolecular.mx.ring;
 
 import com.metamolecular.mx.model.Atom;
-import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.List;
