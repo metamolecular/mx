@@ -1,0 +1,1693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+MX Cheminformatics Tools for Java
+
+Copyright (c) 2007, 2008 Metamolecular, LLC
+ 
+http://metamolecular.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<!--
+This system of atomic masses is quoted from:
+
+de Laeter, J.R.; Boehlke, J.K.; de Bievre, P.; Hidaka, H.; Peiser, H.S.; Rosman, K.J.R.;
+Taylor, P.D.P. Atomic Weights of the Elements: Review 2000 (IUPAC Technical Report)
+Pure Appl. Chem. 2003, 75, 683-800.
+
+http://www.iupac.org/publications/pac/2003/7506/7506x0683.html
+-->
+
+<atomic-mass-table mass-units="u" abundance-units="Mole Fraction">
+  
+  <entry symbol="H" atomic-number="1">
+    <natural-abundance>
+      <mass value="1.00794" error="0.00007" />
+      <isotope mass-number="1">
+        <mass value="1.0078250319" error="0.00000000006" />
+        <abundance value="0.999885" error="0.000070" />
+      </isotope>
+      <isotope mass-number="2">
+        <mass value="2.0141017779" error="0.0000000006" />
+        <abundance value="0.000115" error="0.000070" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="He" atomic-number="2">
+    <natural-abundance>
+      <mass value="4.002602" error="0.000002" />
+      <isotope mass-number="3">
+        <mass value="3.0160293094" error="0.0000000012" />
+        <abundance value="0.00000134" error="0.00000003" />
+      </isotope>
+      <isotope mass-number="4">
+        <mass value="4.0026032497" error="0.0000000015" />
+        <abundance value="0.99999866" error="0.00000003" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="Li" atomic-number="3">
+    <natural-abundance>
+      <mass value="6.9421" error="0.002" />
+      <isotope mass-number="3">
+        <mass value="6.0151223" error="0.0000005" />
+        <abundance value="0.0759" error="0.0004" />
+      </isotope>
+      <isotope mass-number="7">
+        <mass value="7.0160041" error="0.0000005" />
+        <abundance value="0.9241" error="0.0004" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Be" atomic-number="4">
+    <natural-abundance>
+      <mass value="9.012182" error="0.000003" />
+      <isotope mass-number="9">
+        <mass value="9.0121822" error="0.0000004" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="B" atomic-number="5">
+    <natural-abundance>
+      <mass value="10.881" error="0.007" />
+      <isotope mass-number="10">
+        <mass value="10.0129371" error="0.0000003" />
+        <abundance value="0.199" error="0.007" />
+      </isotope>
+      <isotope mass-number="11">
+        <mass value="11.0093055" error="0.0000004" />
+        <abundance value="0.801" error="0.007" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="C" atomic-number="6">
+    <natural-abundance>
+      <mass value="12.0107" error="0.0008" />
+      <isotope mass-number="12">
+        <mass value="12" error="0" />
+        <abundance value="0.9893" error="0.0008" />
+      </isotope>
+      <isotope mass-number="13">
+        <mass value="13.003354838" error="0.000000005" />
+        <abundance value="0.0107" error="0.0008" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="N" atomic-number="7">
+    <natural-abundance>
+      <mass value="14.0067" error="0.0002" />
+      <isotope mass-number="14">
+        <mass value="14.0030740074" error="0.0000000018" />
+        <abundance value="0.99636" error="0.00020" />
+      </isotope>
+      <isotope mass-number="15">
+        <mass value="15.000108973" error="0.000000012" />
+        <abundance value="0.00364" error="0.00020" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="O" atomic-number="8">
+    <natural-abundance>
+      <mass value="15.9994" error="0.0003" />
+      <isotope mass-number="16">
+        <mass value="15.9949146223" error="0.0000000025" />
+        <abundance value="0.99759" error="0.00016" />
+      </isotope>
+      <isotope mass-number="17">
+        <mass value="16.99913150" error="0.00000022" />
+        <abundance value="0.00038" error="0.00001" />
+      </isotope>
+      <isotope mass-number="18">
+        <mass value="17.9991604" error="0.0000009" />
+        <abundance value="0.00205" error="0.00014" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="F" atomic-number="9">
+    <natural-abundance>
+      <mass value="18.9984032" error="0.0000005" />
+      <isotope mass-number="19">
+        <mass value="18.99840320" error="0.00000007" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ne" atomic-number="10">
+    <natural-abundance>
+      <mass value="20.1797" error="0.0006" />
+      <isotope mass-number="20">
+        <mass value="19.992440176" error="0.000000003" />
+        <abundance value="0.9048" error="0.0003" />
+      </isotope>
+      <isotope mass-number="21">
+        <mass value="20.99384674" error="0.00000004" />
+        <abundance value="0.0027" error="0.0001" />
+      </isotope>
+      <isotope mass-number="22">
+        <mass value="21.99138550" error="0.00000025" />
+        <abundance value="0.0925" error="0.0003" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Na" atomic-number="11">
+    <natural-abundance>
+      <mass value="22.989770" error="0.000002" />
+      <isotope mass-number="23">
+        <mass value="22.98976966" error="0.00000026" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Mg" atomic-number="12">
+    <natural-abundance>
+      <mass value="24.3050" error="0.0006" />
+      <isotope mass-number="24">
+        <mass value="23.98504187" error="0.00000026" />
+        <abundance value="0.7899" error="0.0004" />
+      </isotope>
+      <isotope mass-number="25">
+        <mass value="24.98583700" error="0.00000026" />
+        <abundance value="0.1000" error="0.0001" />
+      </isotope>
+      <isotope mass-number="26">
+        <mass value="25.98259300" error="0.00000026" />
+        <abundance value="0.1101" error="0.0003" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Al" atomic-number="13">
+    <natural-abundance>
+      <mass value="26.981538" error="0.000002" />
+      <isotope mass-number="27">
+        <mass value="26.98153841" error="0.00000024" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Si" atomic-number="14">
+    <natural-abundance>
+      <mass value="28.0855" error="0.0003" />
+      <isotope mass-number="28">
+        <mass value="27.97692649" error="0.00000022" />
+        <abundance value="0.92223" error="0.00019" />
+      </isotope>
+      <isotope mass-number="29">
+        <mass value="28.97649468" error="0.00000022" />
+        <abundance value="0.04685" error="0.00008" />
+      </isotope>
+      <isotope mass-number="30">
+        <mass value="29.97377018" error="0.00000022" />
+        <abundance value="0.03092" error="0.00011" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="P" atomic-number="15">
+    <natural-abundance>
+      <mass value="30.973761" error="0.000002" />
+      <isotope mass-number="31">
+        <mass value="30.97376149" error="0.00000027" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="S" atomic-number="16">
+    <natural-abundance>
+      <mass value="32.065" error="0.005" />
+      <isotope mass-number="32">
+        <mass value="31.97207073" error="0.00000015" />
+        <abundance value="0.9499" error="0.0026" />
+      </isotope>
+      <isotope mass-number="33">
+        <mass value="32.97145854" error="0.00000015" />
+        <abundance value="0.0075" error="0.0002" />
+      </isotope>
+      <isotope mass-number="34">
+        <mass value="33.96786687" error="0.00000014" />
+        <abundance value="0.0425" error="0.0024" />
+      </isotope>
+      <isotope mass-number="36">
+        <mass value="35.96708088" error="0.00000025" />
+        <abundance value="0.0001" error="0.0001" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Cl" atomic-number="17">
+    <natural-abundance>
+      <mass value="35.453" error="0.002" />
+      <isotope mass-number="35">
+        <mass value="34.96885271" error="0.00000004" />
+        <abundance value="0.7576" error="0.0010" />
+      </isotope>
+      <isotope mass-number="37">
+        <mass value="36.96590260" error="0.00000005" />
+        <abundance value="0.2424" error="0.0010" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ar" atomic-number="18">
+    <natural-abundance>
+      <mass value="39.948" error="0.001" />
+      <isotope mass-number="36">
+        <mass value="35.96754626" error="0.00000027" />
+        <abundance value="0.0003365" error="0.000030" />
+      </isotope>
+      <isotope mass-number="38">
+        <mass value="37.9627322" error="0.0000005" />
+        <abundance value="0.000632" error="0.000005" />
+      </isotope>
+      <isotope mass-number="40">
+        <mass value="39.962383124" error="0.000000005" />
+        <abundance value="0.996003" error="0.000030" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="K" atomic-number="19">
+    <natural-abundance>
+      <mass value="39.0983" error="0.0001" />
+      <isotope mass-number="39">
+        <mass value="38.9637069" error="0.0000003" />
+        <abundance value="0.932581" error="0.000044" />
+      </isotope>
+      <isotope mass-number="40">
+        <mass value="39.96399867" error="0.00000029" />
+        <abundance value="0.000117" error="0.000001" />
+      </isotope>
+      <isotope mass-number="41">
+        <mass value="40.96182597" error="0.00000028" />
+        <abundance value="0.067302" error="0.000044" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ca" atomic-number="20">
+    <natural-abundance>
+      <mass value="40.078" error="0.004" />
+      <isotope mass-number="40">
+        <mass value="39.9625912" error="0.0000003" />
+        <abundance value="0.96941" error="0.00156" />
+      </isotope>
+      <isotope mass-number="42">
+        <mass value="41.9586183" error="0.0000004" />
+        <abundance value="0.00647" error="0.00023" />
+      </isotope>
+      <isotope mass-number="43">
+        <mass value="42.9587668" error="0.0000005" />
+        <abundance value="0.00135" error="0.00010" />
+      </isotope>
+      <isotope mass-number="44">
+        <mass value="43.9554811" error="0.0000009" />
+        <abundance value="0.02086" error="0.00110" />
+      </isotope>
+      <isotope mass-number="46">
+        <mass value="45.9536927" error="0.0000025" />
+        <abundance value="0.00004" error="0.00003" />
+      </isotope>
+      <isotope mass-number="48">
+        <mass value="47.952533" error="0.000004" />
+        <abundance value="0.00187" error="0.00021" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Sc" atomic-number="21">
+    <natural-abundance>
+      <mass value="44.955910" error="0.000008" />
+      <isotope mass-number="45">
+        <mass value="44.9559102" error="0.0000012" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ti" atomic-number="22">
+    <natural-abundance>
+      <mass value="47.867" error="0.001" />
+      <isotope mass-number="46">
+        <mass value="45.9526295" error="0.0000012" />
+        <abundance value="0.0825" error="0.0003" />
+      </isotope>
+      <isotope mass-number="47">
+        <mass value="46.9517637" error="0.0000010" />
+        <abundance value="0.0744" error="0.0002" />
+      </isotope>
+      <isotope mass-number="48">
+        <mass value="47.9479470" error="0.0000010" />
+        <abundance value="0.7372" error="0.0003" />
+      </isotope>
+      <isotope mass-number="49">
+        <mass value="48.9478707" error="0.0000010" />
+        <abundance value="0.0541" error="0.0002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="V" atomic-number="23">
+    <natural-abundance>
+      <mass value="50.9415" error="0.0001" />
+      <isotope mass-number="50">
+        <mass value="49.9471627" error="0.0000014" />
+        <abundance value="0.00250" error="0.00004" />
+      </isotope>
+      <isotope mass-number="51">
+        <mass value="50.9439635" error="0.0000014" />
+        <abundance value="0.99750" error="0.00004" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Cr" atomic-number="24">
+    <natural-abundance>
+      <mass value="51.9961" error="0.0006" />
+      <isotope mass-number="50">
+        <mass value="49.9460495" error="0.0000014" />
+        <abundance value="0.04345" error="0.00013" />
+      </isotope>
+      <isotope mass-number="52">
+        <mass value="51.9405115" error="0.0000015" />
+        <abundance value="0.83789" error="0.00018" />
+      </isotope>
+      <isotope mass-number="53">
+        <mass value="52.9406534" error="0.0000015" />
+        <abundance value="0.09501" error="0.00017" />
+      </isotope>
+      <isotope mass-number="54">
+        <mass value="53.938846" error="0.0000015" />
+        <abundance value="0.02365" error="0.00007" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Mn" atomic-number="25">
+    <natural-abundance>
+      <mass value="54.938049" error="0.000009" />
+      <isotope mass-number="55">
+        <mass value="54.9380493" error="0.0000015" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="Fe" atomic-number="26">
+    <natural-abundance>
+      <mass value="55.845" error="0.002" />
+      <isotope mass-number="54">
+        <mass value="53.9396147" error="0.0000014" />
+        <abundance value="0.05845" error="0.00035" />
+      </isotope>
+      <isotope mass-number="56">
+        <mass value="55.9349418" error="0.0000015" />
+        <abundance value="0.91754" error="0.00036" />
+      </isotope>
+      <isotope mass-number="57">
+        <mass value="56.9353983" error="0.0000015" />
+        <abundance value="0.02119" error="0.00010" />
+      </isotope>
+      <isotope mass-number="58">
+        <mass value="57.9332801" error="0.0000015" />
+        <abundance value="0.00282" error="0.00004" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Co" atomic-number="27">
+    <natural-abundance>
+      <mass value="58.933200" error="0.000009" />
+      <isotope mass-number="59">
+        <mass value="59.9331999" error="0.0000015" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ni" atomic-number="28">
+    <natural-abundance>
+      <mass value="58.6934" error="0.0002" />
+      <isotope mass-number="58">
+        <mass value="57.9353477" error="0.0000016" />
+        <abundance value="0.680769" error="0.000089" />
+      </isotope>
+      <isotope mass-number="60">
+        <mass value="59.9307903" error="0.0000015" />
+        <abundance value="0.262231" error="0.000077" />
+      </isotope>
+      <isotope mass-number="61">
+        <mass value="60.9310601" error="0.0000015" />
+        <abundance value="0.011399" error="0.000006" />
+      </isotope>
+      <isotope mass-number="62">
+        <mass value="61.9283484" error="0.0000015" />
+        <abundance value="0.0036345" error="0.000017" />
+      </isotope>
+      <isotope mass-number="64">
+        <mass value="63.9279692" error="0.0000016" />
+        <abundance value="0.009256" error="0.000009" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="Cu" atomic-number="29">
+    <natural-abundance>
+      <mass value="63.546" error="0.003" />
+      <isotope mass-number="63">
+        <mass value="62.9296007" error="0.0000015" />
+        <abundance value="0.6915" error="0.0015" />
+      </isotope>
+      <isotope mass-number="65">
+        <mass value="64.9277938" error="0.0000019" />
+        <abundance value="0.3085" error="0.0015" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Zn" atomic-number="30">
+    <natural-abundance>
+      <mass value="65.409" error="0.004" />
+      <isotope mass-number="64">
+        <mass value="63.9291461" error="0.0000018" />
+        <abundance value="0.48268" error="0.00321" />
+      </isotope>
+      <isotope mass-number="66">
+        <mass value="65.9260364" error="0.0000017" />
+        <abundance value="0.27975" error="0.00077" />
+      </isotope>
+      <isotope mass-number="67">
+        <mass value="66.9271305" error="0.0000017" />
+        <abundance value="0.04102" error="0.00021" />
+      </isotope>
+      <isotope mass-number="68">
+        <mass value="67.9248473" error="0.0000017" />
+        <abundance value="0.19024" error="0.00123" />
+      </isotope>
+      <isotope mass-number="70">
+        <mass value="69.925325" error="0.000004" />
+        <abundance value="0.00631" error="0.00009" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ga" atomic-number="31">
+    <natural-abundance>
+      <mass value="69.723" error="0.001" />
+      <isotope mass-number="69">
+        <mass value="68.925581" error="0.000003" />
+        <abundance value="0.60108" error="0.00009" />
+      </isotope>
+      <isotope mass-number="71">
+        <mass value="70.9247073" error="0.0000020" />
+        <abundance value="0.39892" error="0.00009" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+   
+  <entry symbol="Ge" atomic-number="32">
+    <natural-abundance>
+      <mass value="72.64" error="0.01" />
+      <isotope mass-number="70">
+        <mass value="69.9242500" error="0.0000019" />
+        <abundance value="0.2038" error="0.0018" />
+      </isotope>
+      <isotope mass-number="72">
+        <mass value="71.9220763" error="0.0000016" />
+        <abundance value="0.2731" error="0.0026" />
+      </isotope>
+      <isotope mass-number="73">
+        <mass value="72.9234595" error="0.0000016" />
+        <abundance value="0.0776" error="0.0008" />
+      </isotope>
+      <isotope mass-number="74">
+        <mass value="73.9211784" error="0.0000016" />
+        <abundance value="0.3672" error="0.0015" />
+      </isotope>
+      <isotope mass-number="76">
+        <mass value="75.9214029" error="0.0000016" />
+        <abundance value="0.0783" error="0.0007" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="As" atomic-number="33">
+    <natural-abundance>
+      <mass value="74.92160" error="0.00002" />
+      <isotope mass-number="75">
+        <mass value="74.9215966" error="0.0000018" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Se" atomic-number="34">
+    <natural-abundance>
+      <mass value="78.96" error="0.03" />
+      <isotope mass-number="74">
+        <mass value="73.9224767" error="0.0000016" />
+        <abundance value="0.0089" error="0.0004" />
+      </isotope>
+      <isotope mass-number="76">
+        <mass value="75.9192143" error="0.0000016" />
+        <abundance value="0.0937" error="0.0029" />
+      </isotope>
+      <isotope mass-number="77">
+        <mass value="76.9199148" error="0.0000016" />
+        <abundance value="0.0763" error="0.0016" />
+      </isotope>
+      <isotope mass-number="78">
+        <mass value="77.9173097" error="0.0000016" />
+        <abundance value="0.2377" error="0.0028" />
+      </isotope>
+      <isotope mass-number="80">
+        <mass value="79.9165221" error="0.0000020" />
+        <abundance value="0.4961" error="0.0041" />
+      </isotope>
+      <isotope mass-number="82">
+        <mass value="81.9167003" error="0.0000022" />
+        <abundance value="0.0873" error="0.0022" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Br" atomic-number="35">
+    <natural-abundance>
+      <mass value="79.904" error="0.001" />
+      <isotope mass-number="79">
+        <mass value="78.9183379" error="0.0000020" />
+        <abundance value="0.5069" error="0.0007" />
+      </isotope>
+      <isotope mass-number="81">
+        <mass value="80.916291" error="0.000003" />
+        <abundance value="0.4931" error="0.0007" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Kr" atomic-number="36">
+    <natural-abundance>
+      <mass value="83.798" error="0.002" />
+      <isotope mass-number="78">
+        <mass value="77.920388" error="0.000007" />
+        <abundance value="0.00355" error="0.00003" />
+      </isotope>
+      <isotope mass-number="80">
+        <mass value="79.916379" error="0.000004" />
+        <abundance value="0.02286" error="0.00010" />
+      </isotope>
+      <isotope mass-number="82">
+        <mass value="81.9134850" error="0.0000028" />
+        <abundance value="0.11593" error="0.00031" />
+      </isotope>
+      <isotope mass-number="83">
+        <mass value="82.914137" error="0.000004" />
+        <abundance value="0.11500" error="0.00019" />
+      </isotope>
+      <isotope mass-number="84">
+        <mass value="83.911508" error="0.000003" />
+        <abundance value="0.56987" error="0.00015" />
+      </isotope>
+      <isotope mass-number="86">
+        <mass value="85.910615" error="0.000005" />
+        <abundance value="0.17279" error="0.00041" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Rb" atomic-number="37">
+    <natural-abundance>
+      <mass value="85.4678" error="0.0003" />
+      <isotope mass-number="85">
+        <mass value="84.9117924" error="0.0000027" />
+        <abundance value="0.7217" error="0.0002" />
+      </isotope>
+      <isotope mass-number="87">
+        <mass value="86.9091858" error="0.0000028" />
+        <abundance value="0.2783" error="0.0002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Sr" atomic-number="38">
+    <natural-abundance>
+      <mass value="87.62" error="0.01" />
+      <isotope mass-number="84">
+        <mass value="83.913426" error="0.000004" />
+        <abundance value="0.0056" error="0.0001" />
+      </isotope>
+      <isotope mass-number="86">
+        <mass value="85.9092647" error="0.0000025" />
+        <abundance value="0.0986" error="0.0001" />
+      </isotope>
+      <isotope mass-number="87">
+        <mass value="86.9088816" error="0.0000025" />
+        <abundance value="0.0700" error="0.0001" />
+      </isotope>
+      <isotope mass-number="88">
+        <mass value="87.9056167" error="0.0000025" />
+        <abundance value="0.8258" error="0.0001" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Y" atomic-number="39">
+    <natural-abundance>
+      <mass value="88.90585" error="0.00002" />
+      <isotope mass-number="89">
+        <mass value="88.9058485" error="0.0000026" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Zr" atomic-number="40">
+    <natural-abundance>
+      <mass value="91.224" error="0.002" />
+      <isotope mass-number="90">
+        <mass value="89.9047022" error="0.0000024" />
+        <abundance value="0.5145" error="0.0040" />
+      </isotope>
+      <isotope mass-number="91">
+        <mass value="90.9056434" error="0.0000023" />
+        <abundance value="0.1122" error="0.0005" />
+      </isotope>
+      <isotope mass-number="92">
+        <mass value="91.9050386" error="0.0000023" />
+        <abundance value="0.1715" error="0.0008" />
+      </isotope>
+      <isotope mass-number="94">
+        <mass value="93.9063144" error="0.0000026" />
+        <abundance value="0.1738" error="0.0028" />
+      </isotope>
+      <isotope mass-number="96">
+        <mass value="95.908275" error="0.000003" />
+        <abundance value="0.0280" error="0.0009" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Nb" atomic-number="41">
+    <natural-abundance>
+      <mass value="92.90638" error="0.00002" />
+      <isotope mass-number="93">
+        <mass value="92.9063762" error="0.0000024" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Mo" atomic-number="42">
+    <natural-abundance>
+      <mass value="95.94" error="0.02" />
+      <isotope mass-number="92">
+        <mass value="91.906810" error="0.000004" />
+        <abundance value="0.1477" error="0.0031" />
+      </isotope>
+      <isotope mass-number="94">
+        <mass value="93.9050867" error="0.0000020" />
+        <abundance value="0.0923" error="0.0010" />
+      </isotope>
+      <isotope mass-number="95">
+        <mass value="94.9058406" error="0.0000020" />
+        <abundance value="0.1590" error="0.0009" />
+      </isotope>
+      <isotope mass-number="96">
+        <mass value="95.9046780" error="0.0000020" />
+        <abundance value="0.1668" error="0.0001" />
+      </isotope>
+      <isotope mass-number="97">
+        <mass value="96.9030201" error="0.0000020" />
+        <abundance value="0.0956" error="0.0005" />
+      </isotope>
+      <isotope mass-number="98">
+        <mass value="97.9054069" error="0.0000020" />
+        <abundance value="0.2419" error="0.0026" />
+      </isotope>
+      <isotope mass-number="100">
+        <mass value="99.907476" error="0.000006" />
+        <abundance value="0.0967" error="0.0020" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="Ru" atomic-number="44">
+    <natural-abundance>
+      <mass value="101.07" error="0.02" />
+      <isotope mass-number="96">
+        <mass value="95.907604" error="0.000009" />
+        <abundance value="0.0554" error="0.0014" />
+      </isotope>
+      <isotope mass-number="98">
+        <mass value="97.905287" error="0.000007" />
+        <abundance value="0.0187" error="0.0003" />
+      </isotope>
+      <isotope mass-number="99">
+        <mass value="98.9059385" error="0.0000022" />
+        <abundance value=".01276" error="0.0014" />
+      </isotope>
+      <isotope mass-number="100">
+        <mass value="99.9042189" error="0.0000022" />
+        <abundance value="0.1260" error="0.0007" />
+      </isotope>
+      <isotope mass-number="101">
+        <mass value="100.9055815" error="0.0000022" />
+        <abundance value="0.1706" error="0.0002" />
+      </isotope>
+      <isotope mass-number="102">
+        <mass value="101.9043488" error="0.0000022" />
+        <abundance value="0.3155" error="0.0014" />
+      </isotope>
+      <isotope mass-number="104">
+        <mass value="103.905430" error=".01862" />
+        <abundance value="0.1862" error="0.0027" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Rh" atomic-number="45">
+    <natural-abundance>
+      <mass value="1025.90550" error="0.00002" />
+      <isotope mass-number="103">
+        <mass value="102.905504" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Pd" atomic-number="46">
+    <natural-abundance>
+      <mass value="106.42" error="0.01" />
+      <isotope mass-number="102">
+        <mass value="101.905607" error="0.000003" />
+        <abundance value="0.0102" error="0.0001" />
+      </isotope>
+      <isotope mass-number="104">
+        <mass value="103.904034" error="0.000005" />
+        <abundance value="0.1114" error="0.0008" />
+      </isotope>
+      <isotope mass-number="105">
+        <mass value="104.905083" error="0.000005" />
+        <abundance value="0.2233" error="0.0008" />
+      </isotope>
+      <isotope mass-number="106">
+        <mass value="105.903484" error="0.000005" />
+        <abundance value="0.2733" error="0.0003" />
+      </isotope>
+      <isotope mass-number="108">
+        <mass value="107.903895" error="0.000004" />
+        <abundance value="0.2646" error="0.0009" />
+      </isotope>
+      <isotope mass-number="110">
+        <mass value="109.905153" error="0.000012" />
+        <abundance value="0.1172" error="0.0009" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ag" atomic-number="47">
+    <natural-abundance>
+      <mass value="107.8682" error="0.0002" />
+      <isotope mass-number="107">
+        <mass value="106.905093" error="0.000006" />
+        <abundance value="0.51839" error="0.00008" />
+      </isotope>
+      <isotope mass-number="109">
+        <mass value="108.904756" error="0.000003" />
+        <abundance value="0.48161" error="0.00008" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Cd" atomic-number="48">
+    <natural-abundance>
+      <mass value="112.411" error="0.008" />
+      <isotope mass-number="106">
+        <mass value="105.906458" error="0.000006" />
+        <abundance value="0.0125" error="0.0006" />
+      </isotope>
+      <isotope mass-number="108">
+        <mass value="107.904183" error="0.000006" />
+        <abundance value="0.0089" error="0.0003" />
+      </isotope>
+      <isotope mass-number="110">
+        <mass value="109.903006" error="0.000003" />
+        <abundance value="0.1249" error="0.0018" />
+      </isotope>
+      <isotope mass-number="111">
+        <mass value="110.904182" error="0.000003" />
+        <abundance value="0.1280" error="0.0012" />
+      </isotope>
+      <isotope mass-number="112">
+        <mass value="111.9027577" error="0.0000030" />
+        <abundance value="0.2413" error="0.0021" />
+      </isotope>
+      <isotope mass-number="113">
+        <mass value="112.9044014" error="0.0000030" />
+        <abundance value="0.1222" error="0.0012" />
+      </isotope>
+      <isotope mass-number="114">
+        <mass value="113.9033586" error="0.0000030" />
+        <abundance value="0.2873" error="0.0042" />
+      </isotope>
+      <isotope mass-number="116">
+        <mass value="115.904756" error="0.000003" />
+        <abundance value="0.0749" error="0.0018" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="In" atomic-number="49">
+    <natural-abundance>
+      <mass value="114.818" error="0.003" />
+      <isotope mass-number="113">
+        <mass value="112.904062" error="0.000004" />
+        <abundance value="0.0429" error="0.0005" />
+      </isotope>
+      <isotope mass-number="115">
+        <mass value="114.903879" error="0.000040" />
+        <abundance value="0.9571" error="0.0005" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Sn" atomic-number="50">
+    <natural-abundance>
+      <mass value="118.710" error="0.007" />
+      <isotope mass-number="112">
+        <mass value="111.904822" error="0.000005" />
+        <abundance value="0.0097" error="0.0001" />
+      </isotope>
+      <isotope mass-number="114">
+        <mass value="113.902783" error="0.000003" />
+        <abundance value="0.0066" error="0.0001" />
+      </isotope>
+      <isotope mass-number="115">
+        <mass value="114.903347" error="0.000003" />
+        <abundance value="0.0034" error="0.0001" />
+      </isotope>
+      <isotope mass-number="116">
+        <mass value="115.901745" error="0.000003" />
+        <abundance value="0.1454" error="0.0009" />
+      </isotope>
+      <isotope mass-number="117">
+        <mass value="116.902955" error="0.000003" />
+        <abundance value="0.0768" error="0.0007" />
+      </isotope>
+      <isotope mass-number="118">
+        <mass value="117.901608" error="0.000003" />
+        <abundance value="0.2422" error="0.0009" />
+      </isotope>
+      <isotope mass-number="119">
+        <mass value="118.903311" error="0.000003" />
+        <abundance value="0.0859" error="0.0004" />
+      </isotope>
+      <isotope mass-number="120">
+        <mass value="119.9021985" error="0.0000027" />
+        <abundance value="0.3258" error="0.0009" />
+      </isotope>
+      <isotope mass-number="122">
+        <mass value="121.9034411" error="0.0000029" />
+        <abundance value="0.0463" error="0.0003" />
+      </isotope>
+      <isotope mass-number="124">
+        <mass value="123.9052745" error="0.0000015" />
+        <abundance value="0.0579" error="0.0005" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Sb" atomic-number="51">
+    <natural-abundance>
+      <mass value="121.760" error="0.001" />
+      <isotope mass-number="121">
+        <mass value="120.9038222" error="0.0000026" />
+        <abundance value="0.5721" error="0.0005" />
+      </isotope>
+      <isotope mass-number="123">
+        <mass value="122.9042160" error="0.0000022" />
+        <abundance value="0.4279" error="0.0005" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="Te" atomic-number="52">
+    <natural-abundance>
+      <mass value="127.60" error="0.03" />
+      <isotope mass-number="120">
+        <mass value="119.904026" error="0.000011" />
+        <abundance value="0.0009" error="0.0001" />
+      </isotope>
+      <isotope mass-number="122">
+        <mass value="121.9030558" error="0.0000029" />
+        <abundance value="0.0255" error="0.0012" />
+      </isotope>
+      <isotope mass-number="123">
+        <mass value="122.9042711" error="0.0000020" />
+        <abundance value="0.0089" error="0.0003" />
+      </isotope>
+      <isotope mass-number="124">
+        <mass value="123.9028188" error="0.0000016" />
+        <abundance value="0.0474" error="0.0014" />
+      </isotope>
+      <isotope mass-number="125">
+        <mass value="124.9044241" error="0.0000020" />
+        <abundance value="0.0707" error="0.0015" />
+      </isotope>
+      <isotope mass-number="126">
+        <mass value="125.9033049" error="0.0000020" />
+        <abundance value="0.1884" error="0.0025" />
+      </isotope>
+      <isotope mass-number="128">
+        <mass value="127.9044615" error="0.0000019" />
+        <abundance value="0.3174" error="0.0008" />
+      </isotope>
+      <isotope mass-number="130">
+        <mass value="129.9062229" error="0.0000021" />
+        <abundance value="0.3408" error="0.0062" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="I" atomic-number="53">
+    <natural-abundance>
+      <mass value="126.90447" error="0.00003" />
+      <isotope mass-number="127">
+        <mass value="126.904468" error="0.000004" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+
+  <entry symbol="Xe" atomic-number="54">
+    <natural-abundance>
+      <mass value="131.293" error="0.006" />
+      <isotope mass-number="124">
+        <mass value="123.9058954" error="0.0000021" />
+        <abundance value="0.000952" error="0.000003" />
+      </isotope>
+      <isotope mass-number="126">
+        <mass value="125.904268" error="0.000007" />
+        <abundance value="0.000890" error="0.000002" />
+      </isotope>
+      <isotope mass-number="128">
+        <mass value="127.9035305" error="0.0000015" />
+        <abundance value="0.019102" error="0.000008" />
+      </isotope>
+      <isotope mass-number="129">
+        <mass value="128.9047799" error="0.0000009" />
+        <abundance value="0.264006" error="0.000082" />
+      </isotope>
+      <isotope mass-number="130">
+        <mass value="129.9035089" error="0.0000011" />
+        <abundance value="0.040710" error="0.000013" />
+      </isotope>
+      <isotope mass-number="131">
+        <mass value="130.9050828" error="0.0000018" />
+        <abundance value="0.212324" error="0.000030" />
+      </isotope>
+      <isotope mass-number="132">
+        <mass value="131.9041546" error="0.0000015" />
+        <abundance value="0.269086" error="0.000033" />
+      </isotope>
+      <isotope mass-number="134">
+        <mass value="133.9053945" error="0.0000009" />
+        <abundance value="0.104357" error="0.000021" />
+      </isotope>
+      <isotope mass-number="136">
+        <mass value="135.907220" error="0.000008" />
+        <abundance value="0.088573" error="0.000044" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Cs" atomic-number="55">
+    <natural-abundance>
+      <mass value="132.90545" error="0.00002" />
+      <isotope mass-number="133">
+        <mass value="132.905447" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ba" atomic-number="56">
+    <natural-abundance>
+      <mass value="137.327" error="0.007" />
+      <isotope mass-number="130">
+        <mass value="129.906311" error="0.000007" />
+        <abundance value="0.00106" error="0.00001" />
+      </isotope>
+      <isotope mass-number="132">
+        <mass value="131.905056" error="0.000003" />
+        <abundance value="0.00101" error="0.00001" />
+      </isotope>
+      <isotope mass-number="134">
+        <mass value="133.904504" error="0.000003" />
+        <abundance value="0.02417" error="0.00018" />
+      </isotope>
+      <isotope mass-number="135">
+        <mass value="134.905684" error="0.000003" />
+        <abundance value="0.000003" error="0.00012" />
+      </isotope>
+      <isotope mass-number="136">
+        <mass value="135.904571" error="0.000003" />
+        <abundance value="0.07854" error="0.00024" />
+      </isotope>
+      <isotope mass-number="137">
+        <mass value="136.905822" error="0.000003" />
+        <abundance value="0.11232" error="0.00024" />
+      </isotope>
+      <isotope mass-number="138">
+        <mass value="137.905242" error="0.000003" />
+        <abundance value="0.71698" error="0.00042" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="La" atomic-number="57">
+    <natural-abundance>
+      <mass value="138.9055" error="0.0002" />
+      <isotope mass-number="138">
+        <mass value="137.907108" error="0.000004" />
+        <abundance value="0.00090" error="0.00001" />
+      </isotope>
+      <isotope mass-number="139">
+        <mass value="138.906349" error="0.000004" />
+        <abundance value="0.99910" error="0.00001" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ce" atomic-number="58">
+    <natural-abundance>
+      <mass value="140.116" error="0.001" />
+      <isotope mass-number="136">
+        <mass value="135.907140" error="0.000050" />
+        <abundance value="0.00185" error="0.00002" />
+      </isotope>
+      <isotope mass-number="138">
+        <mass value="137.905986" error="0.000011" />
+        <abundance value="0.00251" error="0.00002" />
+      </isotope>
+      <isotope mass-number="140">
+        <mass value="139.905" error="0.000003" />
+        <abundance value="0.88450" error="0.00051" />
+      </isotope>
+      <isotope mass-number="142">
+        <mass value="141.909241" error="0.000004" />
+        <abundance value="0.11114" error="0.00051" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Pr" atomic-number="59">
+    <natural-abundance>
+      <mass value="140.90765" error="0.00002" />
+      <isotope mass-number="141">
+        <mass value="140.907648" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Nd" atomic-number="60">
+    <natural-abundance>
+      <mass value="144.24" error="0.03" />
+      <isotope mass-number="142">
+        <mass value="141.907719" error="0.000003" />
+        <abundance value="0.272" error="0.005" />
+      </isotope>
+      <isotope mass-number="143">
+        <mass value="142.909810" error="0.000003" />
+        <abundance value="0.122" error="0.002" />
+      </isotope>
+      <isotope mass-number="144">
+        <mass value="143.910083" error="0.000003" />
+        <abundance value="0.238" error="0.003" />
+      </isotope>
+      <isotope mass-number="145">
+        <mass value="144.912569" error="0.000003" />
+        <abundance value="0.083" error="0.001" />
+      </isotope>
+      <isotope mass-number="146">
+        <mass value="145.913113" error="0.000003" />
+        <abundance value="0.172" error="0.003" />
+      </isotope>
+      <isotope mass-number="148">
+        <mass value="147.916889" error="0.000004" />
+        <abundance value="0.057" error="0.001" />
+      </isotope>
+      <isotope mass-number="150">
+        <mass value="149.920887" error="0.000004" />
+        <abundance value="0.056" error="0.002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Sm" atomic-number="62">
+    <natural-abundance>
+      <mass value="150.36" error="0.03" />
+      <isotope mass-number="144">
+        <mass value="143.911996" error="0.000004" />
+        <abundance value="0.0307" error="0.0007" />
+      </isotope>
+      <isotope mass-number="147">
+        <mass value="146.914894" error="0.000003" />
+        <abundance value="0.1499" error="0.0018" />
+      </isotope>
+      <isotope mass-number="148">
+        <mass value="147.914818" error="0.1124" />
+        <abundance value="0.1124" error="0.0010" />
+      </isotope>
+      <isotope mass-number="149">
+        <mass value="148.917180" error="0.000003" />
+        <abundance value="0.1382" error="0.0007" />
+      </isotope>
+      <isotope mass-number="150">
+        <mass value="149.917272" error="0.000003" />
+        <abundance value="0.0738" error="0.0001" />
+      </isotope>
+      <isotope mass-number="152">
+        <mass value="151.919729" error="0.000003" />
+        <abundance value="0.2675" error="0.0016" />
+      </isotope>
+      <isotope mass-number="154">
+        <mass value="153.922206" error="0.000003" />
+        <abundance value="0.2275" error="0.0029" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Eu" atomic-number="63">
+    <natural-abundance>
+      <mass value="151.964" error="0.001" />
+      <isotope mass-number="151">
+        <mass value="150.919846" error="0.000003" />
+        <abundance value="0.4781" error="0.0006" />
+      </isotope>
+      <isotope mass-number="153">
+        <mass value="152.921227" error="0.000003" />
+        <abundance value="0.5219" error="0.0006" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Gd" atomic-number="64">
+    <natural-abundance>
+      <mass value="157.25" error="0.03" />
+      <isotope mass-number="152">
+        <mass value="151.919789" error="0.000003" />
+        <abundance value="0.0020" error="0.0001" />
+      </isotope>
+      <isotope mass-number="154">
+        <mass value="153.920862" error="0.000003" />
+        <abundance value="0.0218" error="0.0003" />
+      </isotope>
+      <isotope mass-number="155">
+        <mass value="154.922619" error="0.000003" />
+        <abundance value="0.1480" error="0.0012" />
+      </isotope>
+      <isotope mass-number="156">
+        <mass value="155.922120" error="0.000003" />
+        <abundance value="0.2047" error="0.0009" />
+      </isotope>
+      <isotope mass-number="157">
+        <mass value="156.923957" error="0.000003" />
+        <abundance value="0.1565" error="0.0002" />
+      </isotope>
+      <isotope mass-number="158">
+        <mass value="157.924101" error="0.000003" />
+        <abundance value="0.2484" error="0.0007" />
+      </isotope>
+      <isotope mass-number="160">
+        <mass value="159.927051" error="0.000003" />
+        <abundance value="0.2186" error="0.0019" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Tb" atomic-number="65">
+    <natural-abundance>
+      <mass value="158.92534" error="0.00002" />
+      <isotope mass-number="159">
+        <mass value="158.925343" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Dy" atomic-number="66">
+    <natural-abundance>
+      <mass value="162.500" error="0.001" />
+      <isotope mass-number="156">
+        <mass value="155.924278" error="0.000007" />
+        <abundance value="0.00056" error="0.00003" />
+      </isotope>
+      <isotope mass-number="158">
+        <mass value="157.924405" error="0.000004" />
+        <abundance value="0.00095" error="0.00003" />
+      </isotope>
+      <isotope mass-number="160">
+        <mass value="159.925194" error="0.000003" />
+        <abundance value="0.02329" error="0.00018" />
+      </isotope>
+      <isotope mass-number="161">
+        <mass value="160.926930" error="0.000003" />
+        <abundance value="0.18889" error="0.00042" />
+      </isotope>
+      <isotope mass-number="162">
+        <mass value="161.926795" error="0.000003" />
+        <abundance value="0.25475" error="0.00036" />
+      </isotope>
+      <isotope mass-number="163">
+        <mass value="162.928728" error="0.000003" />
+        <abundance value="0.24896" error="0.00042" />
+      </isotope>
+      <isotope mass-number="164">
+        <mass value="163.929171" error="0.000003" />
+        <abundance value="0.28260" error="0.00054" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ho" atomic-number="67">
+    <natural-abundance>
+      <mass value="164.93032" error="0.00002" />
+      <isotope mass-number="165">
+        <mass value="164.930319" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Er" atomic-number="68">
+    <natural-abundance>
+      <mass value="167.259" error="0.003" />
+      <isotope mass-number="162">
+        <mass value="161.928775" error="0.000004" />
+        <abundance value="0.00139" error="0.00005" />
+      </isotope>
+      <isotope mass-number="164">
+        <mass value="163.929197" error="0.000004" />
+        <abundance value="0.01601" error="0.00003" />
+      </isotope>
+      <isotope mass-number="166">
+        <mass value="165.930290" error="0.000003" />
+        <abundance value="0.33503" error="0.00036" />
+      </isotope>
+      <isotope mass-number="167">
+        <mass value="166.932046" error="0.000003" />
+        <abundance value="0.22869" error="0.00009" />
+      </isotope>
+      <isotope mass-number="168">
+        <mass value="167.932368" error="0.000003" />
+        <abundance value="0.26978" error="0.00018" />
+      </isotope>
+      <isotope mass-number="170">
+        <mass value="169.935461" error="0.000003" />
+        <abundance value="0.14910" error="0.00036" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Tm" atomic-number="69">
+    <natural-abundance>
+      <mass value="168.93421" error="0.00002" />
+      <isotope mass-number="169">
+        <mass value="168.934211" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Yb" atomic-number="70">
+    <natural-abundance>
+      <mass value="173.04" error="0.03" />
+      <isotope mass-number="168">
+        <mass value="167.933895" error="0.000005" />
+        <abundance value="0.0013" error="0.0001" />
+      </isotope>
+      <isotope mass-number="170">
+        <mass value="169.934759" error="0.000003" />
+        <abundance value="0.0304" error="0.0015" />
+      </isotope>
+      <isotope mass-number="171">
+        <mass value="170.936323" error="0.000003" />
+        <abundance value="0.1428" error="0.0057" />
+      </isotope>
+      <isotope mass-number="172">
+        <mass value="171.936378" error="0.000003" />
+        <abundance value="0.2183" error="0.0067" />
+      </isotope>
+      <isotope mass-number="173">
+        <mass value="172.938207" error="0.000003" />
+        <abundance value="0.1613" error="0.0027" />
+      </isotope>
+      <isotope mass-number="174">
+        <mass value="173.938858" error="0.000003" />
+        <abundance value="0.3183" error="0.0092" />
+      </isotope>
+      <isotope mass-number="176">
+        <mass value="175.942569" error="0.000003" />
+        <abundance value="0.1276" error="0.0041" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Lu" atomic-number="71">
+    <natural-abundance>
+      <mass value="174.967" error="0.001" />
+      <isotope mass-number="175">
+        <mass value="174.9407682" error="0.0000028" />
+        <abundance value="0.9741" error="0.0002" />
+      </isotope>
+      <isotope mass-number="176">
+        <mass value="175.9426827" error="0.0000028" />
+        <abundance value="0.0259" error="0.0002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Hf" atomic-number="72">
+    <natural-abundance>
+      <mass value="178.49" error="0.02" />
+      <isotope mass-number="174">
+        <mass value="173.940042" error="0.000004" />
+        <abundance value="0.0016" error="0.0001" />
+      </isotope>
+      <isotope mass-number="176">
+        <mass value="175.941403" error="0.000003" />
+        <abundance value="0.0526" error="0.0007" />
+      </isotope>
+      <isotope mass-number="177">
+        <mass value="176.9432204" error="0.0000027" />
+        <abundance value="0.1860" error="0.0009" />
+      </isotope>
+      <isotope mass-number="178">
+        <mass value="177.9436981" error="0.0000027" />
+        <abundance value="0.2728" error="0.0007" />
+      </isotope>
+      <isotope mass-number="179">
+        <mass value="178.9488154" error="0.0000027" />
+        <abundance value="0.1362" error="0.0002" />
+      </isotope>
+      <isotope mass-number="180">
+        <mass value="179.9465488" error="0.0000027" />
+        <abundance value="0.3508" error="0.0016" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ta" atomic-number="73">
+    <natural-abundance>
+      <mass value="180.9479" error="0.0001" />
+      <isotope mass-number="180">
+        <mass value="179.947466" error="0.000003" />
+        <abundance value="0.00012" error="0.00002" />
+      </isotope>
+      <isotope mass-number="181">
+        <mass value="180.947996" error="0.000003" />
+        <abundance value="0.99988" error="0.00002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="W" atomic-number="74">
+    <natural-abundance>
+      <mass value="183.84" error="0.01" />
+      <isotope mass-number="180">
+        <mass value="179.946706" error="0.000005" />
+        <abundance value="0.0012" error="0.0001" />
+      </isotope>
+      <isotope mass-number="182">
+        <mass value="181.948205" error="0.000003" />
+        <abundance value="0.265" error="0.0016" />
+      </isotope>
+      <isotope mass-number="183">
+        <mass value="182.9502242" error="0.0000030" />
+        <abundance value="0.1431" error="0.0004" />
+      </isotope>
+      <isotope mass-number="184">
+        <mass value="183.9509323" error="0.0000030" />
+        <abundance value="0.3064" error="0.0002" />
+      </isotope>
+      <isotope mass-number="186">
+        <mass value="185.954362" error="0.000003" />
+        <abundance value="0.2843" error="0.0019" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Re" atomic-number="75">
+    <natural-abundance>
+      <mass value="186.207" error="0.001" />
+      <isotope mass-number="185">
+        <mass value="184.952955" error="0.000003" />
+        <abundance value="0.3740" error="0.0002" />
+      </isotope>
+      <isotope mass-number="187">
+        <mass value="186.9557505" error="0.0000030" />
+        <abundance value="0.6260" error="0.0002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Os" atomic-number="76">
+    <natural-abundance>
+      <mass value="190.23" error="0.03" />
+      <isotope mass-number="184">
+        <mass value="183.952491" error="0.000003" />
+        <abundance value="0.0002" error="0.0001" />
+      </isotope>
+      <isotope mass-number="186">
+        <mass value="185.953838" error="0.000003" />
+        <abundance value="0.0159" error="0.0003" />
+      </isotope>
+      <isotope mass-number="187">
+        <mass value="186.9557476" error="0.0000030" />
+        <abundance value="0.0196" error="0.0002" />
+      </isotope>
+      <isotope mass-number="188">
+        <mass value="187.9558357" error="0.0000030" />
+        <abundance value="0.1324" error="0.0008" />
+      </isotope>
+      <isotope mass-number="189">
+        <mass value="188.958145" error="0.000003" />
+        <abundance value="0.1615" error="0.0005" />
+      </isotope>
+      <isotope mass-number="190">
+        <mass value="189.958445" error="0.000003" />
+        <abundance value="0.2626" error="0.0002" />
+      </isotope>
+      <isotope mass-number="192">
+        <mass value="191.961479" error="0.000004" />
+        <abundance value="0.4078" error="0.0019" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Ir" atomic-number="77">
+    <natural-abundance>
+      <mass value="192.217" error="0.003" />
+      <isotope mass-number="191">
+        <mass value="190.960591" error="0.000003" />
+        <abundance value="0.373" error="0.002" />
+      </isotope>
+      <isotope mass-number="193">
+        <mass value="192.962923" error="0.000003" />
+        <abundance value="0.627" error="0.002" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Pt" atomic-number="78">
+    <natural-abundance>
+      <mass value="195.078" error="0.002" />
+      <isotope mass-number="190">
+        <mass value="189.959930" error="0.000007" />
+        <abundance value="0.00014" error="0.00001" />
+      </isotope>
+      <isotope mass-number="192">
+        <mass value="191.961035" error="0.000004" />
+        <abundance value="0.00782" error="0.00007" />
+      </isotope>
+      <isotope mass-number="194">
+        <mass value="193.962663" error="0.000003" />
+        <abundance value="0.32967" error="0.00099" />
+      </isotope>
+      <isotope mass-number="195">
+        <mass value="194.964774" error="0.000003" />
+        <abundance value="0.33832" error="0.00010" />
+      </isotope>
+      <isotope mass-number="196">
+        <mass value="195.964934" error="0.000003" />
+        <abundance value="0.25242" error="0.00041" />
+      </isotope>
+      <isotope mass-number="198">
+        <mass value="197.967875" error="0.000005" />
+        <abundance value="0.07163" error="0.00055" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Au" atomic-number="79">
+    <natural-abundance>
+      <mass value="196.96655" error="0.00002" />
+      <isotope mass-number="197">
+        <mass value="196.966551" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Hg" atomic-number="80">
+    <natural-abundance>
+      <mass value="200.59" error="0.02" />
+      <isotope mass-number="196">
+        <mass value="195.965814" error="0.000004" />
+        <abundance value="0.0015" error="0.0001" />
+      </isotope>
+      <isotope mass-number="198">
+        <mass value="197.966752" error="0.000003" />
+        <abundance value="0.0997" error="0.0020" />
+      </isotope>
+      <isotope mass-number="199">
+        <mass value="198.968262" error="0.000003" />
+        <abundance value="0.1687" error="0.0022" />
+      </isotope>
+      <isotope mass-number="200">
+        <mass value="199.968309" error="0.000003" />
+        <abundance value="0.2310" error="0.0019" />
+      </isotope>
+      <isotope mass-number="201">
+        <mass value="200.970285" error="0.000003" />
+        <abundance value="0.1318" error="0.0009" />
+      </isotope>
+      <isotope mass-number="202">
+        <mass value="201.970625" error="0.000003" />
+        <abundance value="0.2986" error="0.0026" />
+      </isotope>
+      <isotope mass-number="204">
+        <mass value="203.973475" error="0.000003" />
+        <abundance value="0.0687" error="0.0015" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Tl" atomic-number="81">
+    <natural-abundance>
+      <mass value="204.3833" error="0.0002" />
+      <isotope mass-number="203">
+        <mass value="202.972329" error="0.000003" />
+        <abundance value="0.2952" error="0.0001" />
+      </isotope>
+      <isotope mass-number="205">
+        <mass value="204.974412" error="0.000003" />
+        <abundance value="0.7048" error="0.0001" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Pb" atomic-number="82">
+    <natural-abundance>
+      <mass value="207.2" error="0.1" />
+      <isotope mass-number="204">
+        <mass value="203.973028" error="0.000003" />
+        <abundance value="0.014" error="0.001" />
+      </isotope>
+      <isotope mass-number="206">
+        <mass value="205.974449" error="0.000003" />
+        <abundance value="0.241" error="0.001" />
+      </isotope>
+      <isotope mass-number="207">
+        <mass value="206.975880" error="0.000003" />
+        <abundance value="0.221" error="0.001" />
+      </isotope>
+      <isotope mass-number="208">
+        <mass value="207.976636" error="0.000003" />
+        <abundance value="0.524" error="0.001" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Bi" atomic-number="83">
+    <natural-abundance>
+      <mass value="208.98038" error="0.00002" />
+      <isotope mass-number="209">
+        <mass value="208.980384" error="0.000003" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Th" atomic-number="90">
+    <natural-abundance>
+      <mass value="232.0381" error="0.0001" />
+      <isotope mass-number="232">
+        <mass value="232.0380495" error="0.0000022" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="Pa" atomic-number="91">
+    <natural-abundance>
+      <mass value="231.03588" error="0.00002" />
+      <isotope mass-number="231">
+        <mass value="231.03588" error="0.00002" />
+        <abundance value="1" error="0" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+  <entry symbol="U" atomic-number="92">
+    <natural-abundance>
+      <mass value="238.02891" error="0.00003" />
+      <isotope mass-number="234">
+        <mass value="234.0409447" error="0.0000022" />
+        <abundance value="0.000054" error="0.000005" />
+      </isotope>
+      <isotope mass-number="235">
+        <mass value="235.0439222" error="0.0000021" />
+        <abundance value="0.007204" error="0.000006" />
+      </isotope>
+      <isotope mass-number="238">
+        <mass value="238.0507835" error="0.0000022" />
+        <abundance value="0.992742" error="0.000010" />
+      </isotope>
+    </natural-abundance>
+  </entry>
+  
+</atomic-mass-table>

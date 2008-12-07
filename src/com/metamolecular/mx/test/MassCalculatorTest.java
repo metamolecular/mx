@@ -25,35 +25,28 @@
  */
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.calc.MassCalculator;
+import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Molecule;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class MassCalculatorTest extends TestCase
 {
-
-  public static void main(String[] args)
+  private MassCalculator calculator;
+  
+  @Override
+  protected void setUp() throws Exception
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-    suite.addTestSuite(MoleculeKitTest.class);
-
-    TestRunner.run(suite);
+    calculator = new MassCalculator();
+  }
+  
+  public void testItShouldFindTheAveragedMolecularMassOfBenzene()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    
+    assertEquals(78.11184, calculator.findAveragedMass(benzene));
   }
 }

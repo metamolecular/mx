@@ -26,6 +26,7 @@
 
 package com.metamolecular.mx.model;
 
+import com.metamolecular.mx.calc.MassCalculator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +42,13 @@ public class MoleculeKit
   private static MolfileWriter writer;
   private static VirtualHydrogenCounter hydrogenCounter;
   private static String hydrogen = "H";
+  private static MassCalculator massCalculator;
   
   static
   {
     reader = new MolfileReader();
     writer = new MolfileWriter();
+    massCalculator = new MassCalculator();
     hydrogenCounter = new VirtualHydrogenCounter();
   }
   
@@ -55,6 +58,11 @@ public class MoleculeKit
   private MoleculeKit()
   {
     
+  }
+  
+  public static double getMass(Molecule molecule)
+  {
+    return massCalculator.findAveragedMass(molecule);
   }
 
   public static Molecule readMolfile(String molfile)

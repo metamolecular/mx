@@ -394,7 +394,7 @@ public class DefaultMolecule implements Molecule
 
   private void assertAtomSymbolValid(String symbol)
   {
-    if (!AtomicSystem.getInstance().validateSymbol(symbol))
+    if (!AtomicSystem.getInstance().hasElement(symbol))
     {
       throw new IllegalStateException("Unsupported atom type \"" + symbol + "\"");
     }

@@ -23,37 +23,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
+package com.metamolecular.mx.model;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.calc.Measurement;
 
 /**
+ *
  * @author Richard L. Apodaca
  */
-public class MXTest
+public interface Isotope
 {
-
-  public static void main(String[] args)
-  {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-    suite.addTestSuite(MoleculeKitTest.class);
-
-    TestRunner.run(suite);
-  }
+  public int getMassNumber();
+  
+  public Measurement getMass();
+  
+  public Measurement getAbundance();
 }

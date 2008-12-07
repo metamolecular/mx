@@ -23,37 +23,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
+package com.metamolecular.mx.calc;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.AtomicSystem;
+import com.metamolecular.mx.model.Molecule;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class MassCalculator
 {
-
-  public static void main(String[] args)
+  /**
+   * Throws away error determinations.
+   * 
+   * @param molecule the molecule to be measured
+   * @return the averaged moleclar mass of molecule
+   */
+  public double findAveragedMass(Molecule molecule)
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-    suite.addTestSuite(MoleculeKitTest.class);
-
-    TestRunner.run(suite);
+    double result = 0;
+    
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+      
+      if (atom.hasSingleIsotope())
+      {
+        
+      }
+      
+      else
+      {
+        result += AtomicSystem.getInstance().getAverageMass(atom.getSymbol()).getValue();
+      }
+      
+      result += atom.countVirtualHydrogens() * AtomicSystem.getInstance().getAverageMass("H").getValue();
+    }
+    
+    return result;
   }
 }
