@@ -23,38 +23,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+package com.metamolecular.mx.io.mdl;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class MXTest
+public class SDFileReader
 {
-
-  public static void main(String[] args)
+  private Reader reader;
+  
+  public SDFileReader(String filename) throws IOException
   {
-    TestSuite suite = new TestSuite();
 
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-    suite.addTestSuite(MoleculeKitTest.class);
-    suite.addTestSuite(SDFileReaderTest.class);
-
-    TestRunner.run(suite);
+  }
+  
+  public boolean hasNextRecord()
+  {
+    return false;
+  }
+  
+  public void nextRecord()
+  {
+    
   }
 }
