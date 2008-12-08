@@ -29,6 +29,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,12 +46,28 @@ public class SDFileReader
   private BufferedReader reader;
   private Reader file;
   private String record;
-
+  private Pattern keyPattern;
+  private Matcher globalMatcher;
+  private Map<String, Pattern> keyPatterns;
+  
   public SDFileReader(String filename) throws IOException
   {
     record = null;
     file = new FileReader(filename);
     reader = new BufferedReader(file);
+    keyPattern = Pattern.compile("^> *?<(.*?)>", Pattern.MULTILINE);
+    globalMatcher = null;
+    keyPatterns = new HashMap<String, Pattern>();
+    
+    try
+    {
+      nextRecord();
+    }
+    
+    catch (Exception e)
+    {
+      throw new IOException("The file " + filename + " does not appear to be a valid SD file.");
+    }
   }
 
   public void close()
@@ -100,46 +120,30 @@ public class SDFileReader
   
   public String getData(String key)
   {
-    Pattern p = Pattern.compile(".*^> <" + key + ">$.(.*?)$.*", Pattern.MULTILINE | Pattern.DOTALL);
-    Matcher m = p.matcher(record);
+    Pattern pattern = keyPatterns.get(key);
     
-    m.matches();
+    if (pattern == null)
+    {
+      pattern = Pattern.compile(".*^> *?<" + key + ">$.(.*?)$.*", Pattern.MULTILINE | Pattern.DOTALL);
     
-    return m.group(1);
+      keyPatterns.put(key, pattern);
+    }
     
-    //System.out.println(m.group());
-
-    //return Boolean.toString(m.matches());
+    Matcher matcher = pattern.matcher(record);
+    
+    return matcher.matches() ? matcher.group(1) : "";
   }
-
-  public String getData2(String key)
+  
+  public List<String> getKeys()
   {
-    int tagIndex = record.indexOf("<" + key + ">");
-
-    if (tagIndex < 0)
+    List<String> result = new ArrayList<String>();
+    Matcher m = keyPattern.matcher(record);
+    
+    while (m.find())
     {
-      return "";
+      result.add(m.group(1));
     }
 
-    int startIndex = record.indexOf("\n", tagIndex) + 1;
-
-    if (startIndex < 0)
-    {
-      throw new RuntimeException("Data format error at key[" + key + "]: ");
-    }
-
-    int endIndex = record.indexOf("\n\n", startIndex);
-
-    if (endIndex < 0)
-    {
-      endIndex = record.indexOf("\r\n", startIndex);
-
-      if (endIndex < 0)
-      {
-        throw new RuntimeException("Data format error at key[" + key + "]: ");
-      }
-    }
-
-    return record.substring(startIndex, endIndex);
+    return result;
   }
 }

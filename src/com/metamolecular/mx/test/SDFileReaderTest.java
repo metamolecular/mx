@@ -26,6 +26,9 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.mdl.SDFileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import junit.framework.TestCase;
 
 /**
@@ -34,6 +37,10 @@ import junit.framework.TestCase;
 public class SDFileReaderTest extends TestCase
 {
   private SDFileReader reader;
+  private String[] keys =
+  {
+    "PUBCHEM_COMPOUND_CID", "PUBCHEM_COMPOUND_CANONICALIZED", "PUBCHEM_CACTVS_COMPLEXITY", "PUBCHEM_CACTVS_HBOND_ACCEPTOR", "PUBCHEM_CACTVS_HBOND_DONOR", "PUBCHEM_CACTVS_ROTATABLE_BOND", "PUBCHEM_CACTVS_SUBSKEYS", "PUBCHEM_IUPAC_OPENEYE_NAME", "PUBCHEM_IUPAC_CAS_NAME", "PUBCHEM_IUPAC_NAME", "PUBCHEM_IUPAC_SYSTEMATIC_NAME", "PUBCHEM_IUPAC_TRADITIONAL_NAME", "PUBCHEM_NIST_INCHI", "PUBCHEM_EXACT_MASS", "PUBCHEM_MOLECULAR_FORMULA", "PUBCHEM_MOLECULAR_WEIGHT", "PUBCHEM_OPENEYE_CAN_SMILES", "PUBCHEM_OPENEYE_ISO_SMILES", "PUBCHEM_CACTVS_TPSA", "PUBCHEM_MONOISOTOPIC_WEIGHT", "PUBCHEM_TOTAL_CHARGE", "PUBCHEM_HEAVY_ATOM_COUNT", "PUBCHEM_ATOM_DEF_STEREO_COUNT", "PUBCHEM_ATOM_UDEF_STEREO_COUNT", "PUBCHEM_BOND_DEF_STEREO_COUNT", "PUBCHEM_BOND_UDEF_STEREO_COUNT", "PUBCHEM_ISOTOPIC_ATOM_COUNT", "PUBCHEM_COMPONENT_COUNT", "PUBCHEM_CACTVS_TAUTO_COUNT", "PUBCHEM_BONDANNOTATIONS"
+  };
 
   @Override
   protected void setUp() throws Exception
@@ -58,18 +65,40 @@ public class SDFileReaderTest extends TestCase
       count++;
     }
 
-    assertEquals(33, count);
+    assertEquals(32, count);
   }
 
-  public void testItShoudReadAttributesInTheFirstRecord()
+  public void testItShoudReadAllKeysInTheFirstRecord()
   {
-    reader.nextRecord();
-    
-    String[] fields = new String[]{"PUBCHEM_COMPOUND_CID", "PUBCHEM_COMPOUND_CANONICALIZED", "PUBCHEM_CACTVS_COMPLEXITY", "PUBCHEM_CACTVS_HBOND_ACCEPTOR"};
-    
-    for (String field : fields)
+    for (String key : keys)
     {
-      assertNotNull(reader.getData(field));
+      assertFalse("".equals(reader.getData(key)));
+    }
+  }
+
+  public void testItShouldFetchAllKeysForTheFirstRecord()
+  {
+    List<String> fields = reader.getKeys();
+
+    assertEquals(Arrays.asList(keys), fields);
+  }
+
+  public void testItShouldReturnAnEmptyStringWhenKeyNotFound()
+  {
+    assertEquals("", reader.getData("PUBCHEM_FOO_BAR"));
+  }
+
+  public void testItShouldThrowIOExceptionWhenCreatedFromANonexistentFile()
+  {
+    try
+    {
+      new SDFileReader("bar.sdf");
+
+      fail();
+    }
+    catch (IOException ignore)
+    {
+      assertTrue(true);
     }
   }
 }
