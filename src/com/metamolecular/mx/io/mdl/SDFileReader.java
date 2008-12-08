@@ -47,7 +47,6 @@ public class SDFileReader
   private Reader file;
   private String record;
   private Pattern keyPattern;
-  private Matcher globalMatcher;
   private Map<String, Pattern> keyPatterns;
   
   public SDFileReader(String filename) throws IOException
@@ -56,7 +55,6 @@ public class SDFileReader
     file = new FileReader(filename);
     reader = new BufferedReader(file);
     keyPattern = Pattern.compile("^> *?<(.*?)>", Pattern.MULTILINE);
-    globalMatcher = null;
     keyPatterns = new HashMap<String, Pattern>();
     
     try
