@@ -23,9 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.io.mdl;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -35,20 +35,51 @@ import java.io.Reader;
  */
 public class SDFileReader
 {
-  private Reader reader;
-  
+  private static String RECORD_END = "$$$$";
+  private static String LINEFEED = "\n";
+  private BufferedReader reader;
+  private Reader file;
+  private String record;
+
   public SDFileReader(String filename) throws IOException
   {
-
+    record = null;
+    file = new FileReader(filename);
+    reader = new BufferedReader(file);
   }
-  
+
   public boolean hasNextRecord()
   {
+    try
+    {
+      return reader.ready();
+    }
+    catch (IOException ignore)
+    {
+    }
+
     return false;
   }
-  
+
   public void nextRecord()
   {
+    StringBuffer buff = new StringBuffer();
     
+    try
+    {
+      String line = reader.readLine();
+
+      while (!RECORD_END.equals(line))
+      {
+        buff.append(line + LINEFEED);
+
+        line = reader.readLine();
+      }
+    }
+
+    catch (IOException e)
+    {
+      throw new RuntimeException("An unexpected IO error occurred while reading file.", e);
+    }
   }
 }

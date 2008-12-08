@@ -36,7 +36,7 @@ public class SDFileReaderTest extends TestCase
 {
   public void testItShouldIterateOverEveryRecord() throws Exception
   {
-    SDFileReader reader = new SDFileReader("test");
+    SDFileReader reader = new SDFileReader("../resources/pubchem_sample_33.sdf");
     int count = 0;
     
     while (reader.hasNextRecord())
@@ -46,6 +46,6 @@ public class SDFileReaderTest extends TestCase
       count++;
     }
     
-    assertEquals(10, count);
+    assertEquals(33, count);
   }
 }
