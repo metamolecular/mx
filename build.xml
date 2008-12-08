@@ -3,7 +3,7 @@
   <!-- properties -->
   <property name="full-name" value="MX Tools for Cheminformatics" />
   <property name="unix-name" value="mx" />
-  <property name="version" value="0.106.0" />
+  <property name="version" value="0.107.0" />
   <property name="source.dir" location="src" />
   <property name="resource.dir" location="resources" />
   <property name="lib.dir" location="lib" />
@@ -77,6 +77,7 @@
     <copy todir="${dist.dir}/doc">
       <fileset dir="${doc.dir}" />
     </copy>
+    <copy file="${resource.dir}/atomic_system.pdf" todir="${dist.dir}/doc" />
     <copy file="build.xml" todir="${dist.dir}" />
   </target>
   <target name="tgz" depends="dist" description="Create a compressed distribution tarfile.">
