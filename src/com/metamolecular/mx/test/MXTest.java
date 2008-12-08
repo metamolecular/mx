@@ -53,6 +53,7 @@ public class MXTest
     suite.addTestSuite(AtomicSystemTest.class);
     suite.addTestSuite(MassCalculatorTest.class);
     suite.addTestSuite(MoleculeKitTest.class);
+    suite.addTestSuite(SDFileReaderTest.class);
 
     TestRunner.run(suite);
   }
