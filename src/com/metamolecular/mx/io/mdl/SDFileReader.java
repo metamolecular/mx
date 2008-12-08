@@ -25,6 +25,8 @@
  */
 package com.metamolecular.mx.io.mdl;
 
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.model.MoleculeKit;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -47,25 +49,17 @@ public class SDFileReader
   private Reader file;
   private String record;
   private Pattern keyPattern;
+  private Pattern molfilePattern;
   private Map<String, Pattern> keyPatterns;
-  
+
   public SDFileReader(String filename) throws IOException
   {
     record = null;
     file = new FileReader(filename);
     reader = new BufferedReader(file);
     keyPattern = Pattern.compile("^> *?<(.*?)>", Pattern.MULTILINE);
+    molfilePattern = Pattern.compile("^(.*M  END)", Pattern.DOTALL);
     keyPatterns = new HashMap<String, Pattern>();
-    
-    try
-    {
-      nextRecord();
-    }
-    
-    catch (Exception e)
-    {
-      throw new IOException("The file " + filename + " does not appear to be a valid SD file.");
-    }
   }
 
   public void close()
@@ -115,33 +109,69 @@ public class SDFileReader
 
     record = buff.toString();
   }
-  
+
   public String getData(String key)
   {
+    assertRecordLoaded();
+
     Pattern pattern = keyPatterns.get(key);
-    
+
     if (pattern == null)
     {
       pattern = Pattern.compile(".*^> *?<" + key + ">$.(.*?)$.*", Pattern.MULTILINE | Pattern.DOTALL);
-    
+
       keyPatterns.put(key, pattern);
     }
-    
+
     Matcher matcher = pattern.matcher(record);
-    
+
     return matcher.matches() ? matcher.group(1) : "";
   }
-  
+
+  public Molecule getMolecule()
+  {
+    assertRecordLoaded();
+    
+    Matcher matcher = molfilePattern.matcher(record);
+
+    matcher.find();
+
+    String molfile = matcher.group(1);
+
+    return MoleculeKit.readMolfile(molfile);
+  }
+
+  public Molecule getMolecule(boolean virtualizeHydrogens)
+  {
+    assertRecordLoaded();
+    
+    Matcher matcher = molfilePattern.matcher(record);
+
+    matcher.find();
+
+    String molfile = matcher.group(1);
+
+    return MoleculeKit.readMolfile(molfile, virtualizeHydrogens);
+  }
+
   public List<String> getKeys()
   {
     List<String> result = new ArrayList<String>();
     Matcher m = keyPattern.matcher(record);
-    
+
     while (m.find())
     {
       result.add(m.group(1));
     }
 
     return result;
+  }
+
+  private void assertRecordLoaded()
+  {
+    if (record == null)
+    {
+      throw new IllegalStateException("No record has been loaded. Make sure you've called nextRecord() first.");
+    }
   }
 }

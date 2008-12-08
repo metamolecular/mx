@@ -26,6 +26,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.mdl.SDFileReader;
+import com.metamolecular.mx.model.Molecule;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -65,11 +66,13 @@ public class SDFileReaderTest extends TestCase
       count++;
     }
 
-    assertEquals(32, count);
+    assertEquals(33, count);
   }
 
   public void testItShoudReadAllKeysInTheFirstRecord()
   {
+    reader.nextRecord();
+
     for (String key : keys)
     {
       assertFalse("".equals(reader.getData(key)));
@@ -78,6 +81,8 @@ public class SDFileReaderTest extends TestCase
 
   public void testItShouldFetchAllKeysForTheFirstRecord()
   {
+    reader.nextRecord();
+
     List<String> fields = reader.getKeys();
 
     assertEquals(Arrays.asList(keys), fields);
@@ -85,7 +90,37 @@ public class SDFileReaderTest extends TestCase
 
   public void testItShouldReturnAnEmptyStringWhenKeyNotFound()
   {
+    reader.nextRecord();
+
     assertEquals("", reader.getData("PUBCHEM_FOO_BAR"));
+  }
+
+  public void testItShouldThrowIllegalStateExceptionIfGetDataCalledBeforeNextRecord()
+  {
+    try
+    {
+      reader.getData("PUBCHEM_FOO_BAR");
+
+      fail();
+    }
+    catch (IllegalStateException e)
+    {
+      assertTrue(true);
+    }
+  }
+
+  public void testItShouldThrowIllegalStateExceptionIfGetMoleculeCalledBeforeNextRecord()
+  {
+    try
+    {
+      reader.getMolecule();
+
+      fail();
+    }
+    catch (IllegalStateException e)
+    {
+      assertTrue(true);
+    }
   }
 
   public void testItShouldThrowIOExceptionWhenCreatedFromANonexistentFile()
@@ -99,6 +134,30 @@ public class SDFileReaderTest extends TestCase
     catch (IOException ignore)
     {
       assertTrue(true);
+    }
+  }
+
+  public void testItShouldLoadAMoleculeForEveryRecord()
+  {
+    while (reader.hasNextRecord())
+    {
+      reader.nextRecord();
+
+      Molecule molecule = reader.getMolecule();
+
+      assertFalse(molecule.countAtoms() == 0);
+    }
+  }
+
+  public void testItShouldLoadAVirtualizedHydrogenMoleculeForEveryRecord()
+  {
+    while (reader.hasNextRecord())
+    {
+      reader.nextRecord();
+
+      Molecule molecule = reader.getMolecule(true);
+
+      assertFalse(molecule.countAtoms() == 0);
     }
   }
 }
