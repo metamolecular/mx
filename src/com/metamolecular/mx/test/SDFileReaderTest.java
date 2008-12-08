@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.mdl.SDFileReader;
@@ -34,18 +33,43 @@ import junit.framework.TestCase;
  */
 public class SDFileReaderTest extends TestCase
 {
-  public void testItShouldIterateOverEveryRecord() throws Exception
+  private SDFileReader reader;
+
+  @Override
+  protected void setUp() throws Exception
   {
-    SDFileReader reader = new SDFileReader("../resources/pubchem_sample_33.sdf");
+    reader = new SDFileReader("../resources/pubchem_sample_33.sdf");
+  }
+
+  @Override
+  protected void tearDown() throws Exception
+  {
+    reader.close();
+  }
+
+  public void testItShouldIterateOverEveryRecord()
+  {
     int count = 0;
-    
+
     while (reader.hasNextRecord())
     {
       reader.nextRecord();
-      
+
       count++;
     }
-    
+
     assertEquals(33, count);
+  }
+
+  public void testItShoudReadAttributesInTheFirstRecord()
+  {
+    reader.nextRecord();
+    
+    String[] fields = new String[]{"PUBCHEM_COMPOUND_CID", "PUBCHEM_COMPOUND_CANONICALIZED", "PUBCHEM_CACTVS_COMPLEXITY", "PUBCHEM_CACTVS_HBOND_ACCEPTOR"};
+    
+    for (String field : fields)
+    {
+      assertNotNull(reader.getData(field));
+    }
   }
 }

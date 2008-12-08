@@ -29,6 +29,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -48,6 +50,18 @@ public class SDFileReader
     reader = new BufferedReader(file);
   }
 
+  public void close()
+  {
+    try
+    {
+      file.close();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException("Error closing file.", e);
+    }
+  }
+
   public boolean hasNextRecord()
   {
     try
@@ -64,7 +78,7 @@ public class SDFileReader
   public void nextRecord()
   {
     StringBuffer buff = new StringBuffer();
-    
+
     try
     {
       String line = reader.readLine();
@@ -76,10 +90,56 @@ public class SDFileReader
         line = reader.readLine();
       }
     }
-
     catch (IOException e)
     {
       throw new RuntimeException("An unexpected IO error occurred while reading file.", e);
     }
+
+    record = buff.toString();
+  }
+  
+  public String getData(String key)
+  {
+    Pattern p = Pattern.compile(".*^> <" + key + ">$.(.*?)$.*", Pattern.MULTILINE | Pattern.DOTALL);
+    Matcher m = p.matcher(record);
+    
+    m.matches();
+    
+    return m.group(1);
+    
+    //System.out.println(m.group());
+
+    //return Boolean.toString(m.matches());
+  }
+
+  public String getData2(String key)
+  {
+    int tagIndex = record.indexOf("<" + key + ">");
+
+    if (tagIndex < 0)
+    {
+      return "";
+    }
+
+    int startIndex = record.indexOf("\n", tagIndex) + 1;
+
+    if (startIndex < 0)
+    {
+      throw new RuntimeException("Data format error at key[" + key + "]: ");
+    }
+
+    int endIndex = record.indexOf("\n\n", startIndex);
+
+    if (endIndex < 0)
+    {
+      endIndex = record.indexOf("\r\n", startIndex);
+
+      if (endIndex < 0)
+      {
+        throw new RuntimeException("Data format error at key[" + key + "]: ");
+      }
+    }
+
+    return record.substring(startIndex, endIndex);
   }
 }
