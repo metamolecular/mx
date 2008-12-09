@@ -81,7 +81,7 @@ public class PathEdge
 
   public boolean isLoop()
   {
-    return path.get(0).equals(path.get(path.size() - 1));
+    return source == target;
   }
 
   public List<Atom> getPath()

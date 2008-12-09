@@ -28,7 +28,9 @@ package com.metamolecular.mx.test;
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.ring.PathEdge;
 import com.metamolecular.mx.ring.PathGraph;
+import java.util.List;
 import junit.framework.TestCase;
 
 /**
@@ -36,7 +38,14 @@ import junit.framework.TestCase;
  */
 public class PathGraphTest extends TestCase
 {
-
+  public void testItShouldHaveTheSameNumberOfEdgesAsBondsOnCreation()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    PathGraph graph = new PathGraph(benzene);
+    
+    assertEquals(6, graph.getEdges().size());
+  }
+  
   public void testItShouldHaveNextAtomAfterCreation()
   {
     Molecule benzene = Molecules.createBenzene();
@@ -45,10 +54,46 @@ public class PathGraphTest extends TestCase
     assertEquals(true, pathGraph.hasNextAtom());
   }
 
-  public void testItShouldReturnNextAtomAfterCreation()
+  public void testItShouldReturnLeastConnectedAtomAtFirst()
+  {
+    Molecule toluene = Molecules.createToluene();
+    PathGraph pathGraph = new PathGraph(toluene);
+    Atom next = pathGraph.nextAtom();
+
+    assertEquals(6, next.getIndex());
+  }
+
+  public void testItShouldRemoveATerminalAtomWithoutCreatingANewEdge()
+  {
+    Molecule toluene = Molecules.createToluene();
+    PathGraph pathGraph = new PathGraph(toluene);
+    Atom next = pathGraph.nextAtom();
+
+    pathGraph.remove(next);
+
+    assertEquals(6, pathGraph.getAtoms().size());
+    assertFalse(pathGraph.getAtoms().contains(next));
+  }
+
+  public void testItShouldReturnTwoEdgesWhenRemovingFirstAtomFromSimpleCycle()
   {
     Molecule benzene = Molecules.createBenzene();
-    PathGraph pathGraph = new PathGraph(benzene);
-    Atom next = pathGraph.nextAtom();
+    PathGraph graph = new PathGraph(benzene);
+
+    List<PathEdge> edges = graph.remove(benzene.getAtom(0));
+
+    assertEquals(2, edges.size());
+  }
+  
+    
+  private void printPath(PathEdge edge)
+  {
+    for (Atom atom : edge.getPath())
+    {
+      System.out.print(atom.getIndex());
+      System.out.print("-");
+    }
+    
+    System.out.println();
   }
 }
