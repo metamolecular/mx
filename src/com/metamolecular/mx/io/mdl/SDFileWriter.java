@@ -39,11 +39,13 @@ public class SDFileWriter
 
   private FileWriter file;
   private BufferedWriter writer;
+  private int recordCount;
 
   public SDFileWriter(String filename) throws IOException
   {
     file = new FileWriter(filename);
     writer = new BufferedWriter(file);
+    recordCount = 0;
   }
 
   public void writeMolecule(Molecule molecule)
@@ -85,11 +87,16 @@ public class SDFileWriter
     {
       throw new RuntimeException(e);
     }
+
+    recordCount++;
   }
 
   public void close()
   {
-    nextRecord();
+    if (recordCount == 0)
+    {
+      nextRecord();
+    }
 
     try
     {
