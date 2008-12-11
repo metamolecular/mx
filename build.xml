@@ -13,6 +13,7 @@
   <property name="tgz.dir" location="${build.dir}/tgz" />
   <property name="doc.dir" location="${build.dir}/doc" />
   <property name="dist.dir" location="${build.dir}/dist" />
+  <property name="test.dir" location="${build.dir}/test" />
   <property name="lib-licenses.file" location="${lib.dir}/LICENSES.txt" />
   <property name="license.file" location="LICENSE.txt" />
   <property name="junit.lib" value="${lib.dir}/junit-4.5.jar" />
@@ -28,6 +29,7 @@
     <mkdir dir="${jar.dir}" />
     <mkdir dir="${doc.dir}" />
     <mkdir dir="${tgz.dir}" />
+    <mkdir dir="${test.dir}" />
   </target>
   <target name="clean" description="Remove build directories.">
     <delete dir="${build.dir}" />
