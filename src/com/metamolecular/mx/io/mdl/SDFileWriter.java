@@ -36,7 +36,6 @@ import java.io.IOException;
  */
 public class SDFileWriter
 {
-
   private FileWriter file;
   private BufferedWriter writer;
   private int recordCount;
@@ -56,7 +55,8 @@ public class SDFileWriter
     {
       writer.write(molfile);
       writer.newLine();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       throw new RuntimeException(e);
     }
@@ -71,7 +71,8 @@ public class SDFileWriter
       writer.write(value);
       writer.newLine();
       writer.newLine();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       throw new RuntimeException(e);
     }
@@ -83,7 +84,8 @@ public class SDFileWriter
     {
       writer.write("$$$$");
       writer.newLine();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       throw new RuntimeException(e);
     }
@@ -102,7 +104,8 @@ public class SDFileWriter
     {
       writer.flush();
       file.close();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       throw new RuntimeException("IO exception occurred while closing.", e);
     }

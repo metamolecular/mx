@@ -131,7 +131,7 @@ public class SDFileReader
   public Molecule getMolecule()
   {
     assertRecordLoaded();
-    
+
     Matcher matcher = molfilePattern.matcher(record);
 
     matcher.find();
@@ -144,7 +144,7 @@ public class SDFileReader
   public Molecule getMolecule(boolean virtualizeHydrogens)
   {
     assertRecordLoaded();
-    
+
     Matcher matcher = molfilePattern.matcher(record);
 
     matcher.find();
