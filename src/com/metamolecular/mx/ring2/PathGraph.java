@@ -42,8 +42,10 @@ public class PathGraph
   {
     PathNode result = nodes.get(0);
     
-    for (PathNode node : nodes)
+    for (int i = 1; i < nodes.size(); i++)
     {
+      PathNode node = nodes.get(i);
+      
       if (node.countConnections() > result.countConnections())
       {
         result = node;
@@ -78,10 +80,12 @@ public class PathGraph
   private class NodeImpl implements PathNode
   {
     private Atom atom;
+    private List<PathEdge> edges;
     
     private NodeImpl(Atom atom)
     {
       this.atom = atom;
+      edges = new ArrayList();
     }
 
     public Atom getAtom()
@@ -91,7 +95,14 @@ public class PathGraph
 
     public int countConnections()
     {
-      return 0;
+      int result = 0;
+      
+      for (PathEdge edge : edges)
+      {
+        result += edge.isCycle() ? 2 : 1;
+      }
+      
+      return result;
     }
   }
   
@@ -100,6 +111,11 @@ public class PathGraph
     private EdgeImpl(Bond bond)
     {
       
+    }
+    
+    public boolean isCycle()
+    {
+      return false;
     }
   }
 }

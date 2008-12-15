@@ -10,4 +10,5 @@ package com.metamolecular.mx.ring2;
  */
 public interface PathEdge
 {
+  public boolean isCycle();
 }
