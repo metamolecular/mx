@@ -38,6 +38,21 @@ public class PathGraph
     return edges.size();
   }
   
+  public PathNode getLeastConnectedNode()
+  {
+    PathNode result = nodes.get(0);
+    
+    for (PathNode node : nodes)
+    {
+      if (node.countConnections() > result.countConnections())
+      {
+        result = node;
+      }
+    }
+    
+    return result;
+  }
+  
   private void loadNodes(Molecule molecule)
   {
     for (int i = 0; i < molecule.countAtoms(); i++)
@@ -62,9 +77,21 @@ public class PathGraph
   
   private class NodeImpl implements PathNode
   {
+    private Atom atom;
+    
     private NodeImpl(Atom atom)
     {
-      
+      this.atom = atom;
+    }
+
+    public Atom getAtom()
+    {
+      return atom;
+    }
+
+    public int countConnections()
+    {
+      return 0;
     }
   }
   
