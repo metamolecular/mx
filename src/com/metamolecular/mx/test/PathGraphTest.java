@@ -29,6 +29,7 @@ import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.ring2.PathGraph;
+import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
 
@@ -61,8 +62,37 @@ public class PathGraphTest extends TestCase
     Molecule toluene = Molecules.createToluene();
     PathGraph graph = new PathGraph(toluene);
     Atom atom = graph.getLeastConnectedAtom();
-    List<List<Atom>> paths = graph.remove(atom);
+    List<List<Atom>> cycles = graph.remove(atom);
     
-    assertTrue(paths.isEmpty());
+    assertTrue(cycles.isEmpty());
+  }
+  
+  public void testItShouldReturnAllPathsTerminatedByAnAtomCorrectlyOriented()
+  {
+    Molecule toluene = Molecules.createToluene();
+    PathGraph graph = new PathGraph(toluene);
+    List<List<Atom>> paths = graph.getPaths(toluene.getAtom(0));
+    
+    assertEquals(3, paths.size());
+    assertTrue(paths.contains(Arrays.asList(toluene.getAtom(0), toluene.getAtom(1))));
+    assertTrue(paths.contains(Arrays.asList(toluene.getAtom(5), toluene.getAtom(0))));
+    assertTrue(paths.contains(Arrays.asList(toluene.getAtom(6), toluene.getAtom(0))));
+  }
+  
+  public void testItShouldReturnACycleOnRemovalofLastBenzeneAtom()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    PathGraph graph = new PathGraph(benzene);
+    
+    System.out.println(graph.remove(benzene.getAtom(0)));
+    graph.remove(benzene.getAtom(1));
+    graph.remove(benzene.getAtom(2));
+    graph.remove(benzene.getAtom(3));
+    graph.remove(benzene.getAtom(4));
+    
+    List<List<Atom>> cycles = graph.remove(benzene.getAtom(5));
+    
+    assertTrue(graph.isEmpty());
+    assertFalse(cycles.isEmpty());
   }
 }
