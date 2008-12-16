@@ -23,13 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.ring2.PathGraph;
+import java.util.List;
 import junit.framework.TestCase;
 
 /**
@@ -54,5 +54,15 @@ public class PathGraphTest extends TestCase
 
     assertEquals(6, atom.getIndex());
     assertEquals(1, graph.countConnections(atom));
+  }
+
+  public void testItShouldReturnEmptyCollectionWhenRemovingTerminalAtom()
+  {
+    Molecule toluene = Molecules.createToluene();
+    PathGraph graph = new PathGraph(toluene);
+    Atom atom = graph.getLeastConnectedAtom();
+    List<List<Atom>> paths = graph.remove(atom);
+    
+    assertTrue(paths.isEmpty());
   }
 }

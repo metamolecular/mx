@@ -96,6 +96,13 @@ public class PathGraph
     return result;
   }
   
+  public List<List<Atom>> remove(Atom atom)
+  {
+    List<List<Atom>> result = new ArrayList();
+    
+    return result;
+  }
+  
   private void loadAtoms(Molecule molecule)
   {
     for (int i = 0; i < molecule.countAtoms(); i++)
