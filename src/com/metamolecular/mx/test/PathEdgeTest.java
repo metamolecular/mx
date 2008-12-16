@@ -28,7 +28,6 @@ package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.ring2.PathEdge;
 import junit.framework.TestCase;
 
 /**
