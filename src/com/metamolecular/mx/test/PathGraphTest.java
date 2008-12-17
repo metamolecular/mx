@@ -92,6 +92,17 @@ public class PathGraphTest extends TestCase
     
     List<List<Atom>> cycles = graph.remove(benzene.getAtom(5));
     
+    for (List<Atom> cycle : cycles)
+    {
+      System.out.println("Cycle:");
+      for (Atom atom : cycle)
+      {
+        System.out.print(atom.getIndex() + "-");
+      }
+      
+      System.out.println();
+    }
+    
     assertTrue(graph.isEmpty());
     assertFalse(cycles.isEmpty());
   }
