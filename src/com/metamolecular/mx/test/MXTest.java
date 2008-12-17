@@ -51,7 +51,6 @@ public class MXTest
     suite.addTestSuite(SMILESReaderTest.class);
     suite.addTestSuite(SMILESBuilderTest.class);
     suite.addTestSuite(PathEdgeTest.class);
-    suite.addTestSuite(PathGraphTest.class);
 
     TestRunner.run(suite);
   }
