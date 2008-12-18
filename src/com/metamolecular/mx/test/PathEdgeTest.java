@@ -44,7 +44,33 @@ public class PathEdgeTest extends TestCase
     PathEdge path1 = new PathEdge(Arrays.asList(hexane.getAtom(0), hexane.getAtom(1)));
     PathEdge path2 = new PathEdge(Arrays.asList(hexane.getAtom(2), hexane.getAtom(1)));
     PathEdge splice = path1.splice(path2);
-    
+
+
+    assertEquals(Arrays.asList(hexane.getAtom(0),
+            hexane.getAtom(1),
+            hexane.getAtom(2)), splice.getAtoms());
+  }
+
+  public void testItShouldSpliceTailToHead()
+  {
+    Molecule hexane = Molecules.createHexane();
+    PathEdge path1 = new PathEdge(Arrays.asList(hexane.getAtom(1), hexane.getAtom(0)));
+    PathEdge path2 = new PathEdge(Arrays.asList(hexane.getAtom(1), hexane.getAtom(2)));
+    PathEdge splice = path1.splice(path2);
+
+
+    assertEquals(Arrays.asList(hexane.getAtom(0),
+            hexane.getAtom(1),
+            hexane.getAtom(2)), splice.getAtoms());
+  }
+
+  public void testItShouldSpliceTailToTail()
+  {
+    Molecule hexane = Molecules.createHexane();
+    PathEdge path1 = new PathEdge(Arrays.asList(hexane.getAtom(1), hexane.getAtom(0)));
+    PathEdge path2 = new PathEdge(Arrays.asList(hexane.getAtom(2), hexane.getAtom(1)));
+    PathEdge splice = path1.splice(path2);
+
 
     assertEquals(Arrays.asList(hexane.getAtom(0),
             hexane.getAtom(1),
