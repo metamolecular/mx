@@ -47,6 +47,11 @@ public class PathEdge
   {
     return atoms;
   }
+  
+  public boolean isCycle()
+  {
+    return (atoms.size() > 2) && atoms.get(0).equals(atoms.get(atoms.size() - 1));
+  }
 
   public PathEdge splice(PathEdge other)
   {

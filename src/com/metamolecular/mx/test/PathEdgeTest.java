@@ -127,7 +127,7 @@ public class PathEdgeTest extends TestCase
     PathEdge path3 = new PathEdge(Arrays.asList(cyclohexane.getAtom(3), cyclohexane.getAtom(4)));
     PathEdge path4 = new PathEdge(Arrays.asList(cyclohexane.getAtom(4), cyclohexane.getAtom(5)));
     PathEdge path5 = new PathEdge(Arrays.asList(cyclohexane.getAtom(5), cyclohexane.getAtom(0)));
-    
+
     PathEdge splice01 = path0.splice(path1);
     PathEdge splice34 = path3.splice(path4);
     PathEdge splice012 = splice01.splice(path2);
@@ -141,5 +141,20 @@ public class PathEdgeTest extends TestCase
             cyclohexane.getAtom(4),
             cyclohexane.getAtom(5),
             cyclohexane.getAtom(0)), splice012345.getAtoms());
+  }
+
+  public void testItShouldBeACycle()
+  {
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathEdge edge = new PathEdge(Arrays.asList(
+            cyclohexane.getAtom(0),
+            cyclohexane.getAtom(1),
+            cyclohexane.getAtom(2),
+            cyclohexane.getAtom(3),
+            cyclohexane.getAtom(4),
+            cyclohexane.getAtom(5),
+            cyclohexane.getAtom(0)));
+    
+    assertTrue(edge.isCycle());
   }
 }
