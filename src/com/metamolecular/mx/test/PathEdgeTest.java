@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
@@ -95,5 +94,52 @@ public class PathEdgeTest extends TestCase
     assertEquals(Arrays.asList(hexane.getAtom(0),
             hexane.getAtom(1),
             hexane.getAtom(2)), splice.getAtoms());
+  }
+
+  public void testItShouldSpliceLinearChainToSinlgePath()
+  {
+    Molecule hexane = Molecules.createHexane();
+    PathEdge path0 = new PathEdge(Arrays.asList(hexane.getAtom(1), hexane.getAtom(0)));
+    PathEdge path1 = new PathEdge(Arrays.asList(hexane.getAtom(2), hexane.getAtom(1)));
+    PathEdge path2 = new PathEdge(Arrays.asList(hexane.getAtom(2), hexane.getAtom(3)));
+    PathEdge path3 = new PathEdge(Arrays.asList(hexane.getAtom(3), hexane.getAtom(4)));
+    PathEdge path4 = new PathEdge(Arrays.asList(hexane.getAtom(4), hexane.getAtom(5)));
+
+    PathEdge splice01 = path0.splice(path1);
+    PathEdge splice34 = path3.splice(path4);
+    PathEdge splice012 = splice01.splice(path2);
+    PathEdge splice01234 = splice012.splice(splice34);
+
+    assertEquals(Arrays.asList(hexane.getAtom(0),
+            hexane.getAtom(1),
+            hexane.getAtom(2),
+            hexane.getAtom(3),
+            hexane.getAtom(4),
+            hexane.getAtom(5)), splice01234.getAtoms());
+  }
+
+  public void testItShouldSpliceMonocycleToSinglePath()
+  {
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathEdge path0 = new PathEdge(Arrays.asList(cyclohexane.getAtom(1), cyclohexane.getAtom(0)));
+    PathEdge path1 = new PathEdge(Arrays.asList(cyclohexane.getAtom(2), cyclohexane.getAtom(1)));
+    PathEdge path2 = new PathEdge(Arrays.asList(cyclohexane.getAtom(2), cyclohexane.getAtom(3)));
+    PathEdge path3 = new PathEdge(Arrays.asList(cyclohexane.getAtom(3), cyclohexane.getAtom(4)));
+    PathEdge path4 = new PathEdge(Arrays.asList(cyclohexane.getAtom(4), cyclohexane.getAtom(5)));
+    PathEdge path5 = new PathEdge(Arrays.asList(cyclohexane.getAtom(5), cyclohexane.getAtom(0)));
+    
+    PathEdge splice01 = path0.splice(path1);
+    PathEdge splice34 = path3.splice(path4);
+    PathEdge splice012 = splice01.splice(path2);
+    PathEdge splice01234 = splice012.splice(splice34);
+    PathEdge splice012345 = splice01234.splice(path5);
+
+    assertEquals(Arrays.asList(cyclohexane.getAtom(0),
+            cyclohexane.getAtom(1),
+            cyclohexane.getAtom(2),
+            cyclohexane.getAtom(3),
+            cyclohexane.getAtom(4),
+            cyclohexane.getAtom(5),
+            cyclohexane.getAtom(0)), splice012345.getAtoms());
   }
 }

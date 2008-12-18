@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.ring;
 
 import com.metamolecular.mx.model.Atom;
@@ -53,12 +52,12 @@ public class PathEdge
   {
     Atom intersection = getIntersection(other.atoms);
     List<Atom> newAtoms = new ArrayList(atoms);
-    
+
     if (atoms.get(0) == intersection)
     {
       Collections.reverse(newAtoms);
     }
-    
+
     if (other.atoms.get(0) == intersection)
     {
       for (int i = 1; i < other.atoms.size(); i++)
@@ -66,7 +65,6 @@ public class PathEdge
         newAtoms.add(other.atoms.get(i));
       }
     }
-    
     else
     {
       for (int i = other.atoms.size() - 2; i >= 0; i--)
@@ -74,22 +72,22 @@ public class PathEdge
         newAtoms.add(other.atoms.get(i));
       }
     }
-    
+
     return new PathEdge(newAtoms);
   }
-  
+
   private Atom getIntersection(List<Atom> others)
   {
+    if (atoms.get(atoms.size() - 1) == others.get(0) || atoms.get(atoms.size() - 1) == others.get(others.size() - 1))
+    {
+      return atoms.get(atoms.size() - 1);
+    }
+
     if (atoms.get(0) == others.get(0) || atoms.get(0) == others.get(others.size() - 1))
     {
       return atoms.get(0);
     }
-    
-    if (atoms.get(atoms.size() - 1) == others.get(0) || atoms.get(atoms.size() - 1) == others.get(others.size() - 1))
-    {
-      return atoms.get(atoms.size() -1);
-    }
-    
+
     throw new RuntimeException("Couldn't splice - no intersection.");
   }
 }
