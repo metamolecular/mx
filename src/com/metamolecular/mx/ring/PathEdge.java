@@ -48,7 +48,7 @@ public class PathEdge
     
     else
     {
-      for (int i = other.atoms.size() - 1; i >= 0; i--)
+      for (int i = other.atoms.size() - 2; i >= 0; i--)
       {
         newAtoms.add(other.atoms.get(i));
       }
