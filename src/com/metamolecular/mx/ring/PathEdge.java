@@ -48,6 +48,16 @@ public class PathEdge
     return atoms;
   }
   
+  public Atom getSource()
+  {
+    return atoms.get(0);
+  }
+  
+  public Atom getTarget()
+  {
+    return atoms.get(atoms.size() -1);
+  }
+  
   public boolean isCycle()
   {
     return (atoms.size() > 2) && atoms.get(0).equals(atoms.get(atoms.size() - 1));

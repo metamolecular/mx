@@ -44,6 +44,15 @@ public class PathEdgeTest extends TestCase
 
     assertEquals(2, path.getAtoms().size());
   }
+  
+  public void testItShouldReturnAppropriateSourceAndTarget()
+  {
+    Molecule hexane = Molecules.createHexane();
+    PathEdge edge = new PathEdge(Arrays.asList(hexane.getAtom(0), hexane.getAtom(1)));
+    
+    assertEquals(hexane.getAtom(0), edge.getSource());
+    assertEquals(hexane.getAtom(1), edge.getTarget());
+  }
 
   public void testItShouldSpliceHeadToHead()
   {
@@ -143,7 +152,7 @@ public class PathEdgeTest extends TestCase
             cyclohexane.getAtom(0)), splice012345.getAtoms());
   }
 
-  public void testItShouldBeACycle()
+  public void testItShouldBeACycleWhenContainingACyclicPath()
   {
     Molecule cyclohexane = Molecules.createCyclohexane();
     PathEdge edge = new PathEdge(Arrays.asList(

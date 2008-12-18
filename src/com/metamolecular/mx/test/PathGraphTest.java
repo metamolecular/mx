@@ -23,37 +23,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.ring.PathEdge;
+import com.metamolecular.mx.ring.PathGraph;
+import java.util.List;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class PathGraphTest extends TestCase
 {
 
-  public static void main(String[] args)
+  public void testItShouldReturnEmptyListWhenRemovingFirstAtomOfMonocycle()
   {
-    TestSuite suite = new TestSuite();
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathGraph graph = new PathGraph(cyclohexane);
+    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(0));
 
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(PathEdgeTest.class);
-    suite.addTestSuite(PathGraphTest.class);
+    assertEquals(0, cycles.size());
+  }
 
-    TestRunner.run(suite);
+  public void testItShouldReturnOneCycleWhenRemovingLastAtomOfMonocycle()
+  {
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathGraph graph = new PathGraph(cyclohexane);
+
+    graph.remove(cyclohexane.getAtom(0));
+    graph.remove(cyclohexane.getAtom(1));
+    graph.remove(cyclohexane.getAtom(2));
+    graph.remove(cyclohexane.getAtom(3));
+    graph.remove(cyclohexane.getAtom(4));
+   
+    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(5));
+    
+    assertEquals(1, cycles.size());
   }
 }
