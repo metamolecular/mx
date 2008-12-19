@@ -29,6 +29,7 @@ import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.ring.PathEdge;
 import com.metamolecular.mx.ring.PathGraph;
+import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
 
@@ -61,5 +62,29 @@ public class PathGraphTest extends TestCase
     List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(5));
     
     assertEquals(1, cycles.size());
+  }
+  
+  public void testItShouldReturnNoCyclesWhenCollapsingChain()
+  {
+    Molecule propane = Molecules.createPropane();
+    PathGraph graph = new PathGraph(propane);
+    
+    assertEquals(0, graph.remove(propane.getAtom(0)).size());
+    assertEquals(0, graph.remove(propane.getAtom(1)).size());
+    assertEquals(0, graph.remove(propane.getAtom(2)).size());
+  }
+  
+  public void testItShouldReturnThreeCyclesWhenCollapsingFusedRingSystem()
+  {
+    Molecule naphthalene = Molecules.createNaphthalene();
+    PathGraph graph = new PathGraph(naphthalene);
+    List<PathEdge> allCycles = new ArrayList();
+    
+    for (int i = 0; i < naphthalene.countAtoms(); i++)
+    {
+      allCycles.addAll(graph.remove(naphthalene.getAtom(i)));
+    }
+
+    assertEquals(3, allCycles.size());
   }
 }

@@ -72,6 +72,11 @@ public class PathEdge
     {
       Collections.reverse(newAtoms);
     }
+    
+    if (other.getAtoms().contains(newAtoms.get(newAtoms.size() - 2)))
+    {
+      return null;
+    }
 
     if (other.atoms.get(0) == intersection)
     {

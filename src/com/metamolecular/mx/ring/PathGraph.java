@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.ring;
 
 import com.metamolecular.mx.model.Atom;
@@ -51,24 +50,40 @@ public class PathGraph
     loadNodes(molecule);
   }
 
+  public void printPaths()
+  {
+    for (PathEdge edge : edges)
+    {
+      for (Atom atom : edge.getAtoms())
+      {
+        System.out.print(atom.getIndex() + "-");
+      }
+
+      System.out.println();
+    }
+  }
+
   public List<PathEdge> remove(Atom atom)
   {
     List<PathEdge> oldEdges = getEdges(atom);
+    List<PathEdge> result = new ArrayList();
+
+    for (PathEdge edge : oldEdges)
+    {
+      if (edge.isCycle() && edge.getSource().equals(atom))
+      {
+        result.add(edge);
+      }
+    }
+
+    oldEdges.removeAll(result);
+    edges.removeAll(result);
+
     List<PathEdge> newEdges = spliceEdges(oldEdges);
 
     edges.removeAll(oldEdges);
     edges.addAll(newEdges);
     atoms.remove(atom);
-
-    List<PathEdge> result = new ArrayList();
-
-    for (PathEdge oldEdge : oldEdges)
-    {
-      if (oldEdge.isCycle() && oldEdge.getSource().equals(atom))
-      {
-        result.add(oldEdge);
-      }
-    }
 
     return result;
   }
@@ -81,7 +96,12 @@ public class PathGraph
     {
       for (int j = i + 1; j < edges.size(); j++)
       {
-        result.add(edges.get(j).splice(edges.get(i)));
+        PathEdge splice = edges.get(j).splice(edges.get(i));
+
+        if (splice != null)
+        {
+          result.add(splice);
+        }
       }
     }
 
