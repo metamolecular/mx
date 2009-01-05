@@ -26,6 +26,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.ring.PathEdge;
 import com.metamolecular.mx.ring.PathGraph;
@@ -58,33 +59,59 @@ public class PathGraphTest extends TestCase
     graph.remove(cyclohexane.getAtom(2));
     graph.remove(cyclohexane.getAtom(3));
     graph.remove(cyclohexane.getAtom(4));
-   
+
     List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(5));
-    
+
     assertEquals(1, cycles.size());
   }
-  
+
   public void testItShouldReturnNoCyclesWhenCollapsingChain()
   {
     Molecule propane = Molecules.createPropane();
     PathGraph graph = new PathGraph(propane);
-    
+
     assertEquals(0, graph.remove(propane.getAtom(0)).size());
     assertEquals(0, graph.remove(propane.getAtom(1)).size());
     assertEquals(0, graph.remove(propane.getAtom(2)).size());
   }
-  
-  public void testItShouldReturnThreeCyclesWhenCollapsingFusedRingSystem()
+
+  public void testItShouldReturnThreeCyclesWhenCollapsingFusedBicyclicRingSystem()
   {
     Molecule naphthalene = Molecules.createNaphthalene();
     PathGraph graph = new PathGraph(naphthalene);
     List<PathEdge> allCycles = new ArrayList();
-    
+
     for (int i = 0; i < naphthalene.countAtoms(); i++)
     {
       allCycles.addAll(graph.remove(naphthalene.getAtom(i)));
     }
 
     assertEquals(3, allCycles.size());
+  }
+
+  public void testItShouldReturnAllRingsInCubane()
+  {
+    Molecule cubane = Molecules.createCubane();
+    PathGraph graph = new PathGraph(cubane);
+    List<PathEdge> cycles = new ArrayList();
+
+    for (int i = 0; i < cubane.countAtoms(); i++)
+    {
+      cycles.addAll(graph.remove(cubane.getAtom(i)));
+    }
+
+//    for (PathEdge cycle : cycles)
+//    {
+//      System.out.println("cycle:");
+//      
+//      for (Atom atom : cycle.getAtoms())
+//      {
+//        System.out.print(atom.getIndex() + "-");
+//      }
+//      
+//      System.out.println();
+//    }
+    
+    assertEquals(28, cycles.size());
   }
 }
