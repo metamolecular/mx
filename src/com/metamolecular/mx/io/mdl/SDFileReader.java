@@ -118,14 +118,14 @@ public class SDFileReader
 
     if (pattern == null)
     {
-      pattern = Pattern.compile(".*^> *?<" + key + ">$.(.*?)$.*", Pattern.MULTILINE | Pattern.DOTALL);
+      pattern = Pattern.compile(".*^> *?<" + key + ">$(.*?)$^$.*", Pattern.MULTILINE | Pattern.DOTALL);
 
       keyPatterns.put(key, pattern);
     }
 
     Matcher matcher = pattern.matcher(record);
 
-    return matcher.matches() ? matcher.group(1) : "";
+    return matcher.matches() ? matcher.group(1).trim() : "";
   }
 
   public Molecule getMolecule()

@@ -155,6 +155,11 @@ CC(=O)OC(CC(=O)[O-])C[N+](C)(C)C
 > <PUBCHEM_BONDANNOTATIONS>
 7  6  3
 
+> <MULTILINE_DATA>
+line1
+line2
+line3
+
 $$$$
 2
   -OEChem-07120805312D
