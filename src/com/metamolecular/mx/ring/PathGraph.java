@@ -58,7 +58,7 @@ public class PathGraph
       {
         System.out.print("*");
       }
-      
+
       for (Atom atom : edge.getAtoms())
       {
         System.out.print(atom.getIndex() + "-");
@@ -75,10 +75,14 @@ public class PathGraph
 
     for (PathEdge edge : oldEdges)
     {
-      if (edge.isCycle() && edge.getSource().equals(atom))
+      if (edge.isCycle())
       {
         result.add(edge);
       }
+//      if (edge.isCycle() && edge.getSource().equals(atom))
+//      {
+//        result.add(edge);
+//      }
     }
 
     oldEdges.removeAll(result);
@@ -119,9 +123,23 @@ public class PathGraph
 
     for (PathEdge edge : edges)
     {
-      if ((edge.getSource() == atom) || (edge.getTarget() == atom))
+//      if ((edge.getSource() == atom) || (edge.getTarget() == atom))
+//      {
+//        result.add(edge);
+//      }
+      if (edge.isCycle())
       {
-        result.add(edge);
+        if (edge.getAtoms().contains(atom))
+        {
+          result.add(edge);
+        }
+      }
+      else
+      {
+        if ((edge.getSource() == atom) || (edge.getTarget() == atom))
+        {
+          result.add(edge);
+        }
       }
     }
 
