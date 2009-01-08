@@ -47,17 +47,17 @@ public class PathEdge
   {
     return atoms;
   }
-  
+
   public Atom getSource()
   {
     return atoms.get(0);
   }
-  
+
   public Atom getTarget()
   {
-    return atoms.get(atoms.size() -1);
+    return atoms.get(atoms.size() - 1);
   }
-  
+
   public boolean isCycle()
   {
     return (atoms.size() > 2) && atoms.get(0).equals(atoms.get(atoms.size() - 1));
@@ -72,11 +72,6 @@ public class PathEdge
     {
       Collections.reverse(newAtoms);
     }
-    
-    if (other.getAtoms().contains(newAtoms.get(newAtoms.size() - 2)))
-    {
-      return null;
-    }
 
     if (other.atoms.get(0) == intersection)
     {
@@ -85,6 +80,7 @@ public class PathEdge
         newAtoms.add(other.atoms.get(i));
       }
     }
+    
     else
     {
       for (int i = other.atoms.size() - 2; i >= 0; i--)
@@ -92,8 +88,42 @@ public class PathEdge
         newAtoms.add(other.atoms.get(i));
       }
     }
+    
+    if (!isRealPath(newAtoms))
+    {
+      System.out.println("rejecting:");
+      
+      for (int i = 0; i < newAtoms.size(); i++)
+      {
+        System.out.print(newAtoms.get(i).getIndex() + "-");
+      }
+      
+      System.out.println();
+      return null;
+    }
 
     return new PathEdge(newAtoms);
+  }
+
+  private boolean isRealPath(List<Atom> atoms)
+  {
+    for (int i = 1; i < atoms.size() - 1; i++)
+    {
+      for (int j = 1; j < atoms.size() - 1; j++)
+      {
+        if (i == j)
+        {
+          continue;
+        }
+
+        if (atoms.get(i) == atoms.get(j))
+        {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   private Atom getIntersection(List<Atom> others)

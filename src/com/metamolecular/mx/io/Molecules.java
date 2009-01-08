@@ -34,15 +34,16 @@ import com.metamolecular.mx.model.Molecule;
  */
 public class Molecules
 {
+
   private Molecules()
   {
   }
-  
+
   public static Molecule createMethane()
   {
     Molecule result = new DefaultMolecule();
     Atom c0 = result.addAtom("C");
-    
+
     return result;
   }
 
@@ -91,8 +92,8 @@ public class Molecules
 
     return result;
   }
-  
-    public static Molecule createCyclohexane()
+
+  public static Molecule createCyclohexane()
   {
     Molecule result = new DefaultMolecule();
     Atom c0 = result.addAtom("C");
@@ -239,7 +240,7 @@ public class Molecules
 
     return result;
   }
-  
+
   public static Molecule createNeopentane()
   {
     Molecule result = new DefaultMolecule();
@@ -248,15 +249,15 @@ public class Molecules
     Atom c2 = result.addAtom("C");
     Atom c3 = result.addAtom("C");
     Atom c4 = result.addAtom("C");
-    
+
     result.connect(c0, c1, 1);
     result.connect(c0, c2, 1);
     result.connect(c0, c3, 1);
     result.connect(c0, c4, 1);
-    
+
     return result;
   }
-  
+
   public static Molecule createCubane()
   {
     Molecule result = new DefaultMolecule();
@@ -268,21 +269,42 @@ public class Molecules
     Atom c5 = result.addAtom("C");
     Atom c6 = result.addAtom("C");
     Atom c7 = result.addAtom("C");
-    
+
     result.connect(c0, c1, 1);
     result.connect(c1, c2, 1);
     result.connect(c2, c3, 1);
     result.connect(c3, c0, 1);
-    
+
     result.connect(c4, c5, 1);
     result.connect(c5, c6, 1);
     result.connect(c6, c7, 1);
     result.connect(c7, c4, 1);
-    
+
     result.connect(c0, c4, 1);
     result.connect(c1, c5, 1);
     result.connect(c2, c6, 1);
     result.connect(c3, c7, 1);
+
+    return result;
+  }
+
+  public static Molecule createBicyclo220hexane()
+  {
+    Molecule result = new DefaultMolecule();
+    Atom c0 = result.addAtom("C");
+    Atom c1 = result.addAtom("C");
+    Atom c2 = result.addAtom("C");
+    Atom c3 = result.addAtom("C");
+    Atom c4 = result.addAtom("C");
+    Atom c5 = result.addAtom("C");
+    
+    result.connect(c0, c1, 1);
+    result.connect(c1, c2, 1);
+    result.connect(c2, c3, 1);
+    result.connect(c3, c4, 1);
+    result.connect(c4, c5, 1);
+    result.connect(c5, c0, 1);
+    result.connect(c2, c5, 1);
     
     return result;
   }

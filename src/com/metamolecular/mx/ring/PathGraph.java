@@ -54,6 +54,11 @@ public class PathGraph
   {
     for (PathEdge edge : edges)
     {
+      if (edge.isCycle())
+      {
+        System.out.print("*");
+      }
+      
       for (Atom atom : edge.getAtoms())
       {
         System.out.print(atom.getIndex() + "-");
