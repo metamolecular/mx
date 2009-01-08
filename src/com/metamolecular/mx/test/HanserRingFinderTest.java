@@ -26,40 +26,48 @@
 
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.ring.HanserRingFinder;
+import java.util.Collection;
+import java.util.List;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public class HanserRingFinderTest extends TestCase
 {
-
-  public static void main(String[] args)
+  private HanserRingFinder finder;
+  
+  @Override
+  protected void setUp() throws Exception
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-    suite.addTestSuite(MoleculeKitTest.class);
-    suite.addTestSuite(SDFileReaderTest.class);
-    suite.addTestSuite(SDFileWriterTest.class);
-    suite.addTestSuite(PathEdgeTest.class);
-    suite.addTestSuite(PathGraphTest.class);
-    suite.addTestSuite(HanserRingFinderTest.class);
-
-    TestRunner.run(suite);
+    finder = new HanserRingFinder();
+  }
+  
+  public void testItShoudFindOneRingInBenzene()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    Collection<List<Atom>> rings = finder.findRings(benzene);
+    
+    assertEquals(1, rings.size());
+  }
+  
+  public void testItShouldFindThreeRingsInNaphthalene()
+  {
+    Molecule naphthalene = Molecules.createNaphthalene();
+    Collection rings = finder.findRings(naphthalene);
+    
+    assertEquals(3, rings.size());
+  }
+  
+  public void testItShouldFind28RingsInCubane()
+  {
+    Molecule cubane = Molecules.createCubane();
+    Collection rings = finder.findRings(cubane);
+    
+    assertEquals(28, rings.size());
   }
 }
