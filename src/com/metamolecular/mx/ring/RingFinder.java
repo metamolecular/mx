@@ -24,37 +24,17 @@
  * THE SOFTWARE.
  */
 
-package com.metamolecular.mx.test;
+package com.metamolecular.mx.ring;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Molecule;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Richard L. Apodaca
  */
-public class MXTest
+public interface RingFinder
 {
-
-  public static void main(String[] args)
-  {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(PathEdgeTest.class);
-    suite.addTestSuite(PathGraphTest.class);
-    suite.addTestSuite(HanserRingFinderTest.class);
-
-    TestRunner.run(suite);
-  }
+  public Collection<List<Atom>> findRings(Molecule molecule);
 }
