@@ -3,7 +3,7 @@
   <!-- properties -->
   <property name="full-name" value="MX Tools for Cheminformatics" />
   <property name="unix-name" value="mx" />
-  <property name="version" value="0.108.0" />
+  <property name="version" value="0.108.1" />
   <property name="source.dir" location="src" />
   <property name="resource.dir" location="resources" />
   <property name="lib.dir" location="lib" />
