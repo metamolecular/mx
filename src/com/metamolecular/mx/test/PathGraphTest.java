@@ -26,7 +26,6 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
-import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.ring.PathEdge;
 import com.metamolecular.mx.ring.PathGraph;
@@ -93,27 +92,10 @@ public class PathGraphTest extends TestCase
     PathGraph graph = new PathGraph(molecule);
     List<PathEdge> allCycles = new ArrayList();
     
-//    System.out.println("initial state: ");
-//    graph.printPaths();
-    
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
-//      System.out.println("removing atom " + i);
       allCycles.addAll(graph.remove(molecule.getAtom(i)));
-//            graph.printPaths();
     }
-//    
-//    for (PathEdge cycle : allCycles)
-//    {
-//      System.out.println("cycle:");
-//      
-//      for (Atom atom : cycle.getAtoms())
-//      {
-//        System.out.print(atom.getIndex() + "-");
-//      }
-//      
-//      System.out.println();
-//    }
     
     assertEquals(3, allCycles.size());
   }
@@ -122,40 +104,13 @@ public class PathGraphTest extends TestCase
     Molecule cubane = Molecules.createCubane();
     PathGraph graph = new PathGraph(cubane);
     List<PathEdge> cycles = new ArrayList();
-//
-//    System.out.println("initial state: ");
-//    graph.printPaths();
 
     for (int i = 0; i < cubane.countAtoms(); i++)
     {
-//      System.out.println("removing atom " + i +"\n");
       List<PathEdge> removed = graph.remove(cubane.getAtom(i));
       
-//      for (PathEdge edge : removed)
-//      {
-//        System.out.println("### pulled path ###");
-//        for (Atom atom : edge.getAtoms())
-//        {
-//          System.out.print(atom.getIndex() + "-");
-//        }
-//        
-//        System.out.println();
-//      }
       cycles.addAll(removed);
-//      graph.printPaths();
     }
-
-//    for (PathEdge cycle : cycles)
-//    {
-//      System.out.println("cycle:");
-//      
-//      for (Atom atom : cycle.getAtoms())
-//      {
-//        System.out.print(atom.getIndex() + "-");
-//      }
-//      
-//      System.out.println();
-//    }
 
     assertEquals(28, cycles.size());
   }

@@ -79,10 +79,6 @@ public class PathGraph
       {
         result.add(edge);
       }
-//      if (edge.isCycle() && edge.getSource().equals(atom))
-//      {
-//        result.add(edge);
-//      }
     }
 
     oldEdges.removeAll(result);
@@ -123,10 +119,6 @@ public class PathGraph
 
     for (PathEdge edge : edges)
     {
-//      if ((edge.getSource() == atom) || (edge.getTarget() == atom))
-//      {
-//        result.add(edge);
-//      }
       if (edge.isCycle())
       {
         if (edge.getAtoms().contains(atom))
