@@ -70,6 +70,7 @@
     <mkdir dir="${dist.dir}/lib" />
     <mkdir dir="${dist.dir}/src" />
     <mkdir dir="${dist.dir}/doc" />
+    <mkdir dir="${dist.dir}/resources" />
     <copy file="${junit.lib}" todir="${dist.dir}/lib" />
     <copy file="${lib-licenses.file}" todir="${dist.dir}/lib" />
     <copy file="${license.file}" todir="${dist.dir}" />
@@ -79,7 +80,9 @@
     <copy todir="${dist.dir}/doc">
       <fileset dir="${doc.dir}" />
     </copy>
-    <copy file="${resource.dir}/atomic_system.pdf" todir="${dist.dir}/doc" />
+    <copy file="${resource.dir}/atomic_system.pdf" todir="${dist.dir}/resources" />
+    <copy file="${resource.dir}/atomic_system.xml" todir="${dist.dir}/resources" />
+    <copy file="${resource.dir}/pubchem_sample_33.sdf" todir="${dist.dir}/resources" />
     <copy file="build.xml" todir="${dist.dir}" />
   </target>
   <target name="tgz" depends="dist" description="Create a compressed distribution tarfile.">
