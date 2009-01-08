@@ -39,82 +39,69 @@ import junit.framework.TestCase;
  */
 public class PathGraphTest extends TestCase
 {
+  public void testItShouldReturnEmptyListWhenRemovingFirstAtomOfMonocycle()
+  {
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathGraph graph = new PathGraph(cyclohexane);
+    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(0));
 
-//  public void testItShouldReturnEmptyListWhenRemovingFirstAtomOfMonocycle()
-//  {
-//    Molecule cyclohexane = Molecules.createCyclohexane();
-//    PathGraph graph = new PathGraph(cyclohexane);
-//    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(0));
-//
-//    assertEquals(0, cycles.size());
-//  }
-//
-//  public void testItShouldReturnOneCycleWhenRemovingLastAtomOfMonocycle()
-//  {
-//    Molecule cyclohexane = Molecules.createCyclohexane();
-//    PathGraph graph = new PathGraph(cyclohexane);
-//
-//    graph.remove(cyclohexane.getAtom(0));
-//    graph.remove(cyclohexane.getAtom(1));
-//    graph.remove(cyclohexane.getAtom(2));
-//    graph.remove(cyclohexane.getAtom(3));
-//    graph.remove(cyclohexane.getAtom(4));
-//
-//    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(5));
-//
-//    assertEquals(1, cycles.size());
-//  }
-//
-//  public void testItShouldReturnNoCyclesWhenCollapsingChain()
-//  {
-//    Molecule propane = Molecules.createPropane();
-//    PathGraph graph = new PathGraph(propane);
-//
-//    assertEquals(0, graph.remove(propane.getAtom(0)).size());
-//    assertEquals(0, graph.remove(propane.getAtom(1)).size());
-//    assertEquals(0, graph.remove(propane.getAtom(2)).size());
-//  }
-//
-//  public void testItShouldReturnThreeCyclesWhenCollapsingFusedBicyclicRingSystem()
-//  {
-//    Molecule naphthalene = Molecules.createNaphthalene();
-//    PathGraph graph = new PathGraph(naphthalene);
-//    List<PathEdge> allCycles = new ArrayList();
-//
-//    for (int i = 0; i < naphthalene.countAtoms(); i++)
-//    {
-//      allCycles.addAll(graph.remove(naphthalene.getAtom(i)));
-//    }
-//    
-//    for (PathEdge cycle : allCycles)
-//    {
-//      System.out.println("cycle:");
-//      
-//      for (Atom atom : cycle.getAtoms())
-//      {
-//        System.out.print(atom.getIndex() + "-");
-//      }
-//      
-//      System.out.println();
-//    }
-//
-//    assertEquals(3, allCycles.size());
-//  }
-//  public void testItShouldReturnAllRingsInBicyclo220Hexane()
-//  {
-//    Molecule molecule = Molecules.createBicyclo220hexane();
-//    PathGraph graph = new PathGraph(molecule);
-//    List<PathEdge> allCycles = new ArrayList();
-//    
+    assertEquals(0, cycles.size());
+  }
+
+  public void testItShouldReturnOneCycleWhenRemovingLastAtomOfMonocycle()
+  {
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathGraph graph = new PathGraph(cyclohexane);
+
+    graph.remove(cyclohexane.getAtom(0));
+    graph.remove(cyclohexane.getAtom(1));
+    graph.remove(cyclohexane.getAtom(2));
+    graph.remove(cyclohexane.getAtom(3));
+    graph.remove(cyclohexane.getAtom(4));
+
+    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(5));
+
+    assertEquals(1, cycles.size());
+  }
+
+  public void testItShouldReturnNoCyclesWhenCollapsingChain()
+  {
+    Molecule propane = Molecules.createPropane();
+    PathGraph graph = new PathGraph(propane);
+
+    assertEquals(0, graph.remove(propane.getAtom(0)).size());
+    assertEquals(0, graph.remove(propane.getAtom(1)).size());
+    assertEquals(0, graph.remove(propane.getAtom(2)).size());
+  }
+
+  public void testItShouldReturnThreeCyclesWhenCollapsingFusedBicyclicRingSystem()
+  {
+    Molecule naphthalene = Molecules.createNaphthalene();
+    PathGraph graph = new PathGraph(naphthalene);
+    List<PathEdge> allCycles = new ArrayList();
+
+    for (int i = 0; i < naphthalene.countAtoms(); i++)
+    {
+      allCycles.addAll(graph.remove(naphthalene.getAtom(i)));
+    }
+
+    assertEquals(3, allCycles.size());
+  }
+  public void testItShouldReturnAllRingsInBicyclo220Hexane()
+  {
+    Molecule molecule = Molecules.createBicyclo220hexane();
+    PathGraph graph = new PathGraph(molecule);
+    List<PathEdge> allCycles = new ArrayList();
+    
 //    System.out.println("initial state: ");
 //    graph.printPaths();
-//    
-//    for (int i = 0; i < molecule.countAtoms(); i++)
-//    {
+    
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
 //      System.out.println("removing atom " + i);
-//      allCycles.addAll(graph.remove(molecule.getAtom(i)));
+      allCycles.addAll(graph.remove(molecule.getAtom(i)));
 //            graph.printPaths();
-//    }
+    }
 //    
 //    for (PathEdge cycle : allCycles)
 //    {
@@ -127,48 +114,48 @@ public class PathGraphTest extends TestCase
 //      
 //      System.out.println();
 //    }
-//    
-//    assertEquals(3, allCycles.size());
-//  }
+    
+    assertEquals(3, allCycles.size());
+  }
   public void testItShouldReturnAllRingsInCubane()
   {
     Molecule cubane = Molecules.createCubane();
     PathGraph graph = new PathGraph(cubane);
     List<PathEdge> cycles = new ArrayList();
-
-    System.out.println("initial state: ");
-    graph.printPaths();
+//
+//    System.out.println("initial state: ");
+//    graph.printPaths();
 
     for (int i = 0; i < cubane.countAtoms(); i++)
     {
-      System.out.println("removing atom " + i +"\n");
+//      System.out.println("removing atom " + i +"\n");
       List<PathEdge> removed = graph.remove(cubane.getAtom(i));
       
-      for (PathEdge edge : removed)
-      {
-        System.out.println("### pulled path ###");
-        for (Atom atom : edge.getAtoms())
-        {
-          System.out.print(atom.getIndex() + "-");
-        }
-        
-        System.out.println();
-      }
+//      for (PathEdge edge : removed)
+//      {
+//        System.out.println("### pulled path ###");
+//        for (Atom atom : edge.getAtoms())
+//        {
+//          System.out.print(atom.getIndex() + "-");
+//        }
+//        
+//        System.out.println();
+//      }
       cycles.addAll(removed);
-      graph.printPaths();
+//      graph.printPaths();
     }
 
-    for (PathEdge cycle : cycles)
-    {
-      System.out.println("cycle:");
-      
-      for (Atom atom : cycle.getAtoms())
-      {
-        System.out.print(atom.getIndex() + "-");
-      }
-      
-      System.out.println();
-    }
+//    for (PathEdge cycle : cycles)
+//    {
+//      System.out.println("cycle:");
+//      
+//      for (Atom atom : cycle.getAtoms())
+//      {
+//        System.out.print(atom.getIndex() + "-");
+//      }
+//      
+//      System.out.println();
+//    }
 
     assertEquals(28, cycles.size());
   }

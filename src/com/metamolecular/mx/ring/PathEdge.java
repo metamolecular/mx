@@ -91,14 +91,6 @@ public class PathEdge
     
     if (!isRealPath(newAtoms))
     {
-      System.out.println("rejecting:");
-      
-      for (int i = 0; i < newAtoms.size(); i++)
-      {
-        System.out.print(newAtoms.get(i).getIndex() + "-");
-      }
-      
-      System.out.println();
       return null;
     }
 
