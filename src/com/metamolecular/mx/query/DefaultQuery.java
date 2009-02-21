@@ -64,12 +64,4 @@ public class DefaultQuery implements Query
       return matcher;
     }
   }
-  
-  private class EdgeImpl implements Edge
-  {
-    private EdgeImpl(NodeImpl source, NodeImpl target)
-    {
-      
-    }
-  }
 }
