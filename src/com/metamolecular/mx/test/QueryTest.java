@@ -26,42 +26,25 @@
 
 package com.metamolecular.mx.test;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+import com.metamolecular.mx.query.DefaultQuery;
+import com.metamolecular.mx.query.Query;
+import junit.framework.TestCase;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class MXTest
+public class QueryTest extends TestCase
 {
-
-  public static void main(String[] args)
+  private Query query;
+  
+  @Override
+  protected void setUp() throws Exception
   {
-    TestSuite suite = new TestSuite();
-
-    suite.addTestSuite(MoleculeTest.class);
-    suite.addTestSuite(AtomTest.class);
-    suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
-    suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
-    suite.addTestSuite(VirtualHydrogenCounterTest.class);
-    suite.addTestSuite(SMILESTokenizerTest.class);
-    suite.addTestSuite(SMILESReaderTest.class);
-    suite.addTestSuite(SMILESBuilderTest.class);
-    suite.addTestSuite(AtomicSystemTest.class);
-    suite.addTestSuite(MassCalculatorTest.class);
-    suite.addTestSuite(MoleculeKitTest.class);
-    suite.addTestSuite(SDFileReaderTest.class);
-    suite.addTestSuite(SDFileWriterTest.class);
-    suite.addTestSuite(PathEdgeTest.class);
-    suite.addTestSuite(PathGraphTest.class);
-    suite.addTestSuite(HanserRingFinderTest.class);
-    suite.addTestSuite(AtomMatcherTest.class);
-    suite.addTestSuite(QueryTest.class);
-
-    TestRunner.run(suite);
+    query = new DefaultQuery();
+  }
+  
+  public void testItShouldAddANodeAndHaveOne()
+  {
+    
   }
 }
