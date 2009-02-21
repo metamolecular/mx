@@ -29,6 +29,8 @@ import com.metamolecular.mx.query.DefaultAtomMatcher;
 import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.query.Node;
 import com.metamolecular.mx.query.Query;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.TestCase;
 
 /**
@@ -57,12 +59,12 @@ public class QueryTest extends TestCase
 
     assertEquals(0, node.countNeighbors());
   }
-  
+
   public void testItShouldReturnANodeWithCorrectAtomMatcherAfterAdding()
   {
     DefaultAtomMatcher matcher = new DefaultAtomMatcher();
     Node node = query.addNode(matcher);
-    
+
     assertEquals(matcher, node.getAtomMatcher());
   }
 
@@ -75,5 +77,26 @@ public class QueryTest extends TestCase
 
     assertEquals(1, node1.countNeighbors());
     assertEquals(1, node2.countNeighbors());
+  }
+
+  public void testItShouldReturnANodeThatIteratesThreeNodes()
+  {
+    Node node1 = query.addNode(new DefaultAtomMatcher());
+    Node node2 = query.addNode(new DefaultAtomMatcher());
+    Node node3 = query.addNode(new DefaultAtomMatcher());
+    Node node4 = query.addNode(new DefaultAtomMatcher());
+    
+    query.connect(node1, node2);
+    query.connect(node1, node3);
+    query.connect(node1, node4);
+    
+    List neighbors = new ArrayList();
+    
+    for (Node node : node1.neighbors())
+    {
+      neighbors.add(node);
+    }
+    
+    assertEquals(3, neighbors.size());
   }
 }
