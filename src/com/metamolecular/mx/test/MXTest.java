@@ -59,7 +59,7 @@ public class MXTest
     suite.addTestSuite(PathEdgeTest.class);
     suite.addTestSuite(PathGraphTest.class);
     suite.addTestSuite(HanserRingFinderTest.class);
-    suite.addTestSuite(AtomMatcherTest.class);
+    suite.addTestSuite(DefaultAtomMatcherTest.class);
     suite.addTestSuite(QueryTest.class);
 
     TestRunner.run(suite);

@@ -27,18 +27,18 @@ package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.query.AtomMatcher;
+import com.metamolecular.mx.query.DefaultAtomMatcher;
 import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class AtomMatcherTest extends TestCase
+public class DefaultAtomMatcherTest extends TestCase
 {
-  private AtomMatcher matcher;
+  private DefaultAtomMatcher matcher;
   private Molecule phenol;
 
-  public AtomMatcherTest()
+  public DefaultAtomMatcherTest()
   {
     phenol = Molecules.createPhenol();
   }
@@ -46,7 +46,7 @@ public class AtomMatcherTest extends TestCase
   @Override
   protected void setUp() throws Exception
   {
-    matcher = new AtomMatcher();
+    matcher = new DefaultAtomMatcher();
   }
 
   public void testItShouldMatchBasedOnAtomLabel()

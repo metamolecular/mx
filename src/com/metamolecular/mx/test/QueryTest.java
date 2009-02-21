@@ -23,10 +23,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
+import com.metamolecular.mx.query.DefaultAtomMatcher;
 import com.metamolecular.mx.query.DefaultQuery;
+import com.metamolecular.mx.query.Node;
 import com.metamolecular.mx.query.Query;
 import junit.framework.TestCase;
 
@@ -36,15 +37,43 @@ import junit.framework.TestCase;
 public class QueryTest extends TestCase
 {
   private Query query;
-  
+
   @Override
   protected void setUp() throws Exception
   {
     query = new DefaultQuery();
   }
-  
-  public void testItShouldAddANodeAndHaveOne()
+
+  public void testItShouldHaveOneNodeAfterAddingOne()
   {
+    query.addNode(new DefaultAtomMatcher());
+
+    assertEquals(1, query.countNodes());
+  }
+
+  public void testItShouldReturnANodeHavingNoNeighborsAsFirst()
+  {
+    Node node = query.addNode(new DefaultAtomMatcher());
+
+    assertEquals(0, node.countNeighbors());
+  }
+  
+  public void testItShouldReturnANodeWithCorrectAtomMatcherAfterAdding()
+  {
+    DefaultAtomMatcher matcher = new DefaultAtomMatcher();
+    Node node = query.addNode(matcher);
     
+    assertEquals(matcher, node.getAtomMatcher());
+  }
+
+  public void testItShouldUpdateNodeNeighborCountAfterConnectingTwoNodes()
+  {
+    Node node1 = query.addNode(new DefaultAtomMatcher());
+    Node node2 = query.addNode(new DefaultAtomMatcher());
+
+    query.connect(node1, node2);
+
+    assertEquals(1, node1.countNeighbors());
+    assertEquals(1, node2.countNeighbors());
   }
 }
