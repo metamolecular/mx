@@ -44,6 +44,14 @@ public class DefaultAtomMatcher implements AtomMatcher
     minimumNeighbors = -1;
   }
   
+  public DefaultAtomMatcher(Atom atom)
+  {
+    this();
+    
+    this.symbol = atom.getSymbol();
+    this.minimumNeighbors = atom.countNeighbors();
+  }
+  
   public boolean matches(Atom atom)
   {
     if (!matchSymbol(atom))

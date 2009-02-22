@@ -91,7 +91,7 @@ public class DefaultAtomMatcherTest extends TestCase
     assertFalse(matcher.matches(phenol.getAtom(6)));
   }
 
-  public void testItShouldThrowWhenMaximumNeighborsExceedsMinimumNeighbors()
+  public void testItShouldThrowWhenMinimumNeighborsSetHigherThanMaximumNeighbors()
   {
     matcher.setMinimumNeighbors(2);
 
@@ -106,7 +106,7 @@ public class DefaultAtomMatcherTest extends TestCase
     }
   }
 
-  public void testItShouldThrowWhenMinimumNeighborsExceedsMaximumNeighbors()
+  public void testItShouldThrowWhenMaximumNeighborsSetLowerThanMinimumNeighbors()
   {
     matcher.setMaximumNeighbors(2);
 
@@ -119,5 +119,19 @@ public class DefaultAtomMatcherTest extends TestCase
     catch (IllegalStateException ignore)
     {
     }
+  }
+  
+  public void testItShouldCreateATemplateMatcherThatMatchesPhenolOxygen()
+  {
+    matcher = new DefaultAtomMatcher(phenol.getAtom(6));
+  
+    assertTrue(matcher.matches(phenol.getAtom(6)));
+  }
+  
+  public void testItShouldCreateATemplateMatcherThatMatchesPhenolQuatCarbon()
+  {
+    matcher = new DefaultAtomMatcher(phenol.getAtom(5));
+    
+    assertTrue(matcher.matches(phenol.getAtom(5)));
   }
 }

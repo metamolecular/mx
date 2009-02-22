@@ -121,4 +121,6 @@ public class QueryTest extends TestCase
 
     assertEquals(3, neighbors.size());
   }
+  
+  
 }
