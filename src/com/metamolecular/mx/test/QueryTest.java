@@ -25,6 +25,8 @@
  */
 package com.metamolecular.mx.test;
 
+import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.DefaultAtomMatcher;
 import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.query.Edge;
@@ -122,5 +124,11 @@ public class QueryTest extends TestCase
     assertEquals(3, neighbors.size());
   }
   
-  
+  public void testItShouldReturnATemplateQueryWithSevenNodesFromPhenol()
+  {
+    Molecule phenol = Molecules.createPhenol();
+    Query query = new DefaultQuery(phenol);
+    
+    assertEquals(7, query.countNodes());
+  }
 }

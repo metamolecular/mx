@@ -26,6 +26,7 @@
 
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,11 @@ public class DefaultQuery implements Query
   {
     nodes = new ArrayList();
     edges = new ArrayList();
+  }
+  
+  public DefaultQuery(Molecule molecule)
+  {
+    this();
   }
   
   public Node addNode(DefaultAtomMatcher matcher)
