@@ -35,10 +35,12 @@ import java.util.List;
 public class DefaultQuery implements Query
 {
   private List nodes;
+  private List edges;
   
   public DefaultQuery()
   {
     nodes = new ArrayList();
+    edges = new ArrayList();
   }
   
   public Node addNode(DefaultAtomMatcher matcher)
@@ -54,14 +56,24 @@ public class DefaultQuery implements Query
   {
     return nodes.size();
   }
+  
+  public int countEdges()
+  {
+    return edges.size();
+  }
 
-  public void connect(Node source, Node target)
+  public Edge connect(Node source, Node target)
   {
     NodeImpl sourceImpl = (NodeImpl) source;
     NodeImpl targetImpl = (NodeImpl) target;
+    EdgeImpl edge = new EdgeImpl(sourceImpl, targetImpl);
     
     sourceImpl.neighbors.add(targetImpl);
     targetImpl.neighbors.add(sourceImpl);
+    
+    edges.add(edge);
+    
+    return edge;
   }
   
   private class NodeImpl implements Node
@@ -88,6 +100,28 @@ public class DefaultQuery implements Query
     public DefaultAtomMatcher getAtomMatcher()
     {
       return matcher;
+    }
+  }
+  
+  private class EdgeImpl implements Edge
+  {
+    private NodeImpl source;
+    private NodeImpl target;
+    
+    private EdgeImpl(NodeImpl source, NodeImpl target)
+    {
+      this.source = source;
+      this.target = target;
+    }
+
+    public Node getSource()
+    {
+      return source;
+    }
+
+    public Node getTarget()
+    {
+      return target;
     }
   }
 }

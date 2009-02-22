@@ -33,7 +33,9 @@ public interface Query
 {
   public Node addNode(DefaultAtomMatcher matcher);
   
+  public int countEdges();
+  
   public int countNodes();
   
-  public void connect(Node source, Node target);
+  public Edge connect(Node source, Node target);
 }
