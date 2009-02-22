@@ -31,6 +31,14 @@ package com.metamolecular.mx.query;
  */
 public interface Query
 { 
+  public Iterable<Node> nodes();
+  
+  public Node getNode(int index);
+  
+  public Iterable<Edge> edges();
+  
+  public Edge getEdge(int index);
+  
   public int countEdges();
   
   public int countNodes();

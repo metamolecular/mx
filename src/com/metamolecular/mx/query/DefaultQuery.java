@@ -62,8 +62,28 @@ public class DefaultQuery implements Query
     {
       Bond bond = molecule.getBond(i);
       
-//      connect()
+      connect(nodes.get(bond.getSource().getIndex()), nodes.get(bond.getTarget().getIndex()));
     }
+  }
+
+  public Iterable<Edge> edges()
+  {
+    return edges;
+  }
+
+  public Iterable<Node> nodes()
+  {
+    return nodes;
+  }
+  
+  public Node getNode(int index)
+  {
+    return nodes.get(index);
+  }
+  
+  public Edge getEdge(int index)
+  {
+    return edges.get(index);
   }
   
   public Node addNode(AtomMatcher matcher)

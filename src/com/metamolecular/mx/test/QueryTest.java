@@ -26,11 +26,13 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.DefaultAtomMatcher;
 import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.query.Edge;
 import com.metamolecular.mx.query.Node;
+import com.metamolecular.mx.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
@@ -129,5 +131,46 @@ public class QueryTest extends TestCase
     query = new DefaultQuery(phenol);
     
     assertEquals(7, query.countNodes());
+  }
+  
+  public void testItShouldReturnATemplateQueryWithSevenEdgesFromPhenol()
+  {
+    Molecule phenol = Molecules.createPhenol();
+    query = new DefaultQuery(phenol);
+    
+    assertEquals(7, query.countEdges());
+  }
+  
+  public void testItShouldReturnATemplateQueryThatMatchesPhenol()
+  {
+    Molecule phenol = Molecules.createPhenol();
+    query = new DefaultQuery(phenol);
+    
+    assertTrue(matches(query, phenol));
+  }
+  
+  public void testItShouldReturnABenzeneTemplateThatMatchesPhenol()
+  {
+    Molecule phenol = Molecules.createPhenol();
+    Molecule benzene = Molecules.createBenzene();
+    query = new DefaultQuery(benzene);
+    
+    assertTrue(matches(query, phenol));
+  }
+  
+  private boolean matches(Query query, Molecule molecule)
+  {
+    for (int i = 0; i < query.countNodes(); i++)
+    {
+      Node node = query.getNode(i);
+      Atom atom = molecule.getAtom(i);
+      
+      if (!node.getAtomMatcher().matches(atom))
+      {
+        return false;
+      }
+    }
+    
+    return true;
   }
 }
