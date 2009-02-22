@@ -26,6 +26,8 @@
 
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +37,8 @@ import java.util.List;
  */
 public class DefaultQuery implements Query
 {
-  private List nodes;
-  private List edges;
+  private List<Node> nodes;
+  private List<Edge> edges;
   
   public DefaultQuery()
   {
@@ -47,9 +49,24 @@ public class DefaultQuery implements Query
   public DefaultQuery(Molecule molecule)
   {
     this();
+    
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+      AtomMatcher matcher = new DefaultAtomMatcher(atom);
+      
+      addNode(matcher);
+    }
+    
+    for (int i = 0; i < molecule.countBonds(); i++)
+    {
+      Bond bond = molecule.getBond(i);
+      
+//      connect()
+    }
   }
   
-  public Node addNode(DefaultAtomMatcher matcher)
+  public Node addNode(AtomMatcher matcher)
   {
     NodeImpl node = new NodeImpl(matcher);
     
@@ -85,9 +102,9 @@ public class DefaultQuery implements Query
   private class NodeImpl implements Node
   {
     private List<Node> neighbors;
-    private DefaultAtomMatcher matcher;
+    private AtomMatcher matcher;
     
-    private NodeImpl(DefaultAtomMatcher matcher)
+    private NodeImpl(AtomMatcher matcher)
     {
       neighbors = new ArrayList();
       this.matcher = matcher;
@@ -103,7 +120,7 @@ public class DefaultQuery implements Query
       return neighbors;
     }
 
-    public DefaultAtomMatcher getAtomMatcher()
+    public AtomMatcher getAtomMatcher()
     {
       return matcher;
     }

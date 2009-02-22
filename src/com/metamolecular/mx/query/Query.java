@@ -30,12 +30,8 @@ package com.metamolecular.mx.query;
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public interface Query
-{
-  public Node addNode(DefaultAtomMatcher matcher);
-  
+{ 
   public int countEdges();
   
   public int countNodes();
-  
-  public Edge connect(Node source, Node target);
 }

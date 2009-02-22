@@ -31,7 +31,6 @@ import com.metamolecular.mx.query.DefaultAtomMatcher;
 import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.query.Edge;
 import com.metamolecular.mx.query.Node;
-import com.metamolecular.mx.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
@@ -41,7 +40,7 @@ import junit.framework.TestCase;
  */
 public class QueryTest extends TestCase
 {
-  private Query query;
+  private DefaultQuery query;
 
   @Override
   protected void setUp() throws Exception
@@ -127,7 +126,7 @@ public class QueryTest extends TestCase
   public void testItShouldReturnATemplateQueryWithSevenNodesFromPhenol()
   {
     Molecule phenol = Molecules.createPhenol();
-    Query query = new DefaultQuery(phenol);
+    query = new DefaultQuery(phenol);
     
     assertEquals(7, query.countNodes());
   }
