@@ -61,6 +61,8 @@ public class MXTest
     suite.addTestSuite(HanserRingFinderTest.class);
     suite.addTestSuite(DefaultAtomMatcherTest.class);
     suite.addTestSuite(QueryTest.class);
+    
+    suite.addTestSuite(QueryDefaultStateTest.class);
 
     TestRunner.run(suite);
   }
