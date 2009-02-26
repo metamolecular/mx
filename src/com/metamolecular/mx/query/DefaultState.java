@@ -5,6 +5,7 @@
 package com.metamolecular.mx.query;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,16 +82,19 @@ public class DefaultState implements State
   {
     if (map.containsKey(match.getQueryNode()) || map.containsValue(match.getTargetAtom()))
     {
+      System.out.println("contains key");
       return false;
     }
 
     if (!matchAtoms(match))
     {
+      System.out.println("match atoms failed");
       return false;
     }
 
     if (!matchBonds(match))
     {
+      System.out.println("Match bonds failed");
       return false;
     }
 
@@ -194,8 +198,70 @@ public class DefaultState implements State
 //
 //    return match.getQueryAtom().getSymbol().equals(match.getTargetAtom().getSymbol());
   }
-  
+
   private boolean matchBonds(Match match)
+  {
+    if (queryPath.isEmpty())
+    {
+      return true;
+    }
+
+    if (!matchBondsToHead(match))
+    {
+      return false;
+    }
+
+    for (int i = 0; i < queryPath.size() - 1; i++)
+    {
+      Edge queryBond = query.getEdge(queryPath.get(i), match.getQueryNode());
+      Bond targetBond = target.getBond(targetPath.get(i), match.getTargetAtom());
+
+      if (queryBond == null)
+      {
+        continue;
+      }
+
+      if (targetBond == null)
+      {
+        return false;
+      }
+
+      if (!matchBond(queryBond, targetBond))
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private boolean matchBondsToHead(Match match)
+  {
+    Node queryHead = getQueryPathHead();
+    Atom targetHead = getTargetPathHead();
+
+    Edge queryBond = query.getEdge(queryHead, match.getQueryNode());
+    Bond targetBond = target.getBond(targetHead, match.getTargetAtom());
+
+    if (queryBond == null || targetBond == null)
+    {
+      return false;
+    }
+
+    return matchBond(queryBond, targetBond);
+  }
+
+  private Node getQueryPathHead()
+  {
+    return queryPath.get(queryPath.size() - 1);
+  }
+
+  private Atom getTargetPathHead()
+  {
+    return targetPath.get(targetPath.size() - 1);
+  }
+
+  private boolean matchBond(Edge edge, Bond targetBond)
   {
     return true;
   }
