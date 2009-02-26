@@ -59,7 +59,7 @@ public class DefaultState implements State
 
   public Map<Node, Atom> getMap()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return new HashMap<Node, Atom>(map);
   }
 
   public boolean hasNextCandidate()
@@ -69,17 +69,32 @@ public class DefaultState implements State
 
   public boolean isDead()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return query.countNodes() > target.countAtoms();
   }
 
   public boolean isGoal()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return map.size() == query.countNodes();
   }
 
   public boolean isMatchFeasible(Match match)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (map.containsKey(match.getQueryNode()) || map.containsValue(match.getTargetAtom()))
+    {
+      return false;
+    }
+
+    if (!matchAtoms(match))
+    {
+      return false;
+    }
+
+    if (!matchBonds(match))
+    {
+      return false;
+    }
+
+    return true;
   }
 
   public Match nextCandidate()
@@ -153,4 +168,35 @@ public class DefaultState implements State
 //      }
 //    }
 //  }
+
+  private boolean matchAtoms(Match match)
+  {
+    return match.getQueryNode().getAtomMatcher().matches(match.getTargetAtom());
+//    if (match.getQueryAtom().countNeighbors() > match.getTargetAtom().countNeighbors())
+//    {
+//      return false;
+//    }
+//
+//    if (match.getQueryAtom().getValence() > match.getTargetAtom().getValence())
+//    {
+//      return false;
+//    }
+//
+//    int totalQueryNeighbors = match.getQueryAtom().countNeighbors() +
+//      match.getQueryAtom().countVirtualHydrogens();
+//    int totalTargetNeighbors = match.getTargetAtom().countNeighbors() +
+//      match.getTargetAtom().countVirtualHydrogens();
+//
+//    if (totalQueryNeighbors > totalTargetNeighbors)
+//    {
+//      return false;
+//    }
+//
+//    return match.getQueryAtom().getSymbol().equals(match.getTargetAtom().getSymbol());
+  }
+  
+  private boolean matchBonds(Match match)
+  {
+    return true;
+  }
 }
