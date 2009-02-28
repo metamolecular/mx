@@ -82,19 +82,16 @@ public class DefaultState implements State
   {
     if (map.containsKey(match.getQueryNode()) || map.containsValue(match.getTargetAtom()))
     {
-      System.out.println("contains key");
       return false;
     }
 
     if (!matchAtoms(match))
     {
-      System.out.println("match atoms failed");
       return false;
     }
 
     if (!matchBonds(match))
     {
-      System.out.println("Match bonds failed");
       return false;
     }
 

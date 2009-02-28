@@ -29,6 +29,8 @@ public class QueryDefaultStateTest extends TestCase
   private Query tolueneQuery;
   private Molecule phenol;
   private Molecule naphthalene;
+  private Molecule hexane;
+  private Query hexaneQuery;
 
   public QueryDefaultStateTest()
   {
@@ -38,6 +40,8 @@ public class QueryDefaultStateTest extends TestCase
     tolueneQuery = new DefaultQuery(toluene);
     phenol = Molecules.createPhenol();
     naphthalene = Molecules.createNaphthalene();
+    hexane = Molecules.createHexane();
+    hexaneQuery = new DefaultQuery(hexane);
   }
 
   @Override
@@ -45,168 +49,168 @@ public class QueryDefaultStateTest extends TestCase
   {
   }
 
-//  public void testItShouldFindAllMatchCandidatesInTheRootState()
-//  {
-//    State state = new DefaultState(benzeneQuery, benzene);
-//    int count = 0;
-//
-//    while (state.hasNextCandidate())
-//    {
-//      state.nextCandidate();
-//
-//      count++;
-//    }
-//
-//    assertEquals(benzene.countAtoms() * benzene.countAtoms(), count);
-//  }
-//
-//  public void testItShoudFindAllMatchCandidatesInThePrimaryState()
-//  {
-//    State state = new DefaultState(benzeneQuery, benzene);
-//    Match match = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//    State newState = state.nextState(match);
-//    List<Match> candidates = new ArrayList<Match>();
-//
-//    while (newState.hasNextCandidate())
-//    {
-//      candidates.add(newState.nextCandidate());
-//    }
-//
-//    assertEquals(4, candidates.size());
-//  }
-//
-//  public void testItShouldFindAllMatchCandidatesInTheSecondaryState()
-//  {
-//    State state0 = new DefaultState(benzeneQuery, benzene);
-//    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//    State state1 = state0.nextState(match0);
-//    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
-//    State state2 = state1.nextState(match1);
-//    List<Match> candidates = new ArrayList<Match>();
-//
-//    while (state2.hasNextCandidate())
-//    {
-//      candidates.add(state2.nextCandidate());
-//    }
-//
-//    assertEquals(1, candidates.size());
-//  }
-//
-//  public void testItShouldMapAllAtomsInTheSecondaryState()
-//  {
-//    State state0 = new DefaultState(benzeneQuery, benzene);
-//    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//    State state1 = state0.nextState(match0);
-//    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
-//    State state2 = state1.nextState(match1);
-//
-//    Map<Node, Atom> map = state2.getMap();
-//
-//    assertEquals(2, map.size());
-//    assertEquals(benzene.getAtom(0), map.get(benzeneQuery.getNode(0)));
-//    assertEquals(benzene.getAtom(1), map.get(benzeneQuery.getNode(1)));
-//  }
-//
-//  public void testItShouldFindAllMatchCandidatesFromTheTeriaryState()
-//  {
-//    State state0 = new DefaultState(benzeneQuery, benzene);
-//    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//    State state1 = state0.nextState(match0);
-//    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
-//    State state2 = state1.nextState(match1);
-//    Match match2 = new Match(benzeneQuery.getNode(2), benzene.getAtom(2));
-//    State state3 = state2.nextState(match2);
-//    List<Match> candidates = new ArrayList<Match>();
-//
-//    while (state3.hasNextCandidate())
-//    {
-//      candidates.add(state3.nextCandidate());
-//    }
-//
-//    assertEquals(1, candidates.size());
-//  }
-//
-//  public void testItShouldMapAllAtomsInTheTertiaryState()
-//  {
-//    State state0 = new DefaultState(benzeneQuery, benzene);
-//    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//    State state1 = state0.nextState(match0);
-//    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
-//    State state2 = state1.nextState(match1);
-//    Match match2 = new Match(benzeneQuery.getNode(2), benzene.getAtom(2));
-//    State state3 = state2.nextState(match2);
-//    Map<Node, Atom> map = state3.getMap();
-//
-//    assertEquals(3, map.size());
-//    assertEquals(benzene.getAtom(0), map.get(benzeneQuery.getNode(0)));
-//    assertEquals(benzene.getAtom(1), map.get(benzeneQuery.getNode(1)));
-//    assertEquals(benzene.getAtom(2), map.get(benzeneQuery.getNode(2)));
-//  }
-//
-//  public void testItShouldReachGoalWhenAllAtomsAreMapped()
-//  {
-//    State state0 = new DefaultState(benzeneQuery, benzene);
-//    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//    State state1 = state0.nextState(match0);
-//    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
-//    State state2 = state1.nextState(match1);
-//    Match match2 = new Match(benzeneQuery.getNode(2), benzene.getAtom(2));
-//    State state3 = state2.nextState(match2);
-//    Match match3 = new Match(benzeneQuery.getNode(3), benzene.getAtom(3));
-//    State state4 = state3.nextState(match3);
-//    Match match4 = new Match(benzeneQuery.getNode(4), benzene.getAtom(4));
-//    State state5 = state4.nextState(match4);
-//
-//    assertFalse(state5.isGoal());
-//
-//    Match match5 = new Match(benzeneQuery.getNode(5), benzene.getAtom(5));
-//    State state6 = state5.nextState(match5);
-//
-//    assertTrue(state6.isGoal());
-//  }
-//
-//  public void testItShouldDetermineFeasibilityByConnectivity()
-//  {
-//    State state = new DefaultState(benzeneQuery, toluene);
-//
-//    for (int i = 0; i < 6; i++)
-//    {
-//      Match pass = new Match(benzeneQuery.getNode(0), toluene.getAtom(i));
-//      Match fail = new Match(benzeneQuery.getNode(i), toluene.getAtom(6));
-//
-//      assertTrue(state.isMatchFeasible(pass));
-//      assertFalse(state.isMatchFeasible(fail));
-//    }
-//
-//    Match fail = new Match(benzeneQuery.getNode(0), toluene.getAtom(6));
-//
-//    assertFalse(state.isMatchFeasible(fail));
-//  }
-//
-//  public void testItShouldDetermineFeasibilityByAtomSymbol()
-//  {
-//    State state = new DefaultState(tolueneQuery, phenol);
-//    Match fail = new Match(tolueneQuery.getNode(6), phenol.getAtom(6));
-//
-//    assertFalse(state.isMatchFeasible(fail));
-//  }
-//
-//  public void testItShouldBeDeadIfQueryHasMoreAtoms()
-//  {
-//    State state = new DefaultState(tolueneQuery, benzene);
-//
-//    assertTrue(state.isDead());
-//  }
-//
-//  public void testItShouldHaveANextCandidateInTheSecondaryState()
-//  {
-//    State state = new DefaultState(benzeneQuery, benzene);
-//    Match match = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
-//
-//    State nextState = state.nextState(match);
-//
-//    assertTrue(nextState.hasNextCandidate());
-//  }
+  public void testItShouldFindAllMatchCandidatesInTheRootState()
+  {
+    State state = new DefaultState(benzeneQuery, benzene);
+    int count = 0;
+
+    while (state.hasNextCandidate())
+    {
+      state.nextCandidate();
+
+      count++;
+    }
+
+    assertEquals(benzene.countAtoms() * benzene.countAtoms(), count);
+  }
+
+  public void testItShoudFindAllMatchCandidatesInThePrimaryState()
+  {
+    State state = new DefaultState(benzeneQuery, benzene);
+    Match match = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+    State newState = state.nextState(match);
+    List<Match> candidates = new ArrayList<Match>();
+
+    while (newState.hasNextCandidate())
+    {
+      candidates.add(newState.nextCandidate());
+    }
+
+    assertEquals(4, candidates.size());
+  }
+
+  public void testItShouldFindAllMatchCandidatesInTheSecondaryState()
+  {
+    State state0 = new DefaultState(benzeneQuery, benzene);
+    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
+    State state2 = state1.nextState(match1);
+    List<Match> candidates = new ArrayList<Match>();
+
+    while (state2.hasNextCandidate())
+    {
+      candidates.add(state2.nextCandidate());
+    }
+
+    assertEquals(1, candidates.size());
+  }
+
+  public void testItShouldMapAllAtomsInTheSecondaryState()
+  {
+    State state0 = new DefaultState(benzeneQuery, benzene);
+    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
+    State state2 = state1.nextState(match1);
+
+    Map<Node, Atom> map = state2.getMap();
+
+    assertEquals(2, map.size());
+    assertEquals(benzene.getAtom(0), map.get(benzeneQuery.getNode(0)));
+    assertEquals(benzene.getAtom(1), map.get(benzeneQuery.getNode(1)));
+  }
+
+  public void testItShouldFindAllMatchCandidatesFromTheTeriaryState()
+  {
+    State state0 = new DefaultState(benzeneQuery, benzene);
+    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(benzeneQuery.getNode(2), benzene.getAtom(2));
+    State state3 = state2.nextState(match2);
+    List<Match> candidates = new ArrayList<Match>();
+
+    while (state3.hasNextCandidate())
+    {
+      candidates.add(state3.nextCandidate());
+    }
+
+    assertEquals(1, candidates.size());
+  }
+
+  public void testItShouldMapAllAtomsInTheTertiaryState()
+  {
+    State state0 = new DefaultState(benzeneQuery, benzene);
+    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(benzeneQuery.getNode(2), benzene.getAtom(2));
+    State state3 = state2.nextState(match2);
+    Map<Node, Atom> map = state3.getMap();
+
+    assertEquals(3, map.size());
+    assertEquals(benzene.getAtom(0), map.get(benzeneQuery.getNode(0)));
+    assertEquals(benzene.getAtom(1), map.get(benzeneQuery.getNode(1)));
+    assertEquals(benzene.getAtom(2), map.get(benzeneQuery.getNode(2)));
+  }
+
+  public void testItShouldReachGoalWhenAllAtomsAreMapped()
+  {
+    State state0 = new DefaultState(benzeneQuery, benzene);
+    Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(benzeneQuery.getNode(1), benzene.getAtom(1));
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(benzeneQuery.getNode(2), benzene.getAtom(2));
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(benzeneQuery.getNode(3), benzene.getAtom(3));
+    State state4 = state3.nextState(match3);
+    Match match4 = new Match(benzeneQuery.getNode(4), benzene.getAtom(4));
+    State state5 = state4.nextState(match4);
+
+    assertFalse(state5.isGoal());
+
+    Match match5 = new Match(benzeneQuery.getNode(5), benzene.getAtom(5));
+    State state6 = state5.nextState(match5);
+
+    assertTrue(state6.isGoal());
+  }
+
+  public void testItShouldDetermineFeasibilityByConnectivity()
+  {
+    State state = new DefaultState(benzeneQuery, toluene);
+
+    for (int i = 0; i < 6; i++)
+    {
+      Match pass = new Match(benzeneQuery.getNode(0), toluene.getAtom(i));
+      Match fail = new Match(benzeneQuery.getNode(i), toluene.getAtom(6));
+
+      assertTrue(state.isMatchFeasible(pass));
+      assertFalse(state.isMatchFeasible(fail));
+    }
+
+    Match fail = new Match(benzeneQuery.getNode(0), toluene.getAtom(6));
+
+    assertFalse(state.isMatchFeasible(fail));
+  }
+
+  public void testItShouldDetermineFeasibilityByAtomSymbol()
+  {
+    State state = new DefaultState(tolueneQuery, phenol);
+    Match fail = new Match(tolueneQuery.getNode(6), phenol.getAtom(6));
+
+    assertFalse(state.isMatchFeasible(fail));
+  }
+
+  public void testItShouldBeDeadIfQueryHasMoreAtoms()
+  {
+    State state = new DefaultState(tolueneQuery, benzene);
+
+    assertTrue(state.isDead());
+  }
+
+  public void testItShouldHaveANextCandidateInTheSecondaryState()
+  {
+    State state = new DefaultState(benzeneQuery, benzene);
+    Match match = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
+
+    State nextState = state.nextState(match);
+
+    assertTrue(nextState.hasNextCandidate());
+  }
 
   public void testItShouldNotMatchACrossRingClosure()
   {
@@ -223,10 +227,35 @@ public class QueryDefaultStateTest extends TestCase
     State state5 = state4.nextState(match4);
     Match match5Fail = new Match(benzeneQuery.getNode(5), naphthalene.getAtom(6));
 
-    //assertFalse(state5.isMatchFeasible(match5Fail));
+    assertFalse(state5.isMatchFeasible(match5Fail));
 
     Match match5Pass = new Match(benzeneQuery.getNode(5), naphthalene.getAtom(5));
 
     assertTrue(state5.isMatchFeasible(match5Pass));
+  }
+
+  public void testItShouldStoreMappedAtomsForItsChildren()
+  {
+    State state0 = new DefaultState(hexaneQuery, hexane);
+    Match match0 = new Match(hexaneQuery.getNode(0), hexane.getAtom(0));
+    State state1 = state0.nextState(match0);
+
+    assertEquals(1, state0.getMap().size());
+    assertEquals(1, state1.getMap().size());
+
+    Match match1 = new Match(hexaneQuery.getNode(1), hexane.getAtom(1));
+    State state2 = state1.nextState(match1);
+
+    assertEquals(2, state0.getMap().size());
+    assertEquals(2, state1.getMap().size());
+    assertEquals(2, state2.getMap().size());
+
+    Match match2 = new Match(hexaneQuery.getNode(2), hexane.getAtom(2));
+    State state3 = state2.nextState(match2);
+
+    assertEquals(3, state0.getMap().size());
+    assertEquals(3, state1.getMap().size());
+    assertEquals(3, state2.getMap().size());
+    assertEquals(3, state3.getMap().size());
   }
 }
