@@ -157,7 +157,7 @@ public class QueryTest extends TestCase
     
     assertTrue(matches(query, phenol));
   }
-  
+   
   private boolean matches(Query query, Molecule molecule)
   {
     for (int i = 0; i < query.countNodes(); i++)
