@@ -708,4 +708,8 @@ public class DefaultMolecule implements Molecule
       return type;
     }
   }
+
+  private class SgroupImpl implements Sgroup{
+      
+  }
 }
