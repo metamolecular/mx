@@ -29,5 +29,36 @@ package com.metamolecular.mx.model;
  * @author Duan Lian
  */
 public interface Sgroup {
-        
+    public String getLable();
+
+    public String setLable();
+
+    public int countAtoms();
+
+    public int countBonds();
+
+    public Atom getAtom(int index);
+
+    public Bond getBond(int index);
+
+    public Atom addAtom(Atom atom);
+
+    public void removeAtom(Atom atom);
+
+    public Bond getSuperatomBond();
+
+    public void setSuperatomBond(Bond bond);
+
+    public double getSuperatomBondX();
+
+    public void setSuperatomBondX(double x);
+
+    public double getSuperatomBondY();
+
+    public void setSuperatomBondY(double y);
+
+    public int getIdentifier();
+
+    public void setIdentifier(int identifier);
+
 }

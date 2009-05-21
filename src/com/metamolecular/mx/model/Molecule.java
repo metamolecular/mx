@@ -32,17 +32,21 @@ import javax.swing.event.ChangeListener;
  * @author Richard L. Apodaca
  */
 public interface Molecule
-{  
+{
   public int countAtoms();
   
   public int countBonds();
-  
+
+  public int countSgroups();
+
   public Atom getAtom(int index);
   
   public Bond getBond(int index);
   
   public Bond getBond(Atom source, Atom target);
-  
+
+  public Sgroup getSgroup(int index);  
+
   public Atom addAtom(String symbol, double x, double y, double z);
   
   public Atom addAtom(String symbol);
@@ -56,6 +60,10 @@ public interface Molecule
   public void removeBond(Bond bond);
   
   public void disconnect(Atom source, Atom target);
+
+  public void addSgroup(Sgroup sgroup);
+
+  public void removeSgroup(Sgroup sgroup); 
   
   public void clear();
   

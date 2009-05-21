@@ -40,6 +40,7 @@ public class DefaultMolecule implements Molecule
   private List listeners;
   private List atoms;
   private List bonds;
+  private List sgroups;
   private int modifyDepth;
   private boolean changed;
   private ChangeEvent event;
@@ -49,6 +50,7 @@ public class DefaultMolecule implements Molecule
     hCounter = new VirtualHydrogenCounter();
     atoms = new ArrayList();
     bonds = new ArrayList();
+    sgroups = new ArrayList();   
     listeners = null;
     modifyDepth = 0;
     changed = false;
@@ -166,7 +168,15 @@ public class DefaultMolecule implements Molecule
     fireChange();
   }
 
-  public void endModify()
+    public void addSgroup(Sgroup sgroup) {
+        sgroups.add(sgroup);
+    }
+
+    public void removeSgroup(Sgroup sgroup) {
+        sgroups.remove(sgroups);
+    }
+
+    public void endModify()
   {
     modifyDepth--;
 
@@ -218,6 +228,10 @@ public class DefaultMolecule implements Molecule
     return bonds.size();
   }
 
+  public int countSgroups() {
+    return sgroups.size();
+  }
+
   public Atom getAtom(int index)
   {
     return (Atom) atoms.get(index);
@@ -261,6 +275,10 @@ public class DefaultMolecule implements Molecule
     }
 
     return null;
+  }
+
+  public Sgroup getSgroup(int i) {
+    return (Sgroup) sgroups.get(i);
   }
 
   public int getBondIndex(Bond bond)
@@ -321,6 +339,12 @@ public class DefaultMolecule implements Molecule
       Atom target = getAtom(bond.getTarget().getIndex());
 
       connect(source, target, bond.getType(), bond.getStereo());
+    }
+
+    for (int i = 0; i < molecule.countSgroups(); i++)
+    {
+    //TODO sgroup copy code
+
     }
 
     endModify();
@@ -709,7 +733,7 @@ public class DefaultMolecule implements Molecule
     }
   }
 
-  private class SgroupImpl implements Sgroup{
-      
-  }
+//  private class SgroupImpl implements Sgroup{
+//
+//  }
 }
