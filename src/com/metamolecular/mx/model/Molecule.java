@@ -47,7 +47,7 @@ public interface Molecule
 
   public Sgroup getSgroup(int index);
 
-  public Sgroup createSgroup();    
+  public Sgroup addSgroup();    
 
   public Atom addAtom(String symbol, double x, double y, double z);
   

@@ -102,6 +102,7 @@ public class DefaultMolecule implements Molecule
   {
     atoms.clear();
     bonds.clear();
+    sgroups.clear();
 
     fireChange();
   }
@@ -290,10 +291,10 @@ public class DefaultMolecule implements Molecule
     return (Sgroup) sgroups.get(i);
   }
 
-  public Sgroup createSgroup()
+  public Sgroup addSgroup()
   {
       SgroupImpl sgroup = new SgroupImpl(this);
-      sgroups.add(sgroup);
+      addSgroup(sgroup);
       return sgroup;
   }
 
@@ -324,6 +325,25 @@ public class DefaultMolecule implements Molecule
 
       newBond.stereo = oldBond.stereo;
     }
+
+      for (int i = 0; i < this.countSgroups(); i++)
+      {
+          Sgroup sgroup = this.getSgroup(i);
+          Sgroup newSgroup = result.addSgroup();
+          for(int j=0;j<sgroup.countAtoms();j++)
+          {
+            newSgroup.addAtom(result.getAtom(sgroup.getAtom(j).getIndex()));
+          }
+          for(int j=0;j<sgroup.countBonds();j++)
+          {
+            newSgroup.addBond(result.getBond(sgroup.getBond(j).getIndex()));
+          }
+          newSgroup.setIdentifier(sgroup.getIdentifier());
+          newSgroup.setLabel(sgroup.getLabel());
+          newSgroup.setSuperatomBond(sgroup.getSuperatomBond());
+          newSgroup.setSuperatomBondX(sgroup.getSuperatomBondX());
+          newSgroup.setSuperatomBondY(sgroup.getSuperatomBondY());
+      }
 
     return result;
   }
@@ -359,8 +379,21 @@ public class DefaultMolecule implements Molecule
 
     for (int i = 0; i < molecule.countSgroups(); i++)
     {
-    //TODO sgroup copy code
-
+        Sgroup sgroup = molecule.getSgroup(i);
+        Sgroup newSgroup = this.addSgroup();
+        for(int j=0;j<sgroup.countAtoms();j++)
+        {
+          newSgroup.addAtom(this.getAtom(sgroup.getAtom(j).getIndex()));
+        }
+        for(int j=0;j<sgroup.countBonds();j++)
+        {
+          newSgroup.addBond(this.getBond(sgroup.getBond(j).getIndex()));  
+        }
+        newSgroup.setIdentifier(sgroup.getIdentifier());
+        newSgroup.setLabel(sgroup.getLabel());
+        newSgroup.setSuperatomBond(sgroup.getSuperatomBond());
+        newSgroup.setSuperatomBondX(sgroup.getSuperatomBondX());
+        newSgroup.setSuperatomBondY(sgroup.getSuperatomBondY());
     }
 
     endModify();
@@ -448,7 +481,7 @@ public class DefaultMolecule implements Molecule
     }
   }
 
-  private class AtomImpl implements Atom
+    private class AtomImpl implements Atom
   {
     private List neighbors;
     private List bonds;

@@ -41,6 +41,10 @@ public interface Sgroup {
 
     public Bond getBond(int index);
 
+    public boolean contains(Atom atom);
+
+    public boolean contains(Bond bond);
+
     public void addAtom(Atom atom);
 
     public void removeAtom(Atom atom);
