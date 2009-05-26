@@ -53,17 +53,9 @@ public interface Sgroup {
 
     public void removeBond(Bond bond);    
 
-    public Bond getSuperatomBond();
+    public void setBondVector(Bond bond,double[] vector);
 
-    public void setSuperatomBond(Bond bond);
-
-    public double getSuperatomBondX();
-
-    public void setSuperatomBondX(double x);
-
-    public double getSuperatomBondY();
-
-    public void setSuperatomBondY(double y);
+    public double[] getBondVector(Bond bond);
 
     public int getIdentifier();
 

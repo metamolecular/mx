@@ -233,7 +233,7 @@ public class MolfileReader
         {
             createAtomProperty(mol, lines[i]);
         }
-        else if(lines[i].matches("M  (STY|SLB|SAL|SBL|SMT).*"))
+        else if(lines[i].matches("M  (STY|SLB|SAL|SBL|SMT|SBV).*"))
         {
             createSgroupProperty(mol, lines[i]);
         }
@@ -289,26 +289,38 @@ public class MolfileReader
           for (int i = 0; i < entryCount; i++)
           {
             int offset = i * 4;
-            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 13, offset + 17);
-            
+            int atomIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
+            sgroup.addAtom(mol.getAtom(atomIndex-1));
           }
       }
       else if ("M  SBL".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Sgroup sgroup = mol.getSgroup(sgroupIndex);
+          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
           int entryCount = MDLStringKit.extractInt(line, 10, 13);
           for (int i = 0; i < entryCount; i++)
           {
             int offset = i * 4;
-            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 13, offset + 17);
-            sgroup.setIdentifier(sgroupIdentifier);
+            int bondIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
+            sgroup.addBond(mol.getBond(bondIndex-1));
           }
       }
-
-
-
-
+      else if ("M  SMT".equals(property))
+      {
+          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          String label = MDLStringKit.extractString(line, 10, line.length());
+          sgroup.setLabel(label);
+      }
+      else if ("M  SBV".equals(property))
+      {
+          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          int bondIndex = MDLStringKit.extractInt(line, 10, 14);
+          double x=MDLStringKit.extractFloat(line, 14, 24);
+          double y=MDLStringKit.extractFloat(line, 24, 34);
+          sgroup.setBondVector(mol.getBond(bondIndex-1),new double[]{x,y});
+      }
   }
 
   private void createAtomProperty(Molecule mol, String line)

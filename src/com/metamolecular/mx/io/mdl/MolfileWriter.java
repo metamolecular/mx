@@ -181,7 +181,8 @@ public class MolfileWriter
     writeChargeProperty(molecule, writer);
     writeIsotopicProperty(molecule, writer);
     writeRadicalProperty(molecule, writer);
-    
+    writeSgroupProperty(molecule, writer);
+
     writer.write(M_END);
   }
   
@@ -236,6 +237,11 @@ public class MolfileWriter
   private void writeRadicalProperty(Molecule molecule, Writer writer)
   {
     
+  }
+
+  private void writeSgroupProperty(Molecule molecule, Writer writer)
+  {
+      
   }
   
   private class Writer

@@ -27,6 +27,8 @@ package com.metamolecular.mx.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -336,13 +338,12 @@ public class DefaultMolecule implements Molecule
           }
           for(int j=0;j<sgroup.countBonds();j++)
           {
-            newSgroup.addBond(result.getBond(sgroup.getBond(j).getIndex()));
+            Bond bond = result.getBond(sgroup.getBond(j).getIndex());
+            newSgroup.addBond(bond);
+            newSgroup.setBondVector(bond,sgroup.getBondVector(sgroup.getBond(j)));
           }
           newSgroup.setIdentifier(sgroup.getIdentifier());
           newSgroup.setLabel(sgroup.getLabel());
-          newSgroup.setSuperatomBond(sgroup.getSuperatomBond());
-          newSgroup.setSuperatomBondX(sgroup.getSuperatomBondX());
-          newSgroup.setSuperatomBondY(sgroup.getSuperatomBondY());
       }
 
     return result;
@@ -387,13 +388,12 @@ public class DefaultMolecule implements Molecule
         }
         for(int j=0;j<sgroup.countBonds();j++)
         {
-          newSgroup.addBond(this.getBond(sgroup.getBond(j).getIndex()));  
+            Bond bond = this.getBond(sgroup.getBond(j).getIndex());
+            newSgroup.addBond(bond);
+            newSgroup.setBondVector(bond,sgroup.getBondVector(sgroup.getBond(j)));
         }
         newSgroup.setIdentifier(sgroup.getIdentifier());
         newSgroup.setLabel(sgroup.getLabel());
-        newSgroup.setSuperatomBond(sgroup.getSuperatomBond());
-        newSgroup.setSuperatomBondX(sgroup.getSuperatomBondX());
-        newSgroup.setSuperatomBondY(sgroup.getSuperatomBondY());
     }
 
     endModify();
@@ -787,16 +787,15 @@ public class DefaultMolecule implements Molecule
       private List bonds;
       private String label;
       private Molecule molecule;
-      private int identifier;
-      private Bond superatomBond;
-      private double superatomBondX,superatomBondY;
-      
+      private int identifier;      
+      private Map bondVectorMap;
 
       public SgroupImpl(Molecule parent)
       {
          molecule = parent;
          atoms = new ArrayList();
          bonds = new ArrayList();
+         bondVectorMap = new HashMap();
       }
 
       public String getLabel()
@@ -864,37 +863,12 @@ public class DefaultMolecule implements Molecule
           fireChange();                   
       }
 
-      public Bond getSuperatomBond()
-      {
-          return superatomBond;
+      public void setBondVector(Bond bond, double[] vector) {
+          bondVectorMap.put(bond,vector);
       }
 
-      public void setSuperatomBond(Bond bond)
-      {
-         this.superatomBond=bond;
-         fireChange();                   
-      }
-
-      public double getSuperatomBondX()
-      {
-          return superatomBondX;
-      }
-
-      public void setSuperatomBondX(double x)
-      {
-         this.superatomBondX=x;
-         fireChange();
-      }
-
-      public double getSuperatomBondY()
-      {
-          return superatomBondY;
-      }
-
-      public void setSuperatomBondY(double y)
-      {
-          this.superatomBondY=y;
-          fireChange();
+      public double[] getBondVector(Bond bond) {
+          return (double[]) bondVectorMap.get(bond);
       }
 
       public int getIdentifier()
