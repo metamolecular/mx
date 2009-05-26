@@ -34,6 +34,7 @@ import java.util.List;
 
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.model.Sgroup;
 
 /**
  * @author Richard L. Apodaca
@@ -236,7 +237,7 @@ public class MolfileReader
         {
             createSgroupProperty(mol, lines[i]);
         }
-          
+
       }
 
       catch (Exception ignore)
@@ -245,7 +246,7 @@ public class MolfileReader
       }
     }
   }
-  
+
   private void createGroupOldVersion(Molecule mol, String line,String nextLine)
   {
       //does nothing
@@ -255,17 +256,59 @@ public class MolfileReader
       String property = MDLStringKit.extractString(line, 0, 6);
       if ("M  STY".equals(property))
       {
-          
+          int entryCount = MDLStringKit.extractInt(line, 6, 9);
+          for (int i = 0; i < entryCount; i++)
+          {
+            int offset = i * 8;
+            int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
+            String sgroupType = MDLStringKit.extractString(line, offset + 14, offset + 17);
+            if (!"SUP".equals(sgroupType))
+            {
+              throw new RuntimeException("Error parsing Sgroup, only Superatom is supported.");
+            }
+            mol.addSgroup();
+          }
       }
-      int entryCount = MDLStringKit.extractInt(line, 6, 9);
-
-      for (int i = 0; i < entryCount; i++)
+      else if ("M  SLB".equals(property))
       {
-        int offset = i * 8;
-        int atomIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
-        int value = MDLStringKit.extractInt(line, offset + 14, offset + 17);
-        Atom atom = mol.getAtom(atomIndex - 1);
+          int entryCount = MDLStringKit.extractInt(line, 6, 9);
+          for (int i = 0; i < entryCount; i++)
+          {
+            int offset = i * 8;
+            int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
+            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 14, offset + 17);
+            Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+            sgroup.setIdentifier(sgroupIdentifier);
+          }
       }
+      else if ("M  SAL".equals(property))
+      {
+          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          int entryCount = MDLStringKit.extractInt(line, 10, 13);          
+          for (int i = 0; i < entryCount; i++)
+          {
+            int offset = i * 4;
+            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 13, offset + 17);
+            
+          }
+      }
+      else if ("M  SBL".equals(property))
+      {
+          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+          Sgroup sgroup = mol.getSgroup(sgroupIndex);
+          int entryCount = MDLStringKit.extractInt(line, 10, 13);
+          for (int i = 0; i < entryCount; i++)
+          {
+            int offset = i * 4;
+            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 13, offset + 17);
+            sgroup.setIdentifier(sgroupIdentifier);
+          }
+      }
+
+
+
+
   }
 
   private void createAtomProperty(Molecule mol, String line)
