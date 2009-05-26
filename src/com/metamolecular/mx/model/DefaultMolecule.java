@@ -169,10 +169,18 @@ public class DefaultMolecule implements Molecule
   }
 
     public void addSgroup(Sgroup sgroup) {
+        if (sgroup.getMolecule() != this)
+        {
+          throw new RuntimeException("Attempt to add sgroup of another molecule.");
+        }
         sgroups.add(sgroup);
     }
 
     public void removeSgroup(Sgroup sgroup) {
+        if (sgroup.getMolecule() != this)
+        {
+          throw new RuntimeException("Attempt to remove sgroup of another molecule.");
+        }
         sgroups.remove(sgroups);
     }
 
