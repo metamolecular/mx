@@ -56,7 +56,7 @@ public interface Molecule
   public Bond connect(Atom source, Atom target, int type, int stereo);
   
   public Bond connect(Atom source, Atom target, int type);
-  
+                                     
   public void removeBond(Bond bond);
   
   public void disconnect(Atom source, Atom target);
