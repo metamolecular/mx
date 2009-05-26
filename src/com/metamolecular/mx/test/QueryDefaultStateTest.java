@@ -33,6 +33,8 @@ public class QueryDefaultStateTest extends TestCase
   private Molecule naphthalene;
   private Molecule hexane;
   private Query hexaneQuery;
+  private Molecule acetone;
+  private Query acetoneQuery;
 
   public QueryDefaultStateTest()
   {
@@ -44,6 +46,8 @@ public class QueryDefaultStateTest extends TestCase
     naphthalene = Molecules.createNaphthalene();
     hexane = Molecules.createHexane();
     hexaneQuery = new DefaultQuery(hexane);
+    acetone = Molecules.createAcetone();
+    acetoneQuery = new DefaultQuery(acetone);
   }
 
   @Override
@@ -285,6 +289,145 @@ public class QueryDefaultStateTest extends TestCase
 
     assertEquals(1, state0.getMap().size());
     assertTrue(state0.getMap().get(mQuery.getNode(0)).equals(m.getAtom(0)));
+  }
+
+  public void testItShouldNotRemoveAnyAtomMappingsWhenHeadOfChildIsFullyMapped()
+  {
+    Molecule m = create2MethylPentane();
+    DefaultQuery mQuery = new DefaultQuery(m);
+    State state0 = new DefaultState(mQuery, m);
+    Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
+
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(mQuery.getNode(1), m.getAtom(1));
+
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(mQuery.getNode(2), m.getAtom(2));
+
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(mQuery.getNode(3), m.getAtom(3));
+
+    State state4 = state3.nextState(match3);
+    Match match4 = new Match(mQuery.getNode(4), m.getAtom(4));
+
+    State state5 = state4.nextState(match4);
+
+    assertEquals(5, state0.getMap().size());
+
+    state2.backTrack();
+
+    assertEquals(5, state0.getMap().size());
+  }
+
+  public void testItShouldNotMatchACandidateIfQueryAtomHasAlreadyBeenMapped()
+  {
+    State state0 = new DefaultState(acetoneQuery, acetone);
+    Match match0 = new Match(acetoneQuery.getNode(3), acetone.getAtom(3));
+
+    assertTrue(state0.isMatchFeasible(match0));
+
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(acetoneQuery.getNode(1), acetone.getAtom(1));
+
+    assertTrue(state1.isMatchFeasible(match1));
+
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(acetoneQuery.getNode(2), acetone.getAtom(2));
+
+    assertTrue(state2.isMatchFeasible(match2));
+
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(acetoneQuery.getNode(2), acetone.getAtom(0));
+
+    assertEquals(3, state3.getMap().size());
+    assertFalse(state3.isMatchFeasible(match3));
+  }
+
+  public void testItShouldNotMatchACandidateIfTargetAtomHasAlreadyBeenMapped()
+  {
+    State state0 = new DefaultState(acetoneQuery, acetone);
+    Match match0 = new Match(acetoneQuery.getNode(3), acetone.getAtom(3));
+
+    assertTrue(state0.isMatchFeasible(match0));
+
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(acetoneQuery.getNode(1), acetone.getAtom(1));
+
+    assertTrue(state1.isMatchFeasible(match1));
+
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(acetoneQuery.getNode(2), acetone.getAtom(2));
+
+    assertTrue(state2.isMatchFeasible(match2));
+
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(acetoneQuery.getNode(0), acetone.getAtom(2));
+
+    assertEquals(3, state3.getMap().size());
+    assertFalse(state3.isMatchFeasible(match3));
+  }
+
+  public void testItShouldBeAbleToMapADeepSymmetricallyBranchingMolecule()
+  {
+    Molecule m = create2MethylPentane();
+    Query mQuery = new DefaultQuery(m);
+
+    State state0 = new DefaultState(mQuery, m);
+    Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
+
+    assertTrue(state0.isMatchFeasible(match0));
+
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(mQuery.getNode(1), m.getAtom(1));
+
+    assertTrue(state1.isMatchFeasible(match1));
+
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(mQuery.getNode(2), m.getAtom(2));
+
+    assertTrue(state2.isMatchFeasible(match2));
+
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(mQuery.getNode(3), m.getAtom(3));
+
+    assertTrue(state3.isMatchFeasible(match3));
+
+    State state4 = state3.nextState(match3);
+    Match match4 = new Match(mQuery.getNode(4), m.getAtom(4));
+
+    assertFalse(state4.isMatchFeasible(match4));
+    assertTrue(state2.isMatchFeasible(match4));
+  }
+
+  public void testItShouldBeAbleToMapAShallowSymmetricallyBranchingMolecule()
+  {
+    State state0 = new DefaultState(acetoneQuery, acetone);
+    Match match0 = new Match(acetoneQuery.getNode(0), acetone.getAtom(0));
+
+    assertTrue(state0.isMatchFeasible(match0));
+
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(acetoneQuery.getNode(1), acetone.getAtom(1));
+
+    assertTrue(state1.isMatchFeasible(match1));
+
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(acetoneQuery.getNode(2), acetone.getAtom(2));
+
+    assertTrue(state2.isMatchFeasible(match2));
+
+    Match failMatch2 = new Match(acetoneQuery.getNode(2), acetone.getAtom(3));
+
+    assertFalse(state2.isMatchFeasible(failMatch2));
+
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(acetoneQuery.getNode(3), acetone.getAtom(3));
+
+    assertTrue(state2.isMatchFeasible(match3));
+
+    State state4 = state2.nextState(match3);
+
+    assertTrue(state4.isGoal());
   }
 
   private Molecule create2MethylPentane()
