@@ -50,7 +50,7 @@ public class DefaultMolecule implements Molecule
     hCounter = new VirtualHydrogenCounter();
     atoms = new ArrayList();
     bonds = new ArrayList();
-    sgroups = new ArrayList();   
+    sgroups = new ArrayList();
     listeners = null;
     modifyDepth = 0;
     changed = false;
@@ -733,7 +733,125 @@ public class DefaultMolecule implements Molecule
     }
   }
 
-//  private class SgroupImpl implements Sgroup{
-//
-//  }
+  private class SgroupImpl implements Sgroup{
+      private List atoms;
+      private List bonds;
+      private String label;
+      private Molecule molecule;
+      private int identifier;
+      private Bond superatomBond;
+      private double superatomBondX,superatomBondY;
+      
+
+      public SgroupImpl(Molecule parent)
+      {
+         molecule = parent;
+         atoms = new ArrayList();
+         bonds = new ArrayList();
+      }
+
+      public String getLabel()
+      {
+          return label;
+      }
+
+      public void setLabel(String label)
+      {
+         this.label=label;
+         fireChange();
+      }
+
+      public int countAtoms()
+      {
+          return atoms.size();
+      }
+
+      public int countBonds()
+      {
+          return bonds.size();
+      }
+
+      public Atom getAtom(int index)
+      {
+          return (Atom) atoms.get(index);
+      }
+
+      public Bond getBond(int index)
+      {
+          return (Bond) bonds.get(index);
+      }
+
+      public void addAtom(Atom atom)
+      {
+          atoms.add(atom);
+          fireChange();          
+      }
+
+      public void removeAtom(Atom atom)
+      {
+          atoms.remove(atom);
+          fireChange();
+      }
+
+      public void addBond(Bond bond)
+      {
+          bonds.add(bond);
+          fireChange();
+      }
+
+      public void removeBond(Bond bond)
+      {
+          bonds.remove(bond);
+          fireChange();                   
+      }
+
+      public Bond getSuperatomBond()
+      {
+          return superatomBond;
+      }
+
+      public void setSuperatomBond(Bond bond)
+      {
+         this.superatomBond=bond;
+         fireChange();                   
+      }
+
+      public double getSuperatomBondX()
+      {
+          return superatomBondX;
+      }
+
+      public void setSuperatomBondX(double x)
+      {
+         this.superatomBondX=x;
+         fireChange();
+      }
+
+      public double getSuperatomBondY()
+      {
+          return superatomBondY;
+      }
+
+      public void setSuperatomBondY(double y)
+      {
+          this.superatomBondY=y;
+          fireChange();
+      }
+
+      public int getIdentifier()
+      {
+          return identifier;
+      }
+
+      public void setIdentifier(int identifier)
+      {
+         this.identifier=identifier;
+         fireChange();
+      }
+
+      public Molecule getMolecule()
+      {
+          return molecule;  
+      }
+  }
 }
