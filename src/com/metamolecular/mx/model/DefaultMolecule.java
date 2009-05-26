@@ -277,8 +277,16 @@ public class DefaultMolecule implements Molecule
     return null;
   }
 
-  public Sgroup getSgroup(int i) {
+  public Sgroup getSgroup(int i)
+  {
     return (Sgroup) sgroups.get(i);
+  }
+
+  public Sgroup createSgroup()
+  {
+      SgroupImpl sgroup = new SgroupImpl(this);
+      sgroups.add(sgroup);
+      return sgroup;
   }
 
   public int getBondIndex(Bond bond)
@@ -779,6 +787,16 @@ public class DefaultMolecule implements Molecule
       public Bond getBond(int index)
       {
           return (Bond) bonds.get(index);
+      }
+
+      public boolean contains(Atom atom)
+      {
+          return atoms.contains(atom);
+      }
+
+      public boolean contains(Bond bond)
+      {
+          return bonds.contains(bond);  
       }
 
       public void addAtom(Atom atom)
