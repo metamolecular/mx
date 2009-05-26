@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public class DefaultState implements State
 {
+
   private List<Match> candidates;
   private Query query;
   private Molecule target;
@@ -55,7 +56,24 @@ public class DefaultState implements State
 
   public void backTrack()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (queryPath.isEmpty() || isGoal())
+    {
+      map.clear();
+
+      return;
+    }
+
+    if (isHeadMapped())
+    {
+      return;
+    }
+
+    map.clear();
+
+    for (int i = 0; i < queryPath.size() - 1; i++)
+    {
+      map.put(queryPath.get(i), targetPath.get(i));
+    }
   }
 
   public Map<Node, Atom> getMap()
@@ -144,7 +162,7 @@ public class DefaultState implements State
     for (Node queryAtom : map.keySet())
     {
       if (queryAtom.equals(candidate.getQueryNode()) ||
-        map.get(queryAtom).equals(candidate.getTargetAtom()))
+              map.get(queryAtom).equals(candidate.getTargetAtom()))
       {
         return false;
       }
@@ -260,6 +278,29 @@ public class DefaultState implements State
 
   private boolean matchBond(Edge edge, Bond targetBond)
   {
+    return true;
+  }
+
+  private boolean isHeadMapped()
+  {
+    Node head = queryPath.get(queryPath.size() - 1);
+    for (Node neighbor : head.neighbors())
+    {
+      if (!map.containsKey(neighbor))
+      {
+        return false;
+      }
+    }
+//    Atom[] neighbors = head.getNeighbors();
+//
+//    for (Atom neighbor : neighbors)
+//    {
+//      if (!map.containsKey(neighbor))
+//      {
+//        return false;
+//      }
+//    }
+
     return true;
   }
 }

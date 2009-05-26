@@ -157,6 +157,15 @@ public class QueryTest extends TestCase
     
     assertTrue(matches(query, phenol));
   }
+  
+  public void testItShouldReturnABenzeneTemplateThatMatchesToluene()
+  {
+    Molecule toluene = Molecules.createToluene();
+    Molecule benzene = Molecules.createBenzene();
+    query = new DefaultQuery(benzene);
+    
+    assertTrue(matches(query, toluene));
+  }
    
   private boolean matches(Query query, Molecule molecule)
   {

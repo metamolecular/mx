@@ -6,6 +6,7 @@ package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.query.DefaultState;
@@ -23,6 +24,7 @@ import junit.framework.TestCase;
  */
 public class QueryDefaultStateTest extends TestCase
 {
+
   private Molecule benzene;
   private Query benzeneQuery;
   private Molecule toluene;
@@ -257,5 +259,50 @@ public class QueryDefaultStateTest extends TestCase
     assertEquals(3, state1.getMap().size());
     assertEquals(3, state2.getMap().size());
     assertEquals(3, state3.getMap().size());
+  }
+
+  public void testItShouldClearAtomMappingsWhenAChildIsBacktracked()
+  {
+    Molecule m = create2MethylPentane();
+    DefaultQuery mQuery = new DefaultQuery(m);
+    State state0 = new DefaultState(mQuery, m);
+    Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
+
+    State state1 = state0.nextState(match0);
+    Match match1 = new Match(mQuery.getNode(1), m.getAtom(1));
+
+    State state2 = state1.nextState(match1);
+    Match match2 = new Match(mQuery.getNode(2), m.getAtom(2));
+
+    State state3 = state2.nextState(match2);
+    Match match3 = new Match(mQuery.getNode(3), m.getAtom(3));
+
+    State state4 = state3.nextState(match3);
+
+    assertEquals(4, state0.getMap().size());
+
+    state2.backTrack();
+
+    assertEquals(1, state0.getMap().size());
+    assertTrue(state0.getMap().get(mQuery.getNode(0)).equals(m.getAtom(0)));
+  }
+
+  private Molecule create2MethylPentane()
+  {
+    Molecule result = new DefaultMolecule();
+    Atom c0 = result.addAtom("C");
+    Atom c1 = result.addAtom("C");
+    Atom c2 = result.addAtom("C");
+    Atom c3 = result.addAtom("C");
+    Atom c4 = result.addAtom("C");
+    Atom c5 = result.addAtom("C");
+
+    result.connect(c0, c1, 1);
+    result.connect(c1, c2, 1);
+    result.connect(c2, c3, 1);
+    result.connect(c1, c4, 1);
+    result.connect(c4, c5, 1);
+
+    return result;
   }
 }
