@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.query;
 
 import com.metamolecular.mx.model.Atom;
@@ -39,29 +38,29 @@ public class DefaultQuery implements Query
 {
   private List<Node> nodes;
   private List<Edge> edges;
-  
+
   public DefaultQuery()
   {
     nodes = new ArrayList();
     edges = new ArrayList();
   }
-  
+
   public DefaultQuery(Molecule molecule)
   {
     this();
-    
+
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
       Atom atom = molecule.getAtom(i);
       AtomMatcher matcher = new DefaultAtomMatcher(atom);
-      
+
       addNode(matcher);
     }
-    
+
     for (int i = 0; i < molecule.countBonds(); i++)
     {
       Bond bond = molecule.getBond(i);
-      
+
       connect(nodes.get(bond.getSource().getIndex()), nodes.get(bond.getTarget().getIndex()));
     }
   }
@@ -75,23 +74,53 @@ public class DefaultQuery implements Query
   {
     return nodes;
   }
-  
+
   public Node getNode(int index)
   {
     return nodes.get(index);
   }
-  
+
   public Edge getEdge(int index)
   {
     return edges.get(index);
   }
-  
+
+  public Edge getEdge(Node source, Node target)
+  {
+//    if (source.getMolecule() != this || target.getMolecule() != this)
+//    {
+//      return null;
+//    }
+
+    if (source == target)
+    {
+      return null;
+    }
+
+    NodeImpl sourceImpl = (NodeImpl) source;
+
+    for (Edge edge : sourceImpl.edges)
+    //for (int i = 0; i < sourceImpl.edges.size(); i++)
+    {
+      //Bond bond = (Bond) sourceImpl.bonds.get(i);
+
+      if (edge.getSource() == target || edge.getTarget() == target)
+      //if (bond.getSource() == target || bond.getTarget() == target)
+      {
+        return edge;
+        //return bond;
+      }
+    }
+
+    return null;
+  }
+
   public Node addNode(AtomMatcher matcher)
   {
     NodeImpl node = new NodeImpl(matcher);
-    
+
     nodes.add(node);
-    
+
     return node;
   }
 
@@ -99,7 +128,7 @@ public class DefaultQuery implements Query
   {
     return nodes.size();
   }
-  
+
   public int countEdges()
   {
     return edges.size();
@@ -110,22 +139,27 @@ public class DefaultQuery implements Query
     NodeImpl sourceImpl = (NodeImpl) source;
     NodeImpl targetImpl = (NodeImpl) target;
     EdgeImpl edge = new EdgeImpl(sourceImpl, targetImpl);
-    
+
     sourceImpl.neighbors.add(targetImpl);
     targetImpl.neighbors.add(sourceImpl);
     
+    sourceImpl.edges.add(edge);
+    targetImpl.edges.add(edge);
+
     edges.add(edge);
-    
+
     return edge;
   }
-  
+
   private class NodeImpl implements Node
   {
     private List<Node> neighbors;
+    private List<Edge> edges;
     private AtomMatcher matcher;
-    
+
     private NodeImpl(AtomMatcher matcher)
     {
+      edges = new ArrayList();
       neighbors = new ArrayList();
       this.matcher = matcher;
     }
@@ -145,12 +179,12 @@ public class DefaultQuery implements Query
       return matcher;
     }
   }
-  
+
   private class EdgeImpl implements Edge
   {
     private NodeImpl source;
     private NodeImpl target;
-    
+
     private EdgeImpl(NodeImpl source, NodeImpl target)
     {
       this.source = source;

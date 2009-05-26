@@ -39,6 +39,8 @@ public interface Query
   
   public Edge getEdge(int index);
   
+  public Edge getEdge(Node source, Node target);
+  
   public int countEdges();
   
   public int countNodes();
