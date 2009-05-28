@@ -39,6 +39,34 @@ import junit.framework.TestCase;
  */
 public class SgroupTest extends TestCase
 {
+  //TODO: test adding an atom from another molecule throws
+  
+  //TODO: test adding crossing bond from another molecule throws
+  
+  //TODO: test adding the same atom twice throws
+  
+  //TODO: test adding the same crossing bond twice throws
+  
+  //TODO: test removing nonexistant atom throws
+  
+  //TODO: test removing nonexitant crossing bond throws
+  
+  //TODO: test setting crossing vector for nonexistant bond throws
+  
+  //TODO: test deleting atom from molecule deletes atom from substructure as well
+  
+  //TODO: test deleting bond from molecule deletes crossing bond from substructure
+  
+  //TODO: test adding atom fires event
+  
+  //TODO: test removing atom fires event
+  
+  //TODO: test adding crossing bond fires event
+  
+  //TODO: test removing crossing bond fires event
+  
+  //TODO: test changing crossing vector fires event
+  
   public void testAddSgroup()
   {
       Molecule molecule = Molecules.createBenzene();
