@@ -28,6 +28,7 @@ package com.metamolecular.mx.model;
 /**
  * @author Duan Lian
  */
+//TODO: public interface Substructure
 public interface Sgroup {
     public String getLabel();
 
@@ -49,16 +50,24 @@ public interface Sgroup {
 
     public void removeAtom(Atom atom);
 
+    //TODO: addCrossingBond(Bond bond);
     public void addBond(Bond bond);
 
+    //TODO: removeCrossingBond(Bond bond);
     public void removeBond(Bond bond);    
 
+    //TODO: public void setCrossingVector(Bond bond, double x, double y);
     public void setBondVector(Bond bond,double[] vector);
 
+    //TODO:    public double getCrossingVectorX(Bond bond);
+    //TODO:    public double getCrossingVectorY(Bond bond);
     public double[] getBondVector(Bond bond);
 
+    //TODO: public int getIndex();
+    // returns zero-based index, similar to Atom and Bond
     public int getIdentifier();
 
+    //TODO: remove
     public void setIdentifier(int identifier);
 
     public Molecule getMolecule();    
