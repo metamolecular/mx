@@ -787,7 +787,6 @@ public class DefaultMolecule implements Molecule
       private List bonds;
       private String label;
       private Molecule molecule;
-      private int identifier;      
       private Map bondVectorMap;
 
       public SubstructureImpl(Molecule parent)
@@ -882,11 +881,6 @@ public class DefaultMolecule implements Molecule
 
       public int getIndex() {
           return DefaultMolecule.this.substructures.indexOf(this);
-      }
-
-      public int getIdentifier()
-      {
-          return identifier;
       }
 
       public Molecule getMolecule()

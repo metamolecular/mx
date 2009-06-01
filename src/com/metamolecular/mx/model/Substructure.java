@@ -60,12 +60,7 @@ public interface Substructure {
 
     public double getCrossingVectorY(Bond bond);
 
-    //TODO: public int getIndex();
-
     public int getIndex();
-
-    // returns zero-based index, similar to Atom and Bond
-    public int getIdentifier();
 
     public Molecule getMolecule();
 
