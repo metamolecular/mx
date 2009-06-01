@@ -231,7 +231,7 @@ public class MolfileWriter
   
   private void writeIsotopicProperty(Molecule molecule, Writer writer)
   {
-    
+
   }
   
   private void writeRadicalProperty(Molecule molecule, Writer writer)
@@ -241,7 +241,7 @@ public class MolfileWriter
 
   private void writeSgroupProperty(Molecule molecule, Writer writer)
   {
-      
+
   }
   
   private class Writer

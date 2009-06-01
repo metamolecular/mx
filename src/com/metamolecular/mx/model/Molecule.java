@@ -47,10 +47,10 @@ public interface Molecule
   public Bond getBond(Atom source, Atom target);
 
   //TODO public Substructure getSubstructure(int index);
-  public Sgroup getSgroup(int index);
+  public Substructure getSgroup(int index);
 
   //TODO public Substructure addSubstructure();
-  public Sgroup addSgroup();    
+  public Substructure addSgroup();
 
   public Atom addAtom(String symbol, double x, double y, double z);
   
@@ -67,10 +67,10 @@ public interface Molecule
   public void disconnect(Atom source, Atom target);
 
   //TODO: delete method
-  public void addSgroup(Sgroup sgroup);
+  public void addSgroup(Substructure substructure);
 
   //TODO: public void removeSubstructure(Substructure substructure);
-  public void removeSgroup(Sgroup sgroup); 
+  public void removeSgroup(Substructure substructure);
   
   public void clear();
   

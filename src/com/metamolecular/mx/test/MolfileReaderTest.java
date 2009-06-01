@@ -110,10 +110,9 @@ public class MolfileReaderTest extends TestCase
     assertEquals("Ph",mr.getSgroup(1).getLabel());
 
 
-    Bond connectBond = mr.getSgroup(0).getBond(0);
-    double[] bondVector=mr.getSgroup(0).getBondVector(connectBond);
-    assertEquals(0.8200, bondVector[0],0.01);
-    assertEquals(0.0000, bondVector[1],0.01);
+    Bond connectBond = mr.getSgroup(0).getCrossingBond(0);
+    assertEquals(0.8200, mr.getSgroup(0).getCrossingVectorX(connectBond),0.01);
+    assertEquals(0.0000, mr.getSgroup(0).getCrossingVectorY(connectBond),0.01);
   }
 
 }

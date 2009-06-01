@@ -42,17 +42,17 @@ public class DefaultMolecule implements Molecule
   private List listeners;
   private List atoms;
   private List bonds;
-  private List sgroups;
+  private List substructures;
   private int modifyDepth;
   private boolean changed;
   private ChangeEvent event;
 
-  public DefaultMolecule()
+    public DefaultMolecule()
   {
     hCounter = new VirtualHydrogenCounter();
     atoms = new ArrayList();
     bonds = new ArrayList();
-    sgroups = new ArrayList();
+    substructures = new ArrayList();
     listeners = null;
     modifyDepth = 0;
     changed = false;
@@ -104,7 +104,7 @@ public class DefaultMolecule implements Molecule
   {
     atoms.clear();
     bonds.clear();
-    sgroups.clear();
+    substructures.clear();
 
     fireChange();
   }
@@ -171,20 +171,20 @@ public class DefaultMolecule implements Molecule
     fireChange();
   }
 
-    public void addSgroup(Sgroup sgroup) {
-        if (sgroup.getMolecule() != this)
+    public void addSgroup(Substructure substructure) {
+        if (substructure.getMolecule() != this)
         {
-          throw new RuntimeException("Attempt to add sgroup of another molecule.");
+          throw new RuntimeException("Attempt to add substructure of another molecule.");
         }
-        sgroups.add(sgroup);
+        substructures.add(substructure);
     }
 
-    public void removeSgroup(Sgroup sgroup) {
-        if (sgroup.getMolecule() != this)
+    public void removeSgroup(Substructure substructure) {
+        if (substructure.getMolecule() != this)
         {
-          throw new RuntimeException("Attempt to remove sgroup of another molecule.");
+          throw new RuntimeException("Attempt to remove substructure of another molecule.");
         }
-        sgroups.remove(sgroups);
+        substructures.remove(substructures);
     }
 
     public void endModify()
@@ -240,7 +240,7 @@ public class DefaultMolecule implements Molecule
   }
 
   public int countSgroups() {
-    return sgroups.size();
+    return substructures.size();
   }
 
   public Atom getAtom(int index)
@@ -254,7 +254,7 @@ public class DefaultMolecule implements Molecule
   }
 
   /* (non-Javadoc)
-   * @see com.metamolecular.firefly.model.Molecule#getBond(int)
+   * @see com.metamolecular.firefly.model.Molecule#getCrossingBond(int)
    */
   public Bond getBond(int index)
   {
@@ -288,14 +288,14 @@ public class DefaultMolecule implements Molecule
     return null;
   }
 
-  public Sgroup getSgroup(int i)
+  public Substructure getSgroup(int i)
   {
-    return (Sgroup) sgroups.get(i);
+    return (Substructure) substructures.get(i);
   }
 
-  public Sgroup addSgroup()
+  public Substructure addSgroup()
   {
-      SgroupImpl sgroup = new SgroupImpl(this);
+      SubstructureImpl sgroup = new SubstructureImpl(this);
       addSgroup(sgroup);
       return sgroup;
   }
@@ -330,20 +330,20 @@ public class DefaultMolecule implements Molecule
 
       for (int i = 0; i < this.countSgroups(); i++)
       {
-          Sgroup sgroup = this.getSgroup(i);
-          Sgroup newSgroup = result.addSgroup();
-          for(int j=0;j<sgroup.countAtoms();j++)
+          Substructure substructure = this.getSgroup(i);
+          Substructure newSubstructure = result.addSgroup();
+          for(int j=0;j< substructure.countAtoms();j++)
           {
-            newSgroup.addAtom(result.getAtom(sgroup.getAtom(j).getIndex()));
+            newSubstructure.addAtom(result.getAtom(substructure.getAtom(j).getIndex()));
           }
-          for(int j=0;j<sgroup.countBonds();j++)
+          for(int j=0;j< substructure.countBonds();j++)
           {
-            Bond bond = result.getBond(sgroup.getBond(j).getIndex());
-            newSgroup.addBond(bond);
-            newSgroup.setBondVector(bond,sgroup.getBondVector(sgroup.getBond(j)));
+            Bond crossingBond = substructure.getCrossingBond(j);
+            Bond bond = result.getBond(crossingBond.getIndex());
+            newSubstructure.addCrossingBond(bond);
+            newSubstructure.setCrossingVector(bond, substructure.getCrossingVectorX(crossingBond), substructure.getCrossingVectorY(crossingBond));
           }
-          newSgroup.setIdentifier(sgroup.getIdentifier());
-          newSgroup.setLabel(sgroup.getLabel());
+          newSubstructure.setLabel(substructure.getLabel());
       }
 
     return result;
@@ -380,20 +380,20 @@ public class DefaultMolecule implements Molecule
 
     for (int i = 0; i < molecule.countSgroups(); i++)
     {
-        Sgroup sgroup = molecule.getSgroup(i);
-        Sgroup newSgroup = this.addSgroup();
-        for(int j=0;j<sgroup.countAtoms();j++)
+        Substructure substructure = molecule.getSgroup(i);
+        Substructure newSubstructure = this.addSgroup();
+        for(int j=0;j< substructure.countAtoms();j++)
         {
-          newSgroup.addAtom(this.getAtom(sgroup.getAtom(j).getIndex()));
+          newSubstructure.addAtom(this.getAtom(substructure.getAtom(j).getIndex()));
         }
-        for(int j=0;j<sgroup.countBonds();j++)
+        for(int j=0;j< substructure.countBonds();j++)
         {
-            Bond bond = this.getBond(sgroup.getBond(j).getIndex());
-            newSgroup.addBond(bond);
-            newSgroup.setBondVector(bond,sgroup.getBondVector(sgroup.getBond(j)));
+            Bond crossingBond = substructure.getCrossingBond(j);
+            Bond bond = this.getBond(crossingBond.getIndex());
+            newSubstructure.addCrossingBond(bond);
+            newSubstructure.setCrossingVector(bond, substructure.getCrossingVectorX(crossingBond), substructure.getCrossingVectorY(crossingBond));
         }
-        newSgroup.setIdentifier(sgroup.getIdentifier());
-        newSgroup.setLabel(sgroup.getLabel());
+        newSubstructure.setLabel(substructure.getLabel());
     }
 
     endModify();
@@ -782,7 +782,7 @@ public class DefaultMolecule implements Molecule
     }
   }
 
-  private class SgroupImpl implements Sgroup{
+  private class SubstructureImpl implements Substructure {
       private List atoms;
       private List bonds;
       private String label;
@@ -790,7 +790,7 @@ public class DefaultMolecule implements Molecule
       private int identifier;      
       private Map bondVectorMap;
 
-      public SgroupImpl(Molecule parent)
+      public SubstructureImpl(Molecule parent)
       {
          molecule = parent;
          atoms = new ArrayList();
@@ -824,7 +824,7 @@ public class DefaultMolecule implements Molecule
           return (Atom) atoms.get(index);
       }
 
-      public Bond getBond(int index)
+      public Bond getCrossingBond(int index)
       {
           return (Bond) bonds.get(index);
       }
@@ -851,35 +851,42 @@ public class DefaultMolecule implements Molecule
           fireChange();
       }
 
-      public void addBond(Bond bond)
+      public void addCrossingBond(Bond bond)
       {
           bonds.add(bond);
+          //add default bond vector
+          double vectorX=bond.getTarget().getX()-bond.getSource().getX();
+          double vectorY=bond.getTarget().getY()-bond.getSource().getY();
+          setCrossingVector(bond,vectorX,vectorY);
+
           fireChange();
       }
 
-      public void removeBond(Bond bond)
+      public void removeCrossingBond(Bond bond)
       {
           bonds.remove(bond);
           fireChange();                   
       }
 
-      public void setBondVector(Bond bond, double[] vector) {
-          bondVectorMap.put(bond,vector);
+      public void setCrossingVector(Bond bond, double x, double y) {
+          bondVectorMap.put(bond, new double[]{x,y});
       }
 
-      public double[] getBondVector(Bond bond) {
-          return (double[]) bondVectorMap.get(bond);
+      public double getCrossingVectorX(Bond bond) {
+          return  ((double[])bondVectorMap.get(bond))[0];
+      }
+
+      public double getCrossingVectorY(Bond bond) {
+          return  ((double[])bondVectorMap.get(bond))[1];
+      }
+
+      public int getIndex() {
+          return DefaultMolecule.this.substructures.indexOf(this);
       }
 
       public int getIdentifier()
       {
           return identifier;
-      }
-
-      public void setIdentifier(int identifier)
-      {
-         this.identifier=identifier;
-         fireChange();
       }
 
       public Molecule getMolecule()

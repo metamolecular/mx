@@ -27,7 +27,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.model.Sgroup;
+import com.metamolecular.mx.model.Substructure;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.io.Molecules;
@@ -37,7 +37,7 @@ import junit.framework.TestCase;
 /**
  * @author Duan Lian
  */
-public class SgroupTest extends TestCase
+public class SubstructureTest extends TestCase
 {
   //TODO: test adding an atom from another molecule throws
   
@@ -70,34 +70,34 @@ public class SgroupTest extends TestCase
   public void testAddSgroup()
   {
       Molecule molecule = Molecules.createBenzene();
-      Sgroup sgroup = molecule.addSgroup();
+      Substructure substructure = molecule.addSgroup();
       assertEquals(1, molecule.countSgroups());
 
       for (int i = 0; i < molecule.countAtoms(); i++) {
-        sgroup.addAtom(molecule.getAtom(i));
+        substructure.addAtom(molecule.getAtom(i));
       }
       for (int i = 0; i < molecule.countBonds(); i++) {
-        sgroup.addBond(molecule.getBond(i));
+        substructure.addCrossingBond(molecule.getBond(i));
       }
       
-      assertEquals(6,sgroup.countAtoms());
-      assertEquals(6,sgroup.countBonds());
+      assertEquals(6, substructure.countAtoms());
+      assertEquals(6, substructure.countBonds());
 
       //Make a toluene molecule
       Atom methyl = molecule.addAtom("C");
       Bond bondOfMethyl = molecule.connect(methyl, molecule.getAtom(0), 1);
 
-      assertEquals(false,sgroup.contains(methyl));
-      assertEquals(false,sgroup.contains(bondOfMethyl));
+      assertEquals(false, substructure.contains(methyl));
+      assertEquals(false, substructure.contains(bondOfMethyl));
   }
 
   public void testShouldFailIfAddSgroupOfAnotherMolecule(){
       Molecule benzene = Molecules.createBenzene();
-      Sgroup sgroup = benzene.addSgroup();
+      Substructure substructure = benzene.addSgroup();
       Molecule acetone = Molecules.createAcetone();
       try
       {
-          acetone.addSgroup(sgroup);
+          acetone.addSgroup(substructure);
           fail();
       }catch(RuntimeException e){
 
@@ -107,19 +107,19 @@ public class SgroupTest extends TestCase
   public void testShouldContainsSgroupWhenCopied()
   {
       Molecule molecule = Molecules.createBenzene();
-      Sgroup sgroup = molecule.addSgroup();
+      Substructure substructure = molecule.addSgroup();
       Bond bond=molecule.getBond(0);
-      sgroup.addAtom(bond.getSource());
-      sgroup.addAtom(bond.getTarget());
-      sgroup.addBond(bond);
+      substructure.addAtom(bond.getSource());
+      substructure.addAtom(bond.getTarget());
+      substructure.addCrossingBond(bond);
 
       Molecule moleculeCopy=molecule.copy();
       assertEquals(1,moleculeCopy.countSgroups());
-      assertEquals(moleculeCopy.getBond(0),moleculeCopy.getSgroup(0).getBond(0));
+      assertEquals(moleculeCopy.getBond(0),moleculeCopy.getSgroup(0).getCrossingBond(0));
 
       moleculeCopy.copy(molecule);
       assertEquals(1,moleculeCopy.countSgroups());
-      assertEquals(moleculeCopy.getBond(0),moleculeCopy.getSgroup(0).getBond(0));
+      assertEquals(moleculeCopy.getBond(0),moleculeCopy.getSgroup(0).getCrossingBond(0));
   }
 
     

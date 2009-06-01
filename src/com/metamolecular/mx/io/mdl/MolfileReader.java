@@ -34,7 +34,7 @@ import java.util.List;
 
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.model.Sgroup;
+import com.metamolecular.mx.model.Substructure;
 
 /**
  * @author Richard L. Apodaca
@@ -264,7 +264,7 @@ public class MolfileReader
             String sgroupType = MDLStringKit.extractString(line, offset + 14, offset + 17);
             if (!"SUP".equals(sgroupType))
             {
-              throw new RuntimeException("Error parsing Sgroup, only Superatom is supported.");
+              throw new RuntimeException("Error parsing Substructure, only Superatom is supported.");
             }
             mol.addSgroup();
           }
@@ -277,49 +277,49 @@ public class MolfileReader
             int offset = i * 8;
             int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
             int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 14, offset + 17);
-            Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
-            sgroup.setIdentifier(sgroupIdentifier);
+            Substructure substructure = mol.getSgroup(sgroupIndex-1);
+//            substructure.setIdentifier(sgroupIdentifier);
           }
       }
       else if ("M  SAL".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSgroup(sgroupIndex-1);
           int entryCount = MDLStringKit.extractInt(line, 10, 13);          
           for (int i = 0; i < entryCount; i++)
           {
             int offset = i * 4;
             int atomIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
-            sgroup.addAtom(mol.getAtom(atomIndex-1));
+            substructure.addAtom(mol.getAtom(atomIndex-1));
           }
       }
       else if ("M  SBL".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSgroup(sgroupIndex-1);
           int entryCount = MDLStringKit.extractInt(line, 10, 13);
           for (int i = 0; i < entryCount; i++)
           {
             int offset = i * 4;
             int bondIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
-            sgroup.addBond(mol.getBond(bondIndex-1));
+            substructure.addCrossingBond(mol.getBond(bondIndex-1));
           }
       }
       else if ("M  SMT".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSgroup(sgroupIndex-1);
           String label = MDLStringKit.extractString(line, 10, line.length());
-          sgroup.setLabel(label);
+          substructure.setLabel(label);
       }
       else if ("M  SBV".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Sgroup sgroup = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSgroup(sgroupIndex-1);
           int bondIndex = MDLStringKit.extractInt(line, 10, 14);
           double x=MDLStringKit.extractFloat(line, 14, 24);
           double y=MDLStringKit.extractFloat(line, 24, 34);
-          sgroup.setBondVector(mol.getBond(bondIndex-1),new double[]{x,y});
+          substructure.setCrossingVector(mol.getBond(bondIndex-1),x,y);
       }
   }
 
