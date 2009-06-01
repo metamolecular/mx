@@ -171,7 +171,7 @@ public class DefaultMolecule implements Molecule
     fireChange();
   }
 
-    public void addSgroup(Substructure substructure) {
+    private void addSgroup(Substructure substructure) {
         if (substructure.getMolecule() != this)
         {
           throw new RuntimeException("Attempt to add substructure of another molecule.");
@@ -179,7 +179,7 @@ public class DefaultMolecule implements Molecule
         substructures.add(substructure);
     }
 
-    public void removeSgroup(Substructure substructure) {
+    public void removeSubstructure(Substructure substructure) {
         if (substructure.getMolecule() != this)
         {
           throw new RuntimeException("Attempt to remove substructure of another molecule.");
@@ -239,7 +239,7 @@ public class DefaultMolecule implements Molecule
     return bonds.size();
   }
 
-  public int countSgroups() {
+  public int countSubstructures() {
     return substructures.size();
   }
 
@@ -288,12 +288,12 @@ public class DefaultMolecule implements Molecule
     return null;
   }
 
-  public Substructure getSgroup(int i)
+  public Substructure getSubstructure(int i)
   {
     return (Substructure) substructures.get(i);
   }
 
-  public Substructure addSgroup()
+  public Substructure addSubstructure()
   {
       SubstructureImpl sgroup = new SubstructureImpl(this);
       addSgroup(sgroup);
@@ -328,10 +328,10 @@ public class DefaultMolecule implements Molecule
       newBond.stereo = oldBond.stereo;
     }
 
-      for (int i = 0; i < this.countSgroups(); i++)
+      for (int i = 0; i < this.countSubstructures(); i++)
       {
-          Substructure substructure = this.getSgroup(i);
-          Substructure newSubstructure = result.addSgroup();
+          Substructure substructure = this.getSubstructure(i);
+          Substructure newSubstructure = result.addSubstructure();
           for(int j=0;j< substructure.countAtoms();j++)
           {
             newSubstructure.addAtom(result.getAtom(substructure.getAtom(j).getIndex()));
@@ -378,10 +378,10 @@ public class DefaultMolecule implements Molecule
       connect(source, target, bond.getType(), bond.getStereo());
     }
 
-    for (int i = 0; i < molecule.countSgroups(); i++)
+    for (int i = 0; i < molecule.countSubstructures(); i++)
     {
-        Substructure substructure = molecule.getSgroup(i);
-        Substructure newSubstructure = this.addSgroup();
+        Substructure substructure = molecule.getSubstructure(i);
+        Substructure newSubstructure = this.addSubstructure();
         for(int j=0;j< substructure.countAtoms();j++)
         {
           newSubstructure.addAtom(this.getAtom(substructure.getAtom(j).getIndex()));

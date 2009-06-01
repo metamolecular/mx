@@ -37,8 +37,7 @@ public interface Molecule
   
   public int countBonds();
 
-  //TODO: public int countSubstructures();
-  public int countSgroups();
+  public int countSubstructures();
 
   public Atom getAtom(int index);
   
@@ -46,11 +45,9 @@ public interface Molecule
   
   public Bond getBond(Atom source, Atom target);
 
-  //TODO public Substructure getSubstructure(int index);
-  public Substructure getSgroup(int index);
+  public Substructure getSubstructure(int index);
 
-  //TODO public Substructure addSubstructure();
-  public Substructure addSgroup();
+  public Substructure addSubstructure();
 
   public Atom addAtom(String symbol, double x, double y, double z);
   
@@ -66,11 +63,7 @@ public interface Molecule
   
   public void disconnect(Atom source, Atom target);
 
-  //TODO: delete method
-  public void addSgroup(Substructure substructure);
-
-  //TODO: public void removeSubstructure(Substructure substructure);
-  public void removeSgroup(Substructure substructure);
+  public void removeSubstructure(Substructure substructure);
   
   public void clear();
   

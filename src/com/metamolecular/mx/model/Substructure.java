@@ -28,7 +28,6 @@ package com.metamolecular.mx.model;
 /**
  * @author Duan Lian
  */
-//TODO: public interface Substructure
 public interface Substructure {
     public String getLabel();
 

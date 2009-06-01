@@ -98,21 +98,21 @@ public class MolfileReaderTest extends TestCase
   {
     Molecule mr = new DefaultMolecule();
     reader.read(mr, sgroup);
-    assertEquals(2,mr.countSgroups());
+    assertEquals(2,mr.countSubstructures());
 
-    assertEquals(2,mr.getSgroup(0).countAtoms());
-    assertEquals(1,mr.getSgroup(0).countBonds());
-    assertEquals("OMe",mr.getSgroup(0).getLabel());
-
-
-    assertEquals(6,mr.getSgroup(1).countAtoms());
-    assertEquals(1,mr.getSgroup(1).countBonds());
-    assertEquals("Ph",mr.getSgroup(1).getLabel());
+    assertEquals(2,mr.getSubstructure(0).countAtoms());
+    assertEquals(1,mr.getSubstructure(0).countBonds());
+    assertEquals("OMe",mr.getSubstructure(0).getLabel());
 
 
-    Bond connectBond = mr.getSgroup(0).getCrossingBond(0);
-    assertEquals(0.8200, mr.getSgroup(0).getCrossingVectorX(connectBond),0.01);
-    assertEquals(0.0000, mr.getSgroup(0).getCrossingVectorY(connectBond),0.01);
+    assertEquals(6,mr.getSubstructure(1).countAtoms());
+    assertEquals(1,mr.getSubstructure(1).countBonds());
+    assertEquals("Ph",mr.getSubstructure(1).getLabel());
+
+
+    Bond connectBond = mr.getSubstructure(0).getCrossingBond(0);
+    assertEquals(0.8200, mr.getSubstructure(0).getCrossingVectorX(connectBond),0.01);
+    assertEquals(0.0000, mr.getSubstructure(0).getCrossingVectorY(connectBond),0.01);
   }
 
 }

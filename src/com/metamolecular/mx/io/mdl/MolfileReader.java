@@ -266,7 +266,7 @@ public class MolfileReader
             {
               throw new RuntimeException("Error parsing Substructure, only Superatom is supported.");
             }
-            mol.addSgroup();
+            mol.addSubstructure();
           }
       }
       else if ("M  SLB".equals(property))
@@ -277,14 +277,14 @@ public class MolfileReader
             int offset = i * 8;
             int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
             int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 14, offset + 17);
-            Substructure substructure = mol.getSgroup(sgroupIndex-1);
+            Substructure substructure = mol.getSubstructure(sgroupIndex-1);
 //            substructure.setIdentifier(sgroupIdentifier);
           }
       }
       else if ("M  SAL".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Substructure substructure = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSubstructure(sgroupIndex-1);
           int entryCount = MDLStringKit.extractInt(line, 10, 13);          
           for (int i = 0; i < entryCount; i++)
           {
@@ -296,7 +296,7 @@ public class MolfileReader
       else if ("M  SBL".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Substructure substructure = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSubstructure(sgroupIndex-1);
           int entryCount = MDLStringKit.extractInt(line, 10, 13);
           for (int i = 0; i < entryCount; i++)
           {
@@ -308,14 +308,14 @@ public class MolfileReader
       else if ("M  SMT".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Substructure substructure = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSubstructure(sgroupIndex-1);
           String label = MDLStringKit.extractString(line, 10, line.length());
           substructure.setLabel(label);
       }
       else if ("M  SBV".equals(property))
       {
           int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Substructure substructure = mol.getSgroup(sgroupIndex-1);
+          Substructure substructure = mol.getSubstructure(sgroupIndex-1);
           int bondIndex = MDLStringKit.extractInt(line, 10, 14);
           double x=MDLStringKit.extractFloat(line, 14, 24);
           double y=MDLStringKit.extractFloat(line, 24, 34);
