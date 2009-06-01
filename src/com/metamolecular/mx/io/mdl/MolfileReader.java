@@ -271,15 +271,17 @@ public class MolfileReader
       }
       else if ("M  SLB".equals(property))
       {
-          int entryCount = MDLStringKit.extractInt(line, 6, 9);
-          for (int i = 0; i < entryCount; i++)
-          {
-            int offset = i * 8;
-            int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
-            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 14, offset + 17);
-            Substructure substructure = mol.getSubstructure(sgroupIndex-1);
-//            substructure.setIdentifier(sgroupIdentifier);
-          }
+
+//        Ignore Identifier
+
+//          int entryCount = MDLStringKit.extractInt(line, 6, 9);
+//          for (int i = 0; i < entryCount; i++)
+//          {
+//            int offset = i * 8;
+//            int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
+//            int sgroupIdentifier = MDLStringKit.extractInt(line, offset + 14, offset + 17);
+//            Substructure substructure = mol.getSubstructure(sgroupIndex-1);
+//          }
       }
       else if ("M  SAL".equals(property))
       {

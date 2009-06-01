@@ -241,6 +241,15 @@ public class MolfileWriter
 
   private void writeSgroupProperty(Molecule molecule, Writer writer)
   {
+      int substructureCount = molecule.countSubstructures();
+      if(substructureCount >0)
+     {
+         writer.write(M + "STY" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
+     }
+     for(int i=0;i< substructureCount;i++){
+         writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
+         writer.write(MDLStringKit.padLeft("SUP", 4));    
+     }
 
   }
   

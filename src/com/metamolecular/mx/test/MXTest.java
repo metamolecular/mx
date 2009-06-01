@@ -60,6 +60,7 @@ public class MXTest
     suite.addTestSuite(PathGraphTest.class);
     suite.addTestSuite(HanserRingFinderTest.class);
     suite.addTestSuite(SubstructureTest.class);
+    suite.addTestSuite(MolfileWriterTest.class);
 
     TestRunner.run(suite);
   }
