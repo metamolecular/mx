@@ -47,7 +47,7 @@ public class DefaultMolecule implements Molecule
   private boolean changed;
   private ChangeEvent event;
 
-    public DefaultMolecule()
+  public DefaultMolecule()
   {
     hCounter = new VirtualHydrogenCounter();
     atoms = new ArrayList();
@@ -146,7 +146,15 @@ public class DefaultMolecule implements Molecule
 
   public void removeBond(Bond bond)
   {
-    disconnect(bond.getSource(), bond.getTarget());
+      for (int i = 0; i < substructures.size(); i++) {
+          Substructure substructure = (Substructure) substructures.get(i);
+          if (substructure.contains(bond)) {
+              substructure.removeCrossingBond(bond);
+          }
+      }
+
+      disconnect(bond.getSource(), bond.getTarget());
+
   }
 
   public void disconnect(Atom source, Atom target)
@@ -174,7 +182,7 @@ public class DefaultMolecule implements Molecule
     private void addSgroup(Substructure substructure) {
         if (substructure.getMolecule() != this)
         {
-          throw new RuntimeException("Attempt to add substructure of another molecule.");
+          throw new IllegalStateException("Attempt to add substructure of another molecule.");
         }
         substructures.add(substructure);
     }
@@ -182,7 +190,7 @@ public class DefaultMolecule implements Molecule
     public void removeSubstructure(Substructure substructure) {
         if (substructure.getMolecule() != this)
         {
-          throw new RuntimeException("Attempt to remove substructure of another molecule.");
+          throw new IllegalStateException("Attempt to remove substructure of another molecule.");
         }
         substructures.remove(substructures);
     }
@@ -213,6 +221,15 @@ public class DefaultMolecule implements Molecule
     for (int i = 0; i < neighbors.length; i++)
     {
       disconnect(atom, neighbors[i]);
+    }
+
+    for (int i = 0; i < substructures.size(); i++)
+    {
+        Substructure substructure = (Substructure) substructures.get(i);
+        if(substructure.contains(atom))
+        {
+            substructure.removeAtom(atom);
+        }
     }
 
     ((AtomImpl) atom).molecule = null;
@@ -840,52 +857,87 @@ public class DefaultMolecule implements Molecule
 
       public void addAtom(Atom atom)
       {
+          if(contains(atom))
+          {
+            throw new RuntimeException("Trying to add the same atom twice");    
+          }
+
+          assertAtomBelongs(atom);
           atoms.add(atom);
           fireChange();          
       }
 
       public void removeAtom(Atom atom)
       {
+          if(!contains(atom))
+          {
+            throw new RuntimeException("Trying to remove the non-existant atom");
+          }
+          
+          assertAtomBelongs(atom);
           atoms.remove(atom);
           fireChange();
       }
 
       public void addCrossingBond(Bond bond)
       {
+          assertBondBelongs(bond);
+          if(contains(bond))
+          {
+            throw new RuntimeException("Trying to add the same crossing bond twice");    
+          }
+
           bonds.add(bond);
           //add default bond vector
-          double vectorX=bond.getTarget().getX()-bond.getSource().getX();
-          double vectorY=bond.getTarget().getY()-bond.getSource().getY();
-          setCrossingVector(bond,vectorX,vectorY);
+          double x=bond.getTarget().getX()-bond.getSource().getX();
+          double y=bond.getTarget().getY()-bond.getSource().getY();
+          bondVectorMap.put(bond, new double[]{x,y});
 
           fireChange();
       }
 
       public void removeCrossingBond(Bond bond)
       {
+          assertCrossingBondBelongs(bond);
           bonds.remove(bond);
           fireChange();                   
       }
 
-      public void setCrossingVector(Bond bond, double x, double y) {
+      public void setCrossingVector(Bond bond, double x, double y)
+      {
+          assertCrossingBondBelongs(bond);
           bondVectorMap.put(bond, new double[]{x,y});
+          fireChange();
       }
 
-      public double getCrossingVectorX(Bond bond) {
+      public double getCrossingVectorX(Bond bond)
+      {
+          assertCrossingBondBelongs(bond);                    
           return  ((double[])bondVectorMap.get(bond))[0];
       }
 
-      public double getCrossingVectorY(Bond bond) {
+      public double getCrossingVectorY(Bond bond)
+      {
+          assertCrossingBondBelongs(bond);                              
           return  ((double[])bondVectorMap.get(bond))[1];
       }
 
-      public int getIndex() {
+      public int getIndex()
+      {
           return DefaultMolecule.this.substructures.indexOf(this);
       }
 
       public Molecule getMolecule()
       {
           return molecule;  
+      }
+
+      private void assertCrossingBondBelongs(Bond bond){
+          assertBondBelongs(bond);
+          if (!bonds.contains(bond))
+          {
+            throw new IllegalStateException("Attempt to use a non-crossing bond.");
+          }
       }
   }
 }

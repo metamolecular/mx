@@ -34,38 +34,184 @@ import com.metamolecular.mx.io.Molecules;
 
 import junit.framework.TestCase;
 
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
 /**
  * @author Duan Lian
  */
 public class SubstructureTest extends TestCase
 {
-  //TODO: test adding an atom from another molecule throws
+  public void testAddAtomFromAnotherMolecule(){
+      Molecule benzene = Molecules.createBenzene();
+      Substructure substructure = benzene.addSubstructure();
+      Molecule acetone = Molecules.createAcetone();
+      try
+      {
+          substructure.addAtom(acetone.getAtom(0));
+          fail();
+      }catch(IllegalStateException e){
+
+      }
+  }
   
-  //TODO: test adding crossing bond from another molecule throws
+  public void testAddBondFromAnotherMolecule()
+  {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Molecule acetone = Molecules.createAcetone();
+       try
+       {
+           substructure.addCrossingBond(acetone.getBond(0));
+           fail();
+       }catch(IllegalStateException e){
+
+       }
+  }
+
+  public void testAddAtomTwiceThrows()
+  {
+      Molecule benzene = Molecules.createBenzene();
+      Substructure substructure = benzene.addSubstructure();
+      try
+      {
+          substructure.addAtom(benzene.getAtom(0));
+          substructure.addAtom(benzene.getAtom(0));
+          fail();
+      }catch(RuntimeException e){
+
+      }
+  }
+
+  public void testAddCrossingBondTwiceThrows()
+  {
+      Molecule benzene = Molecules.createBenzene();
+      Substructure substructure = benzene.addSubstructure();
+      try
+      {
+          substructure.addCrossingBond(benzene.getBond(0));
+          substructure.addCrossingBond(benzene.getBond(0));
+          fail();
+      }catch(RuntimeException e){
+
+      }
+  }
+
+  public void testRemoveNonExistantAtom()
+  {
+      Molecule benzene = Molecules.createBenzene();
+      Substructure substructure = benzene.addSubstructure();
+      try
+      {
+          substructure.removeAtom(benzene.getAtom(0));
+          fail();
+      }catch(RuntimeException e){
+
+      }
+  }
+
+  public void testRemoveNonExistantCrossingBond()
+  {
+      Molecule benzene = Molecules.createBenzene();
+      Substructure substructure = benzene.addSubstructure();
+      try
+      {
+          substructure.removeCrossingBond(benzene.getBond(0));
+          fail();
+      }catch(RuntimeException e){
+
+      }
+  }
+
+  public void testSetVectorForNonExistantCrossingBond(){
+      Molecule benzene = Molecules.createBenzene();
+      Substructure substructure = benzene.addSubstructure();
+      try
+      {
+          substructure.setCrossingVector(benzene.getBond(0),0.1,0.1);
+          fail();
+      }catch(RuntimeException e){
+
+      }
+   }
+
+   public void testShouldRemoveAtomFromSubstructure()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Atom atom=benzene.getAtom(0);
+       substructure.addAtom(atom);
+       benzene.removeAtom(atom);
+       assertEquals(0,substructure.countAtoms());
+   }
   
-  //TODO: test adding the same atom twice throws
-  
-  //TODO: test adding the same crossing bond twice throws
-  
-  //TODO: test removing nonexistant atom throws
-  
-  //TODO: test removing nonexitant crossing bond throws
-  
-  //TODO: test setting crossing vector for nonexistant bond throws
-  
-  //TODO: test deleting atom from molecule deletes atom from substructure as well
-  
-  //TODO: test deleting bond from molecule deletes crossing bond from substructure
-  
-  //TODO: test adding atom fires event
-  
-  //TODO: test removing atom fires event
-  
-  //TODO: test adding crossing bond fires event
-  
-  //TODO: test removing crossing bond fires event
-  
-  //TODO: test changing crossing vector fires event
+   public void testShouldRemoveCrossingBondFromSubstructure()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Bond bond=benzene.getBond(0);
+       substructure.addCrossingBond(bond);
+       benzene.removeBond(bond);
+       assertEquals(0,substructure.countBonds());
+   }
+
+   public void testAddAtomShouldFiresEvent()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Listener listener = new Listener();
+       benzene.addChangeListener(listener);
+       substructure.addAtom(benzene.getAtom(0));
+       assertEquals(1, listener.count);
+   }
+
+   public void testRemoveAtomShouldFiresEvent()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Atom atom = benzene.getAtom(0);
+       substructure.addAtom(atom);
+       Listener listener = new Listener();
+       benzene.addChangeListener(listener);
+       substructure.removeAtom(atom);
+       assertEquals(1, listener.count);
+   }
+
+
+   public void testAddCrossingBondShouldFiresEvent()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Listener listener = new Listener();
+       benzene.addChangeListener(listener);
+       substructure.addCrossingBond(benzene.getBond(0));
+       assertEquals(1, listener.count);
+   }
+
+   public void testRemoveCrossingBondShouldFiresEvent()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Bond bond = benzene.getBond(0);
+       substructure.addCrossingBond(bond);
+       Listener listener = new Listener();
+       benzene.addChangeListener(listener);
+       substructure.removeCrossingBond(bond);
+       assertEquals(1, listener.count);
+   }
+
+   public void testSetCrossingVectorShouldFiresEvent()
+   {
+       Molecule benzene = Molecules.createBenzene();
+       Substructure substructure = benzene.addSubstructure();
+       Bond bond = benzene.getBond(0);
+       substructure.addCrossingBond(bond);
+
+       Listener listener = new Listener();
+       benzene.addChangeListener(listener);       
+       substructure.setCrossingVector(bond,0.1,0.1);
+       assertEquals(1, listener.count);
+   }
   
   public void testAddSgroup()
   {
@@ -91,19 +237,6 @@ public class SubstructureTest extends TestCase
       assertEquals(false, substructure.contains(bondOfMethyl));
   }
 
-//  public void testShouldFailIfAddSgroupOfAnotherMolecule(){
-//      Molecule benzene = Molecules.createBenzene();
-//      Substructure substructure = benzene.addSubstructure();
-//      Molecule acetone = Molecules.createAcetone();
-//      try
-//      {
-//          acetone.addSgroup(substructure);
-//          fail();
-//      }catch(RuntimeException e){
-//
-//      }
-//  }
-
   public void testShouldContainsSgroupWhenCopied()
   {
       Molecule molecule = Molecules.createBenzene();
@@ -122,7 +255,12 @@ public class SubstructureTest extends TestCase
       assertEquals(moleculeCopy.getBond(0),moleculeCopy.getSubstructure(0).getCrossingBond(0));
   }
 
-    
+  private class Listener implements ChangeListener
+  {
+      private int count = 0;
 
-
+      public void stateChanged(ChangeEvent e) {
+          count++;
+      }
+  }
 }
