@@ -299,8 +299,6 @@ public class MolfileWriter
           writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorY(crossingBond)), 10));
           writer.writeLine();
       }
-
-
   }
 
     private class Writer
