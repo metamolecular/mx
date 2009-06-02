@@ -34,22 +34,14 @@ import com.metamolecular.mx.io.Molecules;
  */
 public class MolfileWriterTest extends TestCase
 {
-    public void testWriter()
+    public void testWriterOutputsSubstructure()
     {
-        Molecule benzene = Molecules.createBenzene();
-        Atom carbon1=benzene.addAtom("C");
-        Atom carbon2=benzene.addAtom("C");
-        Bond crossingBond=benzene.connect(benzene.getAtom(0),carbon1,1);
-        benzene.connect(carbon1,carbon2,1);
+        Molecule ethylbenzene = Molecules.createEthylbenzeneWithSubstructure();
 
-        Substructure substructure=benzene.addSubstructure();
-        substructure.addAtom(carbon1);
-        substructure.addAtom(carbon2);
-        substructure.addCrossingBond(crossingBond);
-        substructure.setCrossingVector(crossingBond,0.1,0.1);
-        substructure.setLabel("Ethyl");
+        String molfile=MoleculeKit.writeMolfile(ethylbenzene);
 
-        System.out.println(MoleculeKit.writeMolfile(benzene));
+        Molecule molecule=MoleculeKit.readMolfile(molfile);
 
+        assertEquals(1,molecule.countSubstructures());
     }
 }
