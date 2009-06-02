@@ -152,7 +152,7 @@ public class SubstructureTest extends TestCase
        Bond bond=benzene.getBond(0);
        substructure.addCrossingBond(bond);
        benzene.removeBond(bond);
-       assertEquals(0,substructure.countBonds());
+       assertEquals(0,substructure.countCrossingBonds());
    }
 
    public void testAddAtomShouldFiresEvent()
@@ -227,7 +227,7 @@ public class SubstructureTest extends TestCase
       }
       
       assertEquals(6, substructure.countAtoms());
-      assertEquals(6, substructure.countBonds());
+      assertEquals(6, substructure.countCrossingBonds());
 
       //Make a toluene molecule
       Atom methyl = molecule.addAtom("C");

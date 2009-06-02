@@ -25,16 +25,31 @@
  */
 package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.io.Molecules;
-import com.metamolecular.mx.io.mdl.SDFileWriter;
-import com.metamolecular.mx.model.Molecule;
-import java.io.File;
 import junit.framework.TestCase;
+import com.metamolecular.mx.model.*;
+import com.metamolecular.mx.io.Molecules;
 
 /**
  * @author Duan Lian
  */
 public class MolfileWriterTest extends TestCase
 {
+    public void testWriter()
+    {
+        Molecule benzene = Molecules.createBenzene();
+        Atom carbon1=benzene.addAtom("C");
+        Atom carbon2=benzene.addAtom("C");
+        Bond crossingBond=benzene.connect(benzene.getAtom(0),carbon1,1);
+        benzene.connect(carbon1,carbon2,1);
 
+        Substructure substructure=benzene.addSubstructure();
+        substructure.addAtom(carbon1);
+        substructure.addAtom(carbon2);
+        substructure.addCrossingBond(crossingBond);
+        substructure.setCrossingVector(crossingBond,0.1,0.1);
+        substructure.setLabel("Ethyl");
+
+        System.out.println(MoleculeKit.writeMolfile(benzene));
+
+    }
 }

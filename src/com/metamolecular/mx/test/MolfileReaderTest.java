@@ -101,12 +101,12 @@ public class MolfileReaderTest extends TestCase
     assertEquals(2,mr.countSubstructures());
 
     assertEquals(2,mr.getSubstructure(0).countAtoms());
-    assertEquals(1,mr.getSubstructure(0).countBonds());
+    assertEquals(1,mr.getSubstructure(0).countCrossingBonds());
     assertEquals("OMe",mr.getSubstructure(0).getLabel());
 
 
     assertEquals(6,mr.getSubstructure(1).countAtoms());
-    assertEquals(1,mr.getSubstructure(1).countBonds());
+    assertEquals(1,mr.getSubstructure(1).countCrossingBonds());
     assertEquals("Ph",mr.getSubstructure(1).getLabel());
 
 

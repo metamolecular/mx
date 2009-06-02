@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.model.Substructure;
 
 /**
  * @author Richard L. Apodaca
@@ -241,19 +242,68 @@ public class MolfileWriter
 
   private void writeSgroupProperty(Molecule molecule, Writer writer)
   {
-      int substructureCount = molecule.countSubstructures();
-      if(substructureCount >0)
+     if(molecule.countSubstructures() >0)
      {
-         writer.write(M + "STY" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
+         writeSgroupCount(molecule,writer);
+         for(int i=0;i< molecule.countSubstructures();i++){
+            writeSingleSgroup(molecule.getSubstructure(i),writer);
+         }
      }
-     for(int i=0;i< substructureCount;i++){
-         writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
-         writer.write(MDLStringKit.padLeft("SUP", 4));    
-     }
+  }
+
+  private void writeSgroupCount(Molecule molecule, Writer writer)
+  {
+      int substructureCount = molecule.countSubstructures();      
+      writer.write(M + "STY" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
+      for(int i=0;i< substructureCount;i++){
+          writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
+          writer.write(MDLStringKit.padLeft("SUP", 4));
+      }
+      writer.writeLine();
+
+      writer.write(M + "SLB" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
+      for(int i=0;i< substructureCount;i++){
+          writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
+          writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
+      }
+      writer.writeLine();
 
   }
-  
-  private class Writer
+
+  private void writeSingleSgroup(Substructure substructure,Writer writer)
+  {
+      writer.write(M + "SAL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countAtoms()),4));
+      for(int i=0;i<substructure.countAtoms();i++)
+      {
+          writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getAtom(i).getIndex()+1),4));
+      }
+      writer.writeLine();
+
+      writer.write(M + "SBL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countCrossingBonds()),4));
+      for(int i=0;i<substructure.countCrossingBonds();i++)
+      {
+          writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getCrossingBond(i).getIndex()+1),4));
+      }
+      writer.writeLine();
+
+      writer.writeLine(M + "SMT" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4) + " " + substructure.getLabel());
+
+      writer.writeLine(M + "SCL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4) + "  ");
+
+      for(int i=0;i<substructure.countCrossingBonds();i++)
+      {
+          Bond crossingBond = substructure.getCrossingBond(i);          
+          writer.write(M + "SBV" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4));
+          writer.write(MDLStringKit.padLeft(String.valueOf(crossingBond.getIndex()+1),4));
+          writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorX(crossingBond)), 10));
+          writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorY(crossingBond)), 10));
+          writer.writeLine();
+      }
+
+
+  }
+
+    private class Writer
   {
     private StringBuffer buffer;
     

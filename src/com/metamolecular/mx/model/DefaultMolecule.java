@@ -353,7 +353,7 @@ public class DefaultMolecule implements Molecule
           {
             newSubstructure.addAtom(result.getAtom(substructure.getAtom(j).getIndex()));
           }
-          for(int j=0;j< substructure.countBonds();j++)
+          for(int j=0;j< substructure.countCrossingBonds();j++)
           {
             Bond crossingBond = substructure.getCrossingBond(j);
             Bond bond = result.getBond(crossingBond.getIndex());
@@ -403,7 +403,7 @@ public class DefaultMolecule implements Molecule
         {
           newSubstructure.addAtom(this.getAtom(substructure.getAtom(j).getIndex()));
         }
-        for(int j=0;j< substructure.countBonds();j++)
+        for(int j=0;j< substructure.countCrossingBonds();j++)
         {
             Bond crossingBond = substructure.getCrossingBond(j);
             Bond bond = this.getBond(crossingBond.getIndex());
@@ -812,6 +812,7 @@ public class DefaultMolecule implements Molecule
          atoms = new ArrayList();
          bonds = new ArrayList();
          bondVectorMap = new HashMap();
+         label = "";
       }
 
       public String getLabel()
@@ -830,7 +831,7 @@ public class DefaultMolecule implements Molecule
           return atoms.size();
       }
 
-      public int countBonds()
+      public int countCrossingBonds()
       {
           return bonds.size();
       }
