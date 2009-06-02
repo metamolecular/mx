@@ -35,7 +35,7 @@ public interface Substructure {
 
     public int countAtoms();
 
-    public int countBonds();
+    public int countCrossingBonds();
 
     public Atom getAtom(int index);
 
