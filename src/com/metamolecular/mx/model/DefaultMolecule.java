@@ -192,7 +192,11 @@ public class DefaultMolecule implements Molecule
         {
           throw new IllegalStateException("Attempt to remove substructure of another molecule.");
         }
-        substructures.remove(substructures);
+        if (!substructures.contains(substructure))
+        {
+          throw new IllegalStateException("Attempt to remove non-existant substructure.");
+        }
+        substructures.remove(substructure);
     }
 
     public void endModify()
@@ -899,6 +903,11 @@ public class DefaultMolecule implements Molecule
 
       public void removeCrossingBond(Bond bond)
       {
+          if(!contains(bond))
+          {
+            throw new RuntimeException("Trying to remove the non-existant crossing bond");
+          }
+
           assertCrossingBondBelongs(bond);
           bonds.remove(bond);
           fireChange();                   

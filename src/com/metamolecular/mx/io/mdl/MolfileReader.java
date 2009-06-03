@@ -240,9 +240,9 @@ public class MolfileReader
 
       }
 
-      catch (Exception ignore)
+      catch (Exception e)
       {
-        //throw new RuntimeException("Can't create property at line " + (startLine + i) + ".\n" + e.getLocalizedMessage() + "\n" + lines[i]);
+        throw new RuntimeException("Can't create property at line " + (startLine + i) + ".\n" + e.getLocalizedMessage() + "\n" + lines[i]);
       }
     }
   }

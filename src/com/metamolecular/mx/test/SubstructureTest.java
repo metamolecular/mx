@@ -255,6 +255,50 @@ public class SubstructureTest extends TestCase
       assertEquals(moleculeCopy.getBond(0),moleculeCopy.getSubstructure(0).getCrossingBond(0));
   }
 
+
+    //TODO: test removing nonexistant substructure (from same molecule) throws - i.e.,
+    //      the substructure was already deleted once before
+  public void testGetSubstructureWithInalidIdThrows()
+  {
+      Molecule molecule = Molecules.createEthylbenzeneWithSubstructure();
+      try
+      {
+          molecule.getSubstructure(2);
+          fail();
+      }catch(IndexOutOfBoundsException e)
+      {
+
+      }
+  }
+  public void testRemoveSubstructureFromDifferentMoleculeThrows()
+  {
+      Molecule molecule = Molecules.createEthylbenzeneWithSubstructure();
+      Molecule anotherMolecule = Molecules.createEthylbenzeneWithSubstructure();
+      try
+      {
+         molecule.removeSubstructure(anotherMolecule.getSubstructure(0));
+         fail();
+      }catch(IllegalStateException e)
+      {
+
+      }
+  }
+
+  public void testRemovingNonExistantSubstructureThrows()
+  {
+      Molecule molecule = Molecules.createEthylbenzeneWithSubstructure();
+      Substructure substructure = molecule.getSubstructure(0);
+      molecule.removeSubstructure(substructure);
+      try
+      {
+          molecule.removeSubstructure(substructure);
+          fail();
+      }catch(Exception e)
+      {
+
+      }
+  }
+
   private class Listener implements ChangeListener
   {
       private int count = 0;
