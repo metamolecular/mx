@@ -39,9 +39,7 @@ public class MolfileWriterTest extends TestCase
         Molecule ethylbenzene = Molecules.createEthylbenzeneWithSubstructure();
 
         String molfile=MoleculeKit.writeMolfile(ethylbenzene);
-
         Molecule molecule=MoleculeKit.readMolfile(molfile);
-
         assertEquals(1,molecule.countSubstructures());
     }
 }

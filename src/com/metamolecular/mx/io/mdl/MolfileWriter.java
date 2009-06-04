@@ -272,14 +272,14 @@ public class MolfileWriter
 
   private void writeSingleSgroup(Substructure substructure,Writer writer)
   {
-      writer.write(M + "SAL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countAtoms()),4));
+      writer.write(M + "SAL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countAtoms()),3));
       for(int i=0;i<substructure.countAtoms();i++)
       {
           writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getAtom(i).getIndex()+1),4));
       }
       writer.writeLine();
 
-      writer.write(M + "SBL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countCrossingBonds()),4));
+      writer.write(M + "SBL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countCrossingBonds()),3));
       for(int i=0;i<substructure.countCrossingBonds();i++)
       {
           writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getCrossingBond(i).getIndex()+1),4));
