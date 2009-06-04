@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.query;
 
 import com.metamolecular.mx.model.Atom;
@@ -33,97 +32,160 @@ import com.metamolecular.mx.model.Atom;
  */
 public class DefaultAtomMatcher implements AtomMatcher
 {
+
   private String symbol;
   private int maximumNeighbors;
   private int minimumNeighbors;
-  
+  private int minimumValence;
+  private int maximumValence;
+
   public DefaultAtomMatcher()
   {
     symbol = null;
     maximumNeighbors = -1;
     minimumNeighbors = -1;
+    minimumValence = -1;
+    maximumValence = -1;
   }
-  
+
   public DefaultAtomMatcher(Atom atom)
   {
     this();
-    
+
     this.symbol = atom.getSymbol();
     this.minimumNeighbors = atom.countNeighbors();
   }
-  
+
   public boolean matches(Atom atom)
   {
     if (!matchSymbol(atom))
     {
       return false;
     }
-    
+
     if (!matchMaximumNeighbors(atom))
     {
       return false;
     }
-    
+
     if (!matchMinimumNeighbors(atom))
     {
       return false;
     }
     
+    if (!matchMinimumValence(atom))
+    {
+      return false;
+    }
+    
+    if (!matchMaximumValence(atom))
+    {
+      return false;
+    }
+
+//    int totalQueryNeighbors = match.getQueryAtom().countNeighbors() +
+//            match.getQueryAtom().countVirtualHydrogens();
+//    int totalTargetNeighbors = match.getTargetAtom().countNeighbors() +
+//            match.getTargetAtom().countVirtualHydrogens();
+//
+//    if (totalQueryNeighbors > totalTargetNeighbors)
+//    {
+//      return false;
+//    }
+
     return true;
   }
   
+  public void setMinimumValence(int minimum)
+  {
+    if (minimum > maximumValence && maximumValence != -1)
+    {
+      throw new IllegalStateException("Minimum " + minimum + " exceeds maximum");
+    }
+    this.minimumValence = minimum;
+  }
+  
+  public void setMaximumValence(int maximum)
+  {
+    if (maximum < minimumValence)
+    {
+      throw new IllegalStateException("Maximum " + maximum + " less than minimum");
+    }
+    this.maximumValence = maximum;
+  }
+
   public void setMaximumNeighbors(int maximum)
   {
     if (maximum < minimumNeighbors)
     {
       throw new IllegalStateException("Maximum " + maximum + " exceeds minimum " + minimumNeighbors);
     }
-    
+
     this.maximumNeighbors = maximum;
   }
-  
+
   public void setMinimumNeighbors(int minimum)
   {
     if (minimum > maximumNeighbors && maximumNeighbors != -1)
     {
       throw new IllegalStateException("Minimum " + minimum + " exceeds maximum " + maximumNeighbors);
     }
-    
+
     this.minimumNeighbors = minimum;
   }
-  
+
   public void setSymbol(String symbol)
   {
     this.symbol = symbol;
   }
-  
+
   private boolean matchSymbol(Atom atom)
   {
     if (symbol == null)
     {
       return true;
     }
-    
+
     return symbol.equals(atom.getSymbol());
   }
-  
+
   private boolean matchMaximumNeighbors(Atom atom)
   {
     if (maximumNeighbors == -1)
     {
       return true;
     }
-    
+
     return atom.countNeighbors() <= maximumNeighbors;
   }
-  
+
   private boolean matchMinimumNeighbors(Atom atom)
   {
     if (minimumNeighbors == -1)
     {
       return true;
     }
-    
+
     return atom.countNeighbors() >= minimumNeighbors;
+  }
+  
+  private boolean matchMinimumValence(Atom atom)
+  {
+    if (minimumValence == -1)
+    {
+      return true;
+    }
+    
+    return atom.countNeighbors() + atom.countVirtualHydrogens() >= minimumValence;
+  }
+  
+  private boolean matchMaximumValence(Atom atom)
+  {
+    if (maximumValence == -1)
+    {
+      return true;
+    }
+    
+    return atom.countNeighbors() + atom.countVirtualHydrogens() <= maximumValence;
   }
 }

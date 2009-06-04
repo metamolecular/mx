@@ -90,6 +90,65 @@ public class DefaultAtomMatcherTest extends TestCase
 
     assertFalse(matcher.matches(phenol.getAtom(6)));
   }
+  
+  public void testItShouldMatchBasedOnMinimumValence()
+  {
+    matcher.setMinimumValence(3);
+    
+    assertTrue(matcher.matches(phenol.getAtom(0)));
+  }
+  
+  public void testItShouldNotMatchBasedOnMinimumValence()
+  {
+    matcher.setMinimumValence(4);
+    
+    assertFalse(matcher.matches(phenol.getAtom(0)));
+  }
+  
+  public void testItShouldMatchBasedOnMaximumValence()
+  {
+    matcher.setMaximumValence(3);
+    
+    assertTrue(matcher.matches(phenol.getAtom(0)));
+  }
+  
+  public void testItShouldNotMatchBasedOnMaximumValence()
+  {
+    matcher.setMaximumValence(2);
+    
+    assertFalse(matcher.matches(phenol.getAtom(0)));
+  }
+  
+  public void testItThrowsWhenMaximumValenceLessThanMinimumaValence()
+  {
+    matcher.setMinimumValence(3);
+    try
+    {
+      matcher.setMaximumValence(2);
+      fail();
+    }
+    
+    catch(IllegalStateException e)
+    {
+      
+    }
+  }
+  
+  public void testItThrowsWhenMinimumValenceGreaterThanMaximumValence()
+  {
+    matcher.setMaximumValence(3);
+    
+    try
+    {
+      matcher.setMinimumValence(4);
+      fail();
+    }
+    
+    catch(IllegalStateException e)
+    {
+      
+    }
+  }
 
   public void testItShouldThrowWhenMinimumNeighborsSetHigherThanMaximumNeighbors()
   {
