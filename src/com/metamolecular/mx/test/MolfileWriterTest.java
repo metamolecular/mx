@@ -45,17 +45,12 @@ public class MolfileWriterTest extends TestCase
         Molecule molecule = MoleculeKit.readMolfile(molfile);
         assertEquals(1, molecule.countSubstructures());
     }
-    public void testWriterOutputReaderInput() throws FileNotFoundException {
+    public void testWriterOutputReaderInput() throws IOException {
         File[] molfiles = new File("../resources/molfiles").listFiles();
         for (File molfile : molfiles)
         {
             String content = null;
-            try {
-                content = getFileContent(molfile);
-            } catch (IOException e) {
-                e.printStackTrace();
-                fail("File reading failed");
-            }
+            content = getFileContent(molfile);
             Molecule molecule1 = MoleculeKit.readMolfile(content);
             String molfile1 = MoleculeKit.writeMolfile(molecule1);
             Molecule molecule2 = MoleculeKit.readMolfile(molfile1);
