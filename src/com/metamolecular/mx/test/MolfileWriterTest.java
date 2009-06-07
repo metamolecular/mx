@@ -28,6 +28,9 @@ package com.metamolecular.mx.test;
 import junit.framework.TestCase;
 import com.metamolecular.mx.model.*;
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.io.mdl.MolfileReader;
+
+import java.io.*;
 
 /**
  * @author Duan Lian
@@ -38,8 +41,35 @@ public class MolfileWriterTest extends TestCase
     {
         Molecule ethylbenzene = Molecules.createEthylbenzeneWithSubstructure();
 
-        String molfile=MoleculeKit.writeMolfile(ethylbenzene);
-        Molecule molecule=MoleculeKit.readMolfile(molfile);
-        assertEquals(1,molecule.countSubstructures());
+        String molfile = MoleculeKit.writeMolfile(ethylbenzene);
+        Molecule molecule = MoleculeKit.readMolfile(molfile);
+        assertEquals(1, molecule.countSubstructures());
+    }
+    public void testWriterOutputReaderInput() throws FileNotFoundException {
+        File[] molfiles = new File("../resources/molfiles").listFiles();
+        for (File molfile : molfiles)
+        {
+            String content = null;
+            try {
+                content = getFileContent(molfile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                fail("File reading failed");
+            }
+            Molecule molecule1 = MoleculeKit.readMolfile(content);
+            String molfile1 = MoleculeKit.writeMolfile(molecule1);
+            Molecule molecule2 = MoleculeKit.readMolfile(molfile1);
+            String molfile2 = MoleculeKit.writeMolfile(molecule2);
+            assertEquals(molfile1,molfile2);
+        }
+    }
+    private String getFileContent(File file) throws IOException {
+        StringBuffer stringBuffer = new StringBuffer();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuffer.append(line+"\n");
+        }
+        return stringBuffer.toString();
     }
 }
