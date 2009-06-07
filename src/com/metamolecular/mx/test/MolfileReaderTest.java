@@ -38,9 +38,6 @@ import junit.framework.TestCase;
  */
 public class MolfileReaderTest extends TestCase
 {
-  //TODO: test invalid substructure-containing molfile throws expected
-  //      exceptions (~3-4 different cases)
-  
   private String TEMPO = null;
   private String methylRadical = null;
   private String sgroup = null;
