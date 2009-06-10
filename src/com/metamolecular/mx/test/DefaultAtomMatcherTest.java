@@ -193,4 +193,11 @@ public class DefaultAtomMatcherTest extends TestCase
     
     assertTrue(matcher.matches(phenol.getAtom(5)));
   }
+  
+  public void testItDoesntMatchCyclohexaneCarbonToPhenolCarbon()
+  {
+    matcher = new DefaultAtomMatcher(Molecules.createCyclohexane().getAtom(0));
+    
+    assertFalse(matcher.matches(phenol.getAtom(2)));
+  }
 }

@@ -54,6 +54,7 @@ public class DefaultAtomMatcher implements AtomMatcher
 
     this.symbol = atom.getSymbol();
     this.minimumNeighbors = atom.countNeighbors();
+    this.minimumValence = atom.countNeighbors() + atom.countVirtualHydrogens();
   }
 
   public boolean matches(Atom atom)
