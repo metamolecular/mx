@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.io.mdl;
 
 import java.text.DecimalFormat;
@@ -41,6 +40,7 @@ import com.metamolecular.mx.model.Superatom;
  */
 public class MolfileWriter
 {
+
   private static String ZERO2 = " 0";
   private static String ZERO3 = "  0";
   private static String CHIRAL_OFF = ZERO3;
@@ -51,54 +51,54 @@ public class MolfileWriter
   private static String M = "M  ";
   private static String M_END = M + "END";
   
+
   static
   {
     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-    
+
     symbols.setDecimalSeparator(".".charAt(0));
     COORD.setDecimalFormatSymbols(symbols);
   }
-  
+
   public MolfileWriter()
   {
-    
   }
 
   public String write(Molecule molecule)
   {
     Writer writer = new Writer();
-    
+
     writeHeader(molecule, writer);
     writeCounts(molecule, writer);
     writeAtoms(molecule, writer);
     writeBonds(molecule, writer);
     writeProperties(molecule, writer);
-    
+
     return writer.getString();
   }
-  
+
   private void writeHeader(Molecule molecule, Writer writer)
   {
     writeName(molecule, writer);
     writeParameters(molecule, writer);
     writeComments(molecule, writer);
   }
-  
+
   private void writeName(Molecule molecule, Writer writer)
   {
     writer.writeLine("[NO NAME]");
   }
-  
+
   private void writeParameters(Molecule molecule, Writer writer)
   {
     writer.writeLine("  CHEMWRIT          2D");
   }
-  
+
   private void writeComments(Molecule molecule, Writer writer)
   {
     writer.writeLine("Created with ChemWriter - http://metamolecular.com/chemwriter");
   }
-  
+
   private void writeCounts(Molecule molecule, Writer writer)
   {
     writer.write(MDLStringKit.padLeft(String.valueOf(molecule.countAtoms()), 3));
@@ -106,23 +106,23 @@ public class MolfileWriter
     writer.write(ZERO3);
     writer.write(ZERO3);
     writer.write(CHIRAL_OFF);
-    
+
     for (int i = 0; i < 5; i++)
     {
       writer.write(ZERO3);
     }
-    
+
     writer.write(MDLStringKit.padLeft(String.valueOf(0), 3));
     writer.write(VERSION);
     writer.write(NEWLINE);
   }
-  
+
   private void writeAtoms(Molecule molecule, Writer writer)
   {
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
       Atom atom = molecule.getAtom(i);
-      
+
       writer.write(MDLStringKit.padLeft(COORD.format(atom.getX()), 10));
       writer.write(MDLStringKit.padLeft(COORD.format(atom.getY()), 10));
       writer.write(MDLStringKit.padLeft(COORD.format(atom.getZ()), 10));
@@ -131,28 +131,40 @@ public class MolfileWriter
       writer.write(ZERO2);
 
       String chargeString = "0";
-      
+
       switch (atom.getCharge())
       {
-        case 1:  chargeString = "3"; break;
-        case 2:  chargeString = "2"; break;
-        case 3:  chargeString = "1"; break;
-        case -1:  chargeString = "5"; break;
-        case -2:  chargeString = "6"; break;
-        case -3:  chargeString = "7"; break;
+        case 1:
+          chargeString = "3";
+          break;
+        case 2:
+          chargeString = "2";
+          break;
+        case 3:
+          chargeString = "1";
+          break;
+        case -1:
+          chargeString = "5";
+          break;
+        case -2:
+          chargeString = "6";
+          break;
+        case -3:
+          chargeString = "7";
+          break;
       }
-      
+
       writer.write(MDLStringKit.padLeft(chargeString, 3));
-      
+
       for (int j = 0; j < 10; j++)
       {
         writer.write(ZERO3);
       }
-      
+
       writer.writeLine();
     }
   }
-  
+
   private void writeBonds(Molecule molecule, Writer writer)
   {
     for (int i = 0; i < molecule.countBonds(); i++)
@@ -162,21 +174,21 @@ public class MolfileWriter
       Atom target = bond.getTarget();
       int sourceIndex = source.getIndex() + 1;
       int targetIndex = target.getIndex() + 1;
-      
+
       writer.write(MDLStringKit.padLeft(String.valueOf(sourceIndex), 3));
       writer.write(MDLStringKit.padLeft(String.valueOf(targetIndex), 3));
       writer.write(MDLStringKit.padLeft(String.valueOf(bond.getType()), 3));
       writer.write(MDLStringKit.padLeft(String.valueOf(bond.getStereo()), 3));
-      
+
       for (int j = 0; j < 3; j++)
       {
         writer.write(ZERO3);
       }
-      
+
       writer.writeLine();
     }
   }
-  
+
   private void writeProperties(Molecule molecule, Writer writer)
   {
     writeChargeProperty(molecule, writer);
@@ -186,12 +198,12 @@ public class MolfileWriter
 
     writer.write(M_END);
   }
-  
+
   private void writeChargeProperty(Molecule molecule, Writer writer)
   {
     List charges = new ArrayList();
     List row = new ArrayList();
-    
+
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
       if (molecule.getAtom(i).getCharge() != 0)
@@ -199,135 +211,143 @@ public class MolfileWriter
         if (row.size() == 8)
         {
           charges.add(row);
-          
+
           row = new ArrayList();
         }
-        
+
         row.add(molecule.getAtom(i));
       }
     }
-    
-    if (!charges.contains(row) && !row.isEmpty()) charges.add(row);
-    if (charges.isEmpty()) return;
-    
+
+    if (!charges.contains(row) && !row.isEmpty())
+    {
+      charges.add(row);
+    }
+    if (charges.isEmpty())
+    {
+      return;
+    }
     for (int i = 0; i < charges.size(); i++)
     {
       row = (List) charges.get(i);
-      
+
       writer.write(M + "CHG" + MDLStringKit.padLeft(String.valueOf(row.size()), 3));
-      
+
       for (int j = 0; j < row.size(); j++)
       {
         Atom atom = (Atom) row.get(j);
         int index = atom.getIndex() + 1;
         //int index = molecule.getAtomIndex(atom) + 1;
         int charge = atom.getCharge();
-        
+
         writer.write(" " + MDLStringKit.padLeft(String.valueOf(index), 3) + " " + MDLStringKit.padLeft(String.valueOf(charge), 3));
       }
-      
+
       writer.writeLine();
     }
   }
-  
+
   private void writeIsotopicProperty(Molecule molecule, Writer writer)
   {
-
   }
-  
+
   private void writeRadicalProperty(Molecule molecule, Writer writer)
   {
-    
   }
 
   private void writeSgroupProperty(Molecule molecule, Writer writer)
   {
-     if(molecule.countSuperatoms() >0)
-     {
-         writeSgroupCount(molecule,writer);
-         for(int i=0;i< molecule.countSuperatoms();i++){
-            writeSingleSgroup(molecule.getSuperatom(i),writer);
-         }
-     }
+    if (molecule.countSuperatoms() > 0)
+    {
+      writeSgroupCount(molecule, writer);
+      for (int i = 0; i < molecule.countSuperatoms(); i++)
+      {
+        writeSingleSgroup(molecule.getSuperatom(i), writer);
+      }
+    }
   }
 
   private void writeSgroupCount(Molecule molecule, Writer writer)
   {
-      int substructureCount = molecule.countSuperatoms();      
-      writer.write(M + "STY" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
-      for(int i=0;i< substructureCount;i++){
-          writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
-          writer.write(MDLStringKit.padLeft("SUP", 4));
-      }
-      writer.writeLine();
+    int substructureCount = molecule.countSuperatoms();
+    writer.write(M + "STY" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
+    for (int i = 0; i < substructureCount; i++)
+    {
+      writer.write(MDLStringKit.padLeft(String.valueOf(i + 1), 4));
+      writer.write(MDLStringKit.padLeft("SUP", 4));
+    }
+    writer.writeLine();
 
-      writer.write(M + "SLB" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
-      for(int i=0;i< substructureCount;i++){
-          writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
-          writer.write(MDLStringKit.padLeft(String.valueOf(i+1), 4));
-      }
-      writer.writeLine();
+    writer.write(M + "SLB" + MDLStringKit.padLeft(String.valueOf(substructureCount), 3));
+    for (int i = 0; i < substructureCount; i++)
+    {
+      writer.write(MDLStringKit.padLeft(String.valueOf(i + 1), 4));
+      writer.write(MDLStringKit.padLeft(String.valueOf(i + 1), 4));
+    }
+    writer.writeLine();
 
   }
 
-  private void writeSingleSgroup(Superatom substructure,Writer writer)
+  private void writeSingleSgroup(Superatom substructure, Writer writer)
   {
-      writer.write(M + "SAL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countAtoms()),3));
-      for(int i=0;i<substructure.countAtoms();i++)
-      {
-          writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getAtom(i).getIndex()+1),4));
-      }
+    writer.write(M + "SAL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex() + 1), 4) + MDLStringKit.padLeft(String.valueOf(substructure.countAtoms()), 3));
+    for (int i = 0; i < substructure.countAtoms(); i++)
+    {
+      writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getAtom(i).getIndex() + 1), 4));
+    }
+    writer.writeLine();
+
+    writer.write(M + "SBL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex() + 1), 4) + MDLStringKit.padLeft(String.valueOf(substructure.countCrossingBonds()), 3));
+    for (int i = 0; i < substructure.countCrossingBonds(); i++)
+    {
+      writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getCrossingBond(i).getIndex() + 1), 4));
+    }
+    writer.writeLine();
+
+    writer.writeLine(M + "SMT" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex() + 1), 4) + " " + substructure.getLabel());
+
+    writer.writeLine(M + "SCL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex() + 1), 4) + "  ");
+
+    for (int i = 0; i < substructure.countCrossingBonds(); i++)
+    {
+      Bond crossingBond = substructure.getCrossingBond(i);
+      writer.write(M + "SBV" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex() + 1), 4));
+      writer.write(MDLStringKit.padLeft(String.valueOf(crossingBond.getIndex() + 1), 4));
+      writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorX(crossingBond)), 10));
+      writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorY(crossingBond)), 10));
       writer.writeLine();
-
-      writer.write(M + "SBL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4)+MDLStringKit.padLeft(String.valueOf(substructure.countCrossingBonds()),3));
-      for(int i=0;i<substructure.countCrossingBonds();i++)
-      {
-          writer.write(MDLStringKit.padLeft(String.valueOf(substructure.getCrossingBond(i).getIndex()+1),4));
-      }
-      writer.writeLine();
-
-      writer.writeLine(M + "SMT" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4) + " " + substructure.getLabel());
-
-      writer.writeLine(M + "SCL" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4) + "  ");
-
-      for(int i=0;i<substructure.countCrossingBonds();i++)
-      {
-          Bond crossingBond = substructure.getCrossingBond(i);          
-          writer.write(M + "SBV" + MDLStringKit.padLeft(String.valueOf(substructure.getIndex()+1),4));
-          writer.write(MDLStringKit.padLeft(String.valueOf(crossingBond.getIndex()+1),4));
-          writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorX(crossingBond)), 10));
-          writer.write(MDLStringKit.padLeft(COORD.format(substructure.getCrossingVectorY(crossingBond)), 10));
-          writer.writeLine();
-      }
+    }
   }
 
-    private class Writer
+  private class Writer
   {
+
     private StringBuffer buffer;
-    
+
     private Writer()
     {
       buffer = new StringBuffer();
     }
-    
+
     public void write(String string)
     {
       buffer.append(string);
     }
-    
+
     public void writeLine(String string)
     {
       buffer.append(string + "\n");
     }
-    
+
     public void writeLine()
     {
       buffer.append("\n");
     }
-    
+
     public String getString()
     {
       return buffer.toString();
     }
   }
+
 }

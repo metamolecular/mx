@@ -87,11 +87,6 @@ public class DefaultQuery implements Query
 
   public Edge getEdge(Node source, Node target)
   {
-//    if (source.getMolecule() != this || target.getMolecule() != this)
-//    {
-//      return null;
-//    }
-
     if (source == target)
     {
       return null;
@@ -100,15 +95,10 @@ public class DefaultQuery implements Query
     NodeImpl sourceImpl = (NodeImpl) source;
 
     for (Edge edge : sourceImpl.edges)
-    //for (int i = 0; i < sourceImpl.edges.size(); i++)
     {
-      //Bond bond = (Bond) sourceImpl.bonds.get(i);
-
       if (edge.getSource() == target || edge.getTarget() == target)
-      //if (bond.getSource() == target || bond.getTarget() == target)
       {
         return edge;
-        //return bond;
       }
     }
 

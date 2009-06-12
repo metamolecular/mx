@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.io.mdl;
 
 import java.io.LineNumberReader;
@@ -41,6 +40,7 @@ import com.metamolecular.mx.model.Superatom;
  */
 public class MolfileReader
 {
+
   private boolean readChargesInAtomBlock;
 
   public MolfileReader()
@@ -67,9 +67,7 @@ public class MolfileReader
       readHeader(mol, bufferedReader);
       int startLine = readConnectionTable(mol, bufferedReader);
       readProperties(mol, bufferedReader, startLine);
-    }
-
-    catch (IOException e)
+    } catch (IOException e)
     {
       throw new RuntimeException(e);
     }
@@ -83,7 +81,6 @@ public class MolfileReader
     {
       readChargesInAtomBlock = false;
     }
-
     else
     {
       readChargesInAtomBlock = true;
@@ -105,9 +102,7 @@ public class MolfileReader
     try
     {
       atomCount = MDLStringKit.extractInt(countsLine, 0, 3);
-    }
-
-    catch (Exception e)
+    } catch (Exception e)
     {
       throw new RuntimeException("Error parsing atom count on line 4:\n" + countsLine);
     }
@@ -117,9 +112,7 @@ public class MolfileReader
     try
     {
       bondCount = MDLStringKit.extractInt(countsLine, 3, 6);
-    }
-
-    catch (Exception e)
+    } catch (Exception e)
     {
       throw new RuntimeException("Error parsing bond count in counts line:\n" + countsLine);
     }
@@ -142,9 +135,7 @@ public class MolfileReader
       try
       {
         createAtom(mol, line);
-      }
-
-      catch (Exception e)
+      } catch (Exception e)
       {
         throw new RuntimeException("Can't parse line " + (startLine + i) + " as atom.\n" + e.getLocalizedMessage() + "\n" + line, e);
       }
@@ -167,19 +158,32 @@ public class MolfileReader
 
       switch (chargeType)
       {
-        case 0: break;
-        case 1: charge = 3; break;
-        case 2: charge = 2; break;
-        case 3: charge = 1; break;
-        case 5: charge = -1; break;
-        case 6: charge = -2; break;
-        case 7: charge = -3; break;
+        case 0:
+          break;
+        case 1:
+          charge = 3;
+          break;
+        case 2:
+          charge = 2;
+          break;
+        case 3:
+          charge = 1;
+          break;
+        case 5:
+          charge = -1;
+          break;
+        case 6:
+          charge = -2;
+          break;
+        case 7:
+          charge = -3;
+          break;
       }
 
       if (charge != 0)
       {
         atom.setCharge(charge);
-        //mol.setCharge(atom, charge);
+      //mol.setCharge(atom, charge);
       }
     }
   }
@@ -193,9 +197,7 @@ public class MolfileReader
       try
       {
         createBond(mol, line);
-      }
-
-      catch (Exception e)
+      } catch (Exception e)
       {
         throw new RuntimeException("Can't parse line " + (i + startLine) + " as bond.\n" + e.getLocalizedMessage() + "\n" + line, e);
       }
@@ -224,55 +226,51 @@ public class MolfileReader
       try
       {
         //Support for old version ISIS abbreviations
-        if(lines[i].startsWith("G"))
+        if (lines[i].startsWith("G"))
         {
-            createGroupOldVersion(mol, lines[i],lines[i++]);
+          createGroupOldVersion(mol, lines[i], lines[i++]);
+        }
+        else if (lines[i].matches("M  (CHG|RAD|ISO).*"))
+        {
+          createAtomProperty(mol, lines[i]);
+        }
+        else if (lines[i].matches("M  (STY|SLB|SAL|SBL|SMT|SBV).*"))
+        {
+          createSgroupProperty(mol, lines[i]);
         }
 
-        else if(lines[i].matches("M  (CHG|RAD|ISO).*"))
-        {
-            createAtomProperty(mol, lines[i]);
-        }
-        else if(lines[i].matches("M  (STY|SLB|SAL|SBL|SMT|SBV).*"))
-        {
-            createSgroupProperty(mol, lines[i]);
-        }
-
-      }
-
-      catch (Exception e)
+      } catch (Exception e)
       {
         throw new RuntimeException("Can't create property at line " + (startLine + i) + ".\n" + e.getLocalizedMessage() + "\n" + lines[i]);
       }
     }
   }
 
-  private void createGroupOldVersion(Molecule mol, String line,String nextLine)
+  private void createGroupOldVersion(Molecule mol, String line, String nextLine)
   {
-      //does nothing
+    //does nothing
   }
+
   private void createSgroupProperty(Molecule mol, String line)
   {
-      String property = MDLStringKit.extractString(line, 0, 6);
-      if ("M  STY".equals(property))
+    String property = MDLStringKit.extractString(line, 0, 6);
+    if ("M  STY".equals(property))
+    {
+      int entryCount = MDLStringKit.extractInt(line, 6, 9);
+      for (int i = 0; i < entryCount; i++)
       {
-          int entryCount = MDLStringKit.extractInt(line, 6, 9);
-          for (int i = 0; i < entryCount; i++)
-          {
-            int offset = i * 8;
-            int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
-            String sgroupType = MDLStringKit.extractString(line, offset + 14, offset + 17);
-            if (!"SUP".equals(sgroupType))
-            {
-              throw new RuntimeException("Error parsing Substructure, only Superatom is supported.");
-            }
-            mol.addSuperatom();
-          }
+        int offset = i * 8;
+        int sgroupIndex = MDLStringKit.extractInt(line, offset + 10, offset + 13);
+        String sgroupType = MDLStringKit.extractString(line, offset + 14, offset + 17);
+        if (!"SUP".equals(sgroupType))
+        {
+          throw new RuntimeException("Error parsing Substructure, only Superatom is supported.");
+        }
+        mol.addSuperatom();
       }
-      else if ("M  SLB".equals(property))
-      {
-
-//        Ignore Identifier
+    }
+    else if ("M  SLB".equals(property))
+    {//        Ignore Identifier
 
 //          int entryCount = MDLStringKit.extractInt(line, 6, 9);
 //          for (int i = 0; i < entryCount; i++)
@@ -283,46 +281,46 @@ public class MolfileReader
 //            Substructure substructure = mol.getSubstructure(sgroupIndex-1);
 //          }
       }
-      else if ("M  SAL".equals(property))
+    else if ("M  SAL".equals(property))
+    {
+      int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+      Superatom substructure = mol.getSuperatom(sgroupIndex - 1);
+      int entryCount = MDLStringKit.extractInt(line, 10, 13);
+      for (int i = 0; i < entryCount; i++)
       {
-          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Superatom substructure = mol.getSuperatom(sgroupIndex-1);
-          int entryCount = MDLStringKit.extractInt(line, 10, 13);          
-          for (int i = 0; i < entryCount; i++)
-          {
-            int offset = i * 4;
-            int atomIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
-            substructure.addAtom(mol.getAtom(atomIndex-1));
-          }
+        int offset = i * 4;
+        int atomIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
+        substructure.addAtom(mol.getAtom(atomIndex - 1));
       }
-      else if ("M  SBL".equals(property))
+    }
+    else if ("M  SBL".equals(property))
+    {
+      int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+      Superatom substructure = mol.getSuperatom(sgroupIndex - 1);
+      int entryCount = MDLStringKit.extractInt(line, 10, 13);
+      for (int i = 0; i < entryCount; i++)
       {
-          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Superatom substructure = mol.getSuperatom(sgroupIndex-1);
-          int entryCount = MDLStringKit.extractInt(line, 10, 13);
-          for (int i = 0; i < entryCount; i++)
-          {
-            int offset = i * 4;
-            int bondIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
-            substructure.addCrossingBond(mol.getBond(bondIndex-1));
-          }
+        int offset = i * 4;
+        int bondIndex = MDLStringKit.extractInt(line, offset + 13, offset + 17);
+        substructure.addCrossingBond(mol.getBond(bondIndex - 1));
       }
-      else if ("M  SMT".equals(property))
-      {
-          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Superatom substructure = mol.getSuperatom(sgroupIndex-1);
-          String label = MDLStringKit.extractString(line, 10, line.length());
-          substructure.setLabel(label);
-      }
-      else if ("M  SBV".equals(property))
-      {
-          int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
-          Superatom substructure = mol.getSuperatom(sgroupIndex-1);
-          int bondIndex = MDLStringKit.extractInt(line, 10, 14);
-          double x=MDLStringKit.extractFloat(line, 14, 24);
-          double y=MDLStringKit.extractFloat(line, 24, 34);
-          substructure.setCrossingVector(mol.getBond(bondIndex-1),x,y);
-      }
+    }
+    else if ("M  SMT".equals(property))
+    {
+      int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+      Superatom substructure = mol.getSuperatom(sgroupIndex - 1);
+      String label = MDLStringKit.extractString(line, 10, line.length());
+      substructure.setLabel(label);
+    }
+    else if ("M  SBV".equals(property))
+    {
+      int sgroupIndex = MDLStringKit.extractInt(line, 6, 10);
+      Superatom substructure = mol.getSuperatom(sgroupIndex - 1);
+      int bondIndex = MDLStringKit.extractInt(line, 10, 14);
+      double x = MDLStringKit.extractFloat(line, 14, 24);
+      double y = MDLStringKit.extractFloat(line, 24, 34);
+      substructure.setCrossingVector(mol.getBond(bondIndex - 1), x, y);
+    }
   }
 
   private void createAtomProperty(Molecule mol, String line)
@@ -341,12 +339,10 @@ public class MolfileReader
       {
         setChargeProperty(mol, atom, value);
       }
-
       else if ("M  RAD".equals(property))
       {
         setRadicalProperty(mol, atom, value);
       }
-
       else if ("M  ISO".equals(property))
       {
         setIsotopeProperty(mol, atom, value);
@@ -372,7 +368,7 @@ public class MolfileReader
   private LineNumberReader getBufferedReader(String molfile)
   {
     LineNumberReader result =
-      new LineNumberReader(new StringReader(molfile));
+            new LineNumberReader(new StringReader(molfile));
 
     return result;
   }
@@ -389,9 +385,9 @@ public class MolfileReader
     /*
     if (line.length() > 80)
     {
-      throw new RuntimeException("Line exceeds 80 characters in length at line " + input.getLineNumber() + ".\n" + line);
+    throw new RuntimeException("Line exceeds 80 characters in length at line " + input.getLineNumber() + ".\n" + line);
     }
-    */
+     */
 
     return line;
   }
@@ -419,9 +415,7 @@ public class MolfileReader
       try
       {
         line = readLine(input);
-      }
-
-      catch (IOException e)
+      } catch (IOException e)
       {
         throw new RuntimeException("Expected stop token \"" + stop + "\" not found.");
       }

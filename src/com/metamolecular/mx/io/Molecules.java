@@ -29,6 +29,7 @@ import com.metamolecular.mx.model.*;
 
 /**
  * @author Richard L. Apodaca
+ * @author Duan Lian
  */
 public class Molecules
 {

@@ -1,6 +1,27 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * MX Cheminformatics Tools for Java
+ * 
+ * Copyright (c) 2007-2009 Metamolecular, LLC
+ * 
+ * http://metamolecular.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.metamolecular.mx.query;
 
@@ -169,49 +190,11 @@ public class DefaultState implements State
     }
 
     return true;
-  }//  private void loadCandidates(Match lastMatch)
-//  {
-//    Atom[] queryNeighbors = lastMatch.getQueryNode().getNeighbors();
-//    Atom[] targetNeighbors = lastMatch.getTargetAtom().getNeighbors();
-//
-//    for (Atom q : queryNeighbors)
-//    {
-//      for (Atom t : targetNeighbors)
-//      {
-//        Match match = new Match(q, t);
-//
-//        if (candidateFeasible(match))
-//        {
-//          candidates.add(match);
-//        }
-//      }
-//    }
-//  }
+  }
 
   private boolean matchAtoms(Match match)
   {
     return match.getQueryNode().getAtomMatcher().matches(match.getTargetAtom());
-//    if (match.getQueryAtom().countNeighbors() > match.getTargetAtom().countNeighbors())
-//    {
-//      return false;
-//    }
-//
-//    if (match.getQueryAtom().getValence() > match.getTargetAtom().getValence())
-//    {
-//      return false;
-//    }
-//
-//    int totalQueryNeighbors = match.getQueryAtom().countNeighbors() +
-//      match.getQueryAtom().countVirtualHydrogens();
-//    int totalTargetNeighbors = match.getTargetAtom().countNeighbors() +
-//      match.getTargetAtom().countVirtualHydrogens();
-//
-//    if (totalQueryNeighbors > totalTargetNeighbors)
-//    {
-//      return false;
-//    }
-//
-//    return match.getQueryAtom().getSymbol().equals(match.getTargetAtom().getSymbol());
   }
 
   private boolean matchBonds(Match match)
@@ -291,15 +274,6 @@ public class DefaultState implements State
         return false;
       }
     }
-//    Atom[] neighbors = head.getNeighbors();
-//
-//    for (Atom neighbor : neighbors)
-//    {
-//      if (!map.containsKey(neighbor))
-//      {
-//        return false;
-//      }
-//    }
 
     return true;
   }

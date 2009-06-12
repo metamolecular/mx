@@ -84,16 +84,6 @@ public class DefaultAtomMatcher implements AtomMatcher
       return false;
     }
 
-//    int totalQueryNeighbors = match.getQueryAtom().countNeighbors() +
-//            match.getQueryAtom().countVirtualHydrogens();
-//    int totalTargetNeighbors = match.getTargetAtom().countNeighbors() +
-//            match.getTargetAtom().countVirtualHydrogens();
-//
-//    if (totalQueryNeighbors > totalTargetNeighbors)
-//    {
-//      return false;
-//    }
-
     return true;
   }
   
