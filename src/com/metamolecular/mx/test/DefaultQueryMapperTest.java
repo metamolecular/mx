@@ -204,7 +204,6 @@ public class DefaultQueryMapperTest extends TestCase
     Mapper mapper = new DefaultMapper(benzeneQuery);
     List<Map<Node, Atom>> maps = mapper.getMaps(benzene);
 
-//    assertTrue(containsAutomap(maps, benzene));
     assertEquals(12, maps.size());
   }
 
