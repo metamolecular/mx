@@ -1,8 +1,8 @@
 /*
  * MX Cheminformatics Tools for Java
- * 
+ *
  * Copyright (c) 2007-2009 Metamolecular, LLC
- * 
+ *
  * http://metamolecular.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,61 +23,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.model;
 
-import javax.swing.event.ChangeListener;
-
 /**
- * @author Richard L. Apodaca
  * @author Duan Lian
+ * @author Richard L. Apodaca
  */
-public interface Molecule
+public interface Superatom
 {
-  public int countAtoms();
-  
-  public int countBonds();
+  public String getLabel();
 
-  public int countSuperatoms();
+  public void setLabel(String label);
+
+  public int countAtoms();
+
+  public int countCrossingBonds();
 
   public Atom getAtom(int index);
-  
-  public Bond getBond(int index);
-  
-  public Bond getBond(Atom source, Atom target);
 
-  public Superatom getSuperatom(int index);
+  public Bond getCrossingBond(int index);
 
-  public Superatom addSuperatom();
+  public boolean contains(Atom atom);
 
-  public Atom addAtom(String symbol, double x, double y, double z);
-  
-  public Atom addAtom(String symbol);
-  
+  public boolean contains(Bond bond);
+
+  public void addAtom(Atom atom);
+
   public void removeAtom(Atom atom);
-  
-  public Bond connect(Atom source, Atom target, int type, int stereo);
-  
-  public Bond connect(Atom source, Atom target, int type);
-                                     
-  public void removeBond(Bond bond);
-  
-  public void disconnect(Atom source, Atom target);
 
-  public void removeSuperatom(Superatom substructure);
-  
-  public void clear();
-  
-  public void beginModify();
-  
-  public void endModify();
+  public void addCrossingBond(Bond bond);
 
-  public void addChangeListener(ChangeListener listener);
+  public void removeCrossingBond(Bond bond);
 
-  public void removeChangeListener(ChangeListener listener);
-  
-  public Molecule copy();
-  
-  public void copy(Molecule molecule);
+  public void setCrossingVector(Bond bond, double x, double y);
+
+  public double getCrossingVectorX(Bond bond);
+
+  public double getCrossingVectorY(Bond bond);
+
+  public int getIndex();
+
+  public Molecule getMolecule();
 }
-

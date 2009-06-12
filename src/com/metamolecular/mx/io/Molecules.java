@@ -25,9 +25,7 @@
  */
 package com.metamolecular.mx.io;
 
-import com.metamolecular.mx.model.Atom;
-import com.metamolecular.mx.model.DefaultMolecule;
-import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.model.*;
 
 /**
  * @author Richard L. Apodaca
@@ -308,4 +306,23 @@ public class Molecules
     
     return result;
   }
+
+  public static Molecule createEthylbenzeneWithSuperatom()
+  {
+    Molecule result = Molecules.createBenzene();
+    Atom carbon1=result.addAtom("C");
+    Atom carbon2=result.addAtom("C");
+    Bond crossingBond=result.connect(result.getAtom(0),carbon1,1);
+    result.connect(carbon1,carbon2,1);
+
+    Superatom substructure=result.addSuperatom();
+    substructure.addAtom(carbon1);
+    substructure.addAtom(carbon2);
+    substructure.addCrossingBond(crossingBond);
+    substructure.setCrossingVector(crossingBond,0.1,0.1);
+    substructure.setLabel("Ethyl");
+
+    return result;
+  }
+
 }

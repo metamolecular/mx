@@ -27,19 +27,24 @@ package com.metamolecular.mx.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
  * @author Richard L. Apodaca
+ * @author Duan Lian
  */
 public class DefaultMolecule implements Molecule
 {
+
   private VirtualHydrogenCounter hCounter;
   private List listeners;
   private List atoms;
   private List bonds;
+  private List substructures;
   private int modifyDepth;
   private boolean changed;
   private ChangeEvent event;
@@ -49,6 +54,7 @@ public class DefaultMolecule implements Molecule
     hCounter = new VirtualHydrogenCounter();
     atoms = new ArrayList();
     bonds = new ArrayList();
+    substructures = new ArrayList();
     listeners = null;
     modifyDepth = 0;
     changed = false;
@@ -100,6 +106,7 @@ public class DefaultMolecule implements Molecule
   {
     atoms.clear();
     bonds.clear();
+    substructures.clear();
 
     fireChange();
   }
@@ -141,7 +148,17 @@ public class DefaultMolecule implements Molecule
 
   public void removeBond(Bond bond)
   {
+    for (int i = 0; i < substructures.size(); i++)
+    {
+      Superatom substructure = (Superatom) substructures.get(i);
+      if (substructure.contains(bond))
+      {
+        substructure.removeCrossingBond(bond);
+      }
+    }
+
     disconnect(bond.getSource(), bond.getTarget());
+
   }
 
   public void disconnect(Atom source, Atom target)
@@ -164,6 +181,28 @@ public class DefaultMolecule implements Molecule
     bonds.remove(bond);
 
     fireChange();
+  }
+
+  private void addSgroup(Superatom substructure)
+  {
+    if (substructure.getMolecule() != this)
+    {
+      throw new IllegalStateException("Attempt to add substructure of another molecule.");
+    }
+    substructures.add(substructure);
+  }
+
+  public void removeSuperatom(Superatom substructure)
+  {
+    if (substructure.getMolecule() != this)
+    {
+      throw new IllegalStateException("Attempt to remove substructure of another molecule.");
+    }
+    if (!substructures.contains(substructure))
+    {
+      throw new IllegalStateException("Attempt to remove non-existant substructure.");
+    }
+    substructures.remove(substructure);
   }
 
   public void endModify()
@@ -194,6 +233,15 @@ public class DefaultMolecule implements Molecule
       disconnect(atom, neighbors[i]);
     }
 
+    for (int i = 0; i < substructures.size(); i++)
+    {
+      Superatom substructure = (Superatom) substructures.get(i);
+      if (substructure.contains(atom))
+      {
+        substructure.removeAtom(atom);
+      }
+    }
+
     ((AtomImpl) atom).molecule = null;
 
     atoms.remove(atom);
@@ -218,6 +266,11 @@ public class DefaultMolecule implements Molecule
     return bonds.size();
   }
 
+  public int countSuperatoms()
+  {
+    return substructures.size();
+  }
+
   public Atom getAtom(int index)
   {
     return (Atom) atoms.get(index);
@@ -229,7 +282,7 @@ public class DefaultMolecule implements Molecule
   }
 
   /* (non-Javadoc)
-   * @see com.metamolecular.firefly.model.Molecule#getBond(int)
+   * @see com.metamolecular.firefly.model.Molecule#getCrossingBond(int)
    */
   public Bond getBond(int index)
   {
@@ -263,6 +316,18 @@ public class DefaultMolecule implements Molecule
     return null;
   }
 
+  public Superatom getSuperatom(int i)
+  {
+    return (Superatom) substructures.get(i);
+  }
+
+  public Superatom addSuperatom()
+  {
+    SuperatomImpl sgroup = new SuperatomImpl(this);
+    addSgroup(sgroup);
+    return sgroup;
+  }
+
   public int getBondIndex(Bond bond)
   {
     return bonds.indexOf(bond);
@@ -285,10 +350,28 @@ public class DefaultMolecule implements Molecule
       int sourceIndex = atoms.indexOf(oldBond.source);
       int targetIndex = atoms.indexOf(oldBond.target);
       BondImpl newBond = (BondImpl) result.connect((AtomImpl) result.atoms.get(sourceIndex),
-        (AtomImpl) result.atoms.get(targetIndex),
-        oldBond.type);
+              (AtomImpl) result.atoms.get(targetIndex),
+              oldBond.type);
 
       newBond.stereo = oldBond.stereo;
+    }
+
+    for (int i = 0; i < this.countSuperatoms(); i++)
+    {
+      Superatom substructure = this.getSuperatom(i);
+      Superatom newSubstructure = result.addSuperatom();
+      for (int j = 0; j < substructure.countAtoms(); j++)
+      {
+        newSubstructure.addAtom(result.getAtom(substructure.getAtom(j).getIndex()));
+      }
+      for (int j = 0; j < substructure.countCrossingBonds(); j++)
+      {
+        Bond crossingBond = substructure.getCrossingBond(j);
+        Bond bond = result.getBond(crossingBond.getIndex());
+        newSubstructure.addCrossingBond(bond);
+        newSubstructure.setCrossingVector(bond, substructure.getCrossingVectorX(crossingBond), substructure.getCrossingVectorY(crossingBond));
+      }
+      newSubstructure.setLabel(substructure.getLabel());
     }
 
     return result;
@@ -321,6 +404,24 @@ public class DefaultMolecule implements Molecule
       Atom target = getAtom(bond.getTarget().getIndex());
 
       connect(source, target, bond.getType(), bond.getStereo());
+    }
+
+    for (int i = 0; i < molecule.countSuperatoms(); i++)
+    {
+      Superatom superatom = molecule.getSuperatom(i);
+      Superatom newSubstructure = this.addSuperatom();
+      for (int j = 0; j < superatom.countAtoms(); j++)
+      {
+        newSubstructure.addAtom(this.getAtom(superatom.getAtom(j).getIndex()));
+      }
+      for (int j = 0; j < superatom.countCrossingBonds(); j++)
+      {
+        Bond crossingBond = superatom.getCrossingBond(j);
+        Bond bond = this.getBond(crossingBond.getIndex());
+        newSubstructure.addCrossingBond(bond);
+        newSubstructure.setCrossingVector(bond, superatom.getCrossingVectorX(crossingBond), superatom.getCrossingVectorY(crossingBond));
+      }
+      newSubstructure.setLabel(superatom.getLabel());
     }
 
     endModify();
@@ -410,6 +511,7 @@ public class DefaultMolecule implements Molecule
 
   private class AtomImpl implements Atom
   {
+
     private List neighbors;
     private List bonds;
     private Molecule molecule;
@@ -581,6 +683,7 @@ public class DefaultMolecule implements Molecule
 
   private class BondImpl implements Bond
   {
+
     private Atom source;
     private Atom target;
     private int type;
@@ -708,4 +811,162 @@ public class DefaultMolecule implements Molecule
       return type;
     }
   }
+
+  private class SuperatomImpl implements Superatom
+  {
+
+    private List atoms;
+    private List bonds;
+    private String label;
+    private Molecule molecule;
+    private Map bondVectorMap;
+
+    public SuperatomImpl(Molecule parent)
+    {
+      molecule = parent;
+      atoms = new ArrayList();
+      bonds = new ArrayList();
+      bondVectorMap = new HashMap();
+      label = "";
+    }
+
+    public String getLabel()
+    {
+      return label;
+    }
+
+    public void setLabel(String label)
+    {
+      this.label = label;
+      fireChange();
+    }
+
+    public int countAtoms()
+    {
+      return atoms.size();
+    }
+
+    public int countCrossingBonds()
+    {
+      return bonds.size();
+    }
+
+    public Atom getAtom(int index)
+    {
+      return (Atom) atoms.get(index);
+    }
+
+    public Bond getCrossingBond(int index)
+    {
+      return (Bond) bonds.get(index);
+    }
+
+    public boolean contains(Atom atom)
+    {
+      return atoms.contains(atom);
+    }
+
+    public boolean contains(Bond bond)
+    {
+      return bonds.contains(bond);
+    }
+
+    public void addAtom(Atom atom)
+    {
+      if (contains(atom))
+      {
+        throw new RuntimeException("Trying to add the same atom twice");
+      }
+
+      assertAtomBelongs(atom);
+      atoms.add(atom);
+      fireChange();
+    }
+
+    public void removeAtom(Atom atom)
+    {
+      if (!contains(atom))
+      {
+        throw new RuntimeException("Trying to remove the non-existant atom");
+      }
+
+      assertAtomBelongs(atom);
+      atoms.remove(atom);
+      fireChange();
+    }
+
+    public void addCrossingBond(Bond bond)
+    {
+      assertBondBelongs(bond);
+      if (contains(bond))
+      {
+        throw new RuntimeException("Trying to add the same crossing bond twice");
+      }
+
+      bonds.add(bond);
+      //add default bond vector
+      double x = bond.getTarget().getX() - bond.getSource().getX();
+      double y = bond.getTarget().getY() - bond.getSource().getY();
+      bondVectorMap.put(bond, new double[]
+              {
+                x, y
+              });
+
+      fireChange();
+    }
+
+    public void removeCrossingBond(Bond bond)
+    {
+      if (!contains(bond))
+      {
+        throw new RuntimeException("Trying to remove the non-existant crossing bond");
+      }
+
+      assertCrossingBondBelongs(bond);
+      bonds.remove(bond);
+      fireChange();
+    }
+
+    public void setCrossingVector(Bond bond, double x, double y)
+    {
+      assertCrossingBondBelongs(bond);
+      bondVectorMap.put(bond, new double[]
+              {
+                x, y
+              });
+      fireChange();
+    }
+
+    public double getCrossingVectorX(Bond bond)
+    {
+      assertCrossingBondBelongs(bond);
+      return ((double[]) bondVectorMap.get(bond))[0];
+    }
+
+    public double getCrossingVectorY(Bond bond)
+    {
+      assertCrossingBondBelongs(bond);
+      return ((double[]) bondVectorMap.get(bond))[1];
+    }
+
+    public int getIndex()
+    {
+      return DefaultMolecule.this.substructures.indexOf(this);
+    }
+
+    public Molecule getMolecule()
+    {
+      return molecule;
+    }
+
+    private void assertCrossingBondBelongs(Bond bond)
+    {
+      assertBondBelongs(bond);
+      if (!bonds.contains(bond))
+      {
+        throw new IllegalStateException("Attempt to use a non-crossing bond.");
+      }
+    }
+  }
+
 }

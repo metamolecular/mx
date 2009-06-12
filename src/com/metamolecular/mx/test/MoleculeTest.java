@@ -38,6 +38,17 @@ import junit.framework.TestCase;
  */
 public class MoleculeTest extends TestCase
 {
+  //TODO: test getSubstructure with invalid id throws
+  
+  //TODO: test removing substructure from different molecule throws
+  
+  //TODO: test removing nonexistant substructure (from same molecule) throws - i.e.,
+  //      the substructure was already deleted once before
+  
+  //TODO: test adding substructure fires event
+  
+  //TODO: test removing substructure fires event
+  
   public void testItShouldAddAValidAtom()
   {
     Molecule molecule = new DefaultMolecule();

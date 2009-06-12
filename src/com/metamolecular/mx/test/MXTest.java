@@ -62,8 +62,9 @@ public class MXTest
     suite.addTestSuite(DefaultAtomMatcherTest.class);
     suite.addTestSuite(QueryTest.class);
     suite.addTestSuite(DefaultQueryMapperTest.class);
-    
     suite.addTestSuite(QueryDefaultStateTest.class);
+    suite.addTestSuite(SuperatomTest.class);
+    suite.addTestSuite(MolfileWriterTest.class);
 
     TestRunner.run(suite);
   }
