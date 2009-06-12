@@ -23,9 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.map;
 
+import com.metamolecular.mx.query.*;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
@@ -34,20 +34,37 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * @author Richard L. Apodaca
  */
 public class DefaultMapper implements Mapper
 {
-  private Molecule query;
-  private List<Map<Atom, Atom>> maps;
 
-  public DefaultMapper(Molecule query)
+  private Query query;
+  private List<Map<Node, Atom>> maps;
+
+  public DefaultMapper(Query query)
   {
     this.query = query;
-    this.maps = new ArrayList<Map<Atom, Atom>>();
+    this.maps = new ArrayList<Map<Node, Atom>>();
+  }
+  
+  public DefaultMapper(Molecule molecule)
+  {
+    this.query = new DefaultQuery(molecule);
+    this.maps = new ArrayList<Map<Node, Atom>>();
   }
 
-  public List<Map<Atom, Atom>> getMaps(Molecule target)
+  public boolean hasMap(Molecule target)
+  {
+    DefaultState state = new DefaultState(query, target);
+
+    maps.clear();
+
+    return mapFirst(state);
+  }
+
+  public List<Map<Node, Atom>> getMaps(Molecule target)
   {
     DefaultState state = new DefaultState(query, target);
 
@@ -55,7 +72,18 @@ public class DefaultMapper implements Mapper
 
     mapAll(state);
 
-    return new ArrayList<Map<Atom, Atom>>(maps);
+    return new ArrayList<Map<Node, Atom>>(maps);
+  }
+
+  public Map<Node, Atom> getFirstMap(Molecule target)
+  {
+    DefaultState state = new DefaultState(query, target);
+
+    maps.clear();
+
+    mapFirst(state);
+
+    return maps.isEmpty() ? new HashMap<Node, Atom>() : maps.get(0);
   }
 
   public int countMaps(Molecule target)
@@ -69,26 +97,6 @@ public class DefaultMapper implements Mapper
     return maps.size();
   }
 
-  public Map<Atom, Atom> getFirstMap(Molecule target)
-  {
-    DefaultState state = new DefaultState(query, target);
-
-    maps.clear();
-
-    mapFirst(state);
-
-    return maps.isEmpty() ? new HashMap<Atom, Atom>() : maps.get(0);
-  }
-
-  public boolean hasMap(Molecule target)
-  {
-    DefaultState state = new DefaultState(query, target);
-
-    maps.clear();
-
-    return mapFirst(state);
-  }
-
   private void mapAll(State state)
   {
     if (state.isDead())
@@ -98,7 +106,7 @@ public class DefaultMapper implements Mapper
 
     if (state.isGoal())
     {
-      Map<Atom, Atom> map = state.getMap();
+      Map<Node, Atom> map = state.getMap();
 
       if (!hasMap(map))
       {
@@ -155,9 +163,9 @@ public class DefaultMapper implements Mapper
     return found;
   }
 
-  private boolean hasMap(Map<Atom, Atom> map)
+  private boolean hasMap(Map<Node, Atom> map)
   {
-    for (Map<Atom, Atom> test : maps)
+    for (Map<Node, Atom> test : maps)
     {
       if (test.equals(map))
       {

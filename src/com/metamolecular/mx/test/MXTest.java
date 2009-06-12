@@ -42,8 +42,6 @@ public class MXTest
     suite.addTestSuite(MoleculeTest.class);
     suite.addTestSuite(AtomTest.class);
     suite.addTestSuite(BondTest.class);
-    suite.addTestSuite(StateTest.class);
-    suite.addTestSuite(MapperTest.class);
     suite.addTestSuite(MolfileReaderTest.class);
     suite.addTestSuite(StepTest.class);
     suite.addTestSuite(PathFinderTest.class);

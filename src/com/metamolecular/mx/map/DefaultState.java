@@ -23,9 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.map;
 
+import com.metamolecular.mx.query.*;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
@@ -35,24 +35,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class DefaultState implements State
 {
-  private Map<Atom, Atom> map;
-  private List<Atom> queryPath;
-  private List<Atom> targetPath;
-  private List<Match> candidates;
-  private Molecule query;
-  private Molecule target;
 
-  public DefaultState(Molecule query, Molecule target)
+  private List<Match> candidates;
+  private Query query;
+  private Molecule target;
+  private List<Node> queryPath;
+  private List<Atom> targetPath;
+  private Map<Node, Atom> map;
+
+  public DefaultState(Query query, Molecule target)
   {
+    this.map = new HashMap();
+    this.queryPath = new ArrayList<Node>();
+    this.targetPath = new ArrayList<Atom>();
+
     this.query = query;
     this.target = target;
-    this.map = new HashMap<Atom, Atom>();
-    this.queryPath = new ArrayList<Atom>();
-    this.targetPath = new ArrayList<Atom>();
     candidates = new ArrayList<Match>();
 
     loadRootCandidates();
@@ -61,14 +63,14 @@ public class DefaultState implements State
   private DefaultState(DefaultState state, Match match)
   {
     candidates = new ArrayList<Match>();
-    this.queryPath = new ArrayList<Atom>(state.queryPath);
+    this.queryPath = new ArrayList<Node>(state.queryPath);
     this.targetPath = new ArrayList<Atom>(state.targetPath);
     this.map = state.map;
     this.query = state.query;
     this.target = state.target;
 
-    map.put(match.getQueryAtom(), match.getTargetAtom());
-    queryPath.add(match.getQueryAtom());
+    map.put(match.getQueryNode(), match.getTargetAtom());
+    queryPath.add(match.getQueryNode());
     targetPath.add(match.getTargetAtom());
 
     loadCandidates(match);
@@ -96,14 +98,29 @@ public class DefaultState implements State
     }
   }
 
-  public State nextState(Match match)
+  public Map<Node, Atom> getMap()
   {
-    return new DefaultState(this, match);
+    return new HashMap<Node, Atom>(map);
+  }
+
+  public boolean hasNextCandidate()
+  {
+    return !candidates.isEmpty();
+  }
+
+  public boolean isDead()
+  {
+    return query.countNodes() > target.countAtoms();
+  }
+
+  public boolean isGoal()
+  {
+    return map.size() == query.countNodes();
   }
 
   public boolean isMatchFeasible(Match match)
   {
-    if (map.containsKey(match.getQueryAtom()) || map.containsValue(match.getTargetAtom()))
+    if (map.containsKey(match.getQueryNode()) || map.containsValue(match.getTargetAtom()))
     {
       return false;
     }
@@ -121,38 +138,23 @@ public class DefaultState implements State
     return true;
   }
 
-  public boolean isDead()
-  {
-    return query.countAtoms() > target.countAtoms();
-  }
-
-  public boolean isGoal()
-  {
-    return map.size() == query.countAtoms();
-  }
-
-  public Map<Atom, Atom> getMap()
-  {
-    return new HashMap<Atom, Atom>(map);
-  }
-
-  public boolean hasNextCandidate()
-  {
-    return !candidates.isEmpty();
-  }
-
   public Match nextCandidate()
   {
     return candidates.remove(candidates.size() - 1);
   }
 
+  public State nextState(Match match)
+  {
+    return new DefaultState(this, match);
+  }
+
   private void loadRootCandidates()
   {
-    for (int i = 0; i < query.countAtoms(); i++)
+    for (int i = 0; i < query.countNodes(); i++)
     {
       for (int j = 0; j < target.countAtoms(); j++)
       {
-        Match match = new Match(query.getAtom(i), target.getAtom(j));
+        Match match = new Match(query.getNode(i), target.getAtom(j));
 
         candidates.add(match);
       }
@@ -161,10 +163,9 @@ public class DefaultState implements State
 
   private void loadCandidates(Match lastMatch)
   {
-    Atom[] queryNeighbors = lastMatch.getQueryAtom().getNeighbors();
     Atom[] targetNeighbors = lastMatch.getTargetAtom().getNeighbors();
 
-    for (Atom q : queryNeighbors)
+    for (Node q : lastMatch.getQueryNode().neighbors())
     {
       for (Atom t : targetNeighbors)
       {
@@ -180,10 +181,10 @@ public class DefaultState implements State
 
   private boolean candidateFeasible(Match candidate)
   {
-    for (Atom queryAtom : map.keySet())
+    for (Node queryAtom : map.keySet())
     {
-      if (queryAtom.equals(candidate.getQueryAtom()) ||
-        map.get(queryAtom).equals(candidate.getTargetAtom()))
+      if (queryAtom.equals(candidate.getQueryNode()) ||
+              map.get(queryAtom).equals(candidate.getTargetAtom()))
       {
         return false;
       }
@@ -194,27 +195,7 @@ public class DefaultState implements State
 
   private boolean matchAtoms(Match match)
   {
-    if (match.getQueryAtom().countNeighbors() > match.getTargetAtom().countNeighbors())
-    {
-      return false;
-    }
-    
-    if (match.getQueryAtom().getValence() > match.getTargetAtom().getValence())
-    {
-      return false;
-    }
-    
-    int totalQueryNeighbors = match.getQueryAtom().countNeighbors() +
-      match.getQueryAtom().countVirtualHydrogens();
-    int totalTargetNeighbors = match.getTargetAtom().countNeighbors() +
-      match.getTargetAtom().countVirtualHydrogens();
-    
-    if (totalQueryNeighbors > totalTargetNeighbors)
-    {
-      return false;
-    }
-
-    return match.getQueryAtom().getSymbol().equals(match.getTargetAtom().getSymbol());
+    return match.getQueryNode().getAtomMatcher().matches(match.getTargetAtom());
   }
 
   private boolean matchBonds(Match match)
@@ -231,7 +212,7 @@ public class DefaultState implements State
 
     for (int i = 0; i < queryPath.size() - 1; i++)
     {
-      Bond queryBond = query.getBond(queryPath.get(i), match.getQueryAtom());
+      Edge queryBond = query.getEdge(queryPath.get(i), match.getQueryNode());
       Bond targetBond = target.getBond(targetPath.get(i), match.getTargetAtom());
 
       if (queryBond == null)
@@ -255,10 +236,10 @@ public class DefaultState implements State
 
   private boolean matchBondsToHead(Match match)
   {
-    Atom queryHead = getQueryPathHead();
+    Node queryHead = getQueryPathHead();
     Atom targetHead = getTargetPathHead();
 
-    Bond queryBond = query.getBond(queryHead, match.getQueryAtom());
+    Edge queryBond = query.getEdge(queryHead, match.getQueryNode());
     Bond targetBond = target.getBond(targetHead, match.getTargetAtom());
 
     if (queryBond == null || targetBond == null)
@@ -269,17 +250,25 @@ public class DefaultState implements State
     return matchBond(queryBond, targetBond);
   }
 
-  private boolean matchBond(Bond queryBond, Bond targetBond)
+  private Node getQueryPathHead()
+  {
+    return queryPath.get(queryPath.size() - 1);
+  }
+
+  private Atom getTargetPathHead()
+  {
+    return targetPath.get(targetPath.size() - 1);
+  }
+
+  private boolean matchBond(Edge edge, Bond targetBond)
   {
     return true;
   }
 
   private boolean isHeadMapped()
   {
-    Atom head = queryPath.get(queryPath.size() - 1);
-    Atom[] neighbors = head.getNeighbors();
-
-    for (Atom neighbor : neighbors)
+    Node head = queryPath.get(queryPath.size() - 1);
+    for (Node neighbor : head.neighbors())
     {
       if (!map.containsKey(neighbor))
       {
@@ -288,15 +277,5 @@ public class DefaultState implements State
     }
 
     return true;
-  }
-
-  private Atom getQueryPathHead()
-  {
-    return queryPath.get(queryPath.size() - 1);
-  }
-
-  private Atom getTargetPathHead()
-  {
-    return targetPath.get(targetPath.size() - 1);
   }
 }

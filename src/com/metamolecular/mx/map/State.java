@@ -26,11 +26,13 @@
 
 package com.metamolecular.mx.map;
 
+import com.metamolecular.mx.query.*;
+import com.metamolecular.mx.map.Match;
 import com.metamolecular.mx.model.Atom;
 import java.util.Map;
 
 /**
- * @author Richard Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public interface State
 {
@@ -40,7 +42,7 @@ public interface State
    * 
    * @return the current mapping of query atoms onto target atoms
    */
-  public Map<Atom, Atom> getMap();
+  public Map<Node, Atom> getMap();
 
   /**
    * Returns true if another candidate match can be found or

@@ -26,23 +26,24 @@
 
 package com.metamolecular.mx.map;
 
+import com.metamolecular.mx.query.*;
 import com.metamolecular.mx.model.Atom;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class Match
 {
-  private Atom query;
+  private Node query;
   private Atom target;
 
-  public Match(Atom query, Atom target)
+  public Match(Node query, Atom target)
   {
     this.query = query;
     this.target = target;
   }
 
-  public Atom getQueryAtom()
+  public Node getQueryNode()
   {
     return query;
   }
