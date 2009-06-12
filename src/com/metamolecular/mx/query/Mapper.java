@@ -25,7 +25,10 @@
  */
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -34,4 +37,10 @@ import com.metamolecular.mx.model.Molecule;
 public interface Mapper
 {
   public boolean hasMap(Molecule molecule);
+
+  public int countMaps(Molecule target);
+
+  public List<Map<Node, Atom>> getMaps(Molecule target);
+
+  public Map<Node, Atom> getFirstMap(Molecule target);
 }

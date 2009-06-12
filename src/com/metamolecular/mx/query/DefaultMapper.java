@@ -28,6 +28,7 @@ package com.metamolecular.mx.query;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +38,10 @@ import java.util.Map;
  */
 public class DefaultMapper implements Mapper
 {
+
   private Query query;
   private List<Map<Node, Atom>> maps;
-  
+
   public DefaultMapper(Query query)
   {
     this.query = query;
@@ -54,7 +56,74 @@ public class DefaultMapper implements Mapper
 
     return mapFirst(state);
   }
-  
+
+  public List<Map<Node, Atom>> getMaps(Molecule target)
+  {
+    DefaultState state = new DefaultState(query, target);
+
+    maps.clear();
+
+    mapAll(state);
+
+    return new ArrayList<Map<Node, Atom>>(maps);
+  }
+
+  public Map<Node, Atom> getFirstMap(Molecule target)
+  {
+    DefaultState state = new DefaultState(query, target);
+
+    maps.clear();
+
+    mapFirst(state);
+
+    return maps.isEmpty() ? new HashMap<Node, Atom>() : maps.get(0);
+  }
+
+  public int countMaps(Molecule target)
+  {
+    DefaultState state = new DefaultState(query, target);
+
+    maps.clear();
+
+    mapAll(state);
+
+    return maps.size();
+  }
+
+  private void mapAll(State state)
+  {
+    if (state.isDead())
+    {
+      return;
+    }
+
+    if (state.isGoal())
+    {
+      Map<Node, Atom> map = state.getMap();
+
+      if (!hasMap(map))
+      {
+        maps.add(state.getMap());
+      }
+
+      return;
+    }
+
+    while (state.hasNextCandidate())
+    {
+      Match candidate = state.nextCandidate();
+
+      if (state.isMatchFeasible(candidate))
+      {
+        State nextState = state.nextState(candidate);
+
+        mapAll(nextState);
+
+        nextState.backTrack();
+      }
+    }
+  }
+
   private boolean mapFirst(State state)
   {
     if (state.isDead())
@@ -85,5 +154,18 @@ public class DefaultMapper implements Mapper
     }
 
     return found;
+  }
+
+  private boolean hasMap(Map<Node, Atom> map)
+  {
+    for (Map<Node, Atom> test : maps)
+    {
+      if (test.equals(map))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
