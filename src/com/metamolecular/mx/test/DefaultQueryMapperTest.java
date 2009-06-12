@@ -100,6 +100,13 @@ public class DefaultQueryMapperTest extends TestCase
 
     assertTrue(mapper.hasMap(hexane));
   }
+  
+  public void testItShouldMatchHexaneToHexaneWhenUsingMolecule()
+  {
+    Mapper mapper = new DefaultMapper(hexane);
+    
+    assertTrue(mapper.hasMap(hexane));
+  }
 
   public void testItShouldMatchBenzeneToBenzene()
   {

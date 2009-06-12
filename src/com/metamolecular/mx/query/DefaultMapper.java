@@ -47,6 +47,12 @@ public class DefaultMapper implements Mapper
     this.query = query;
     this.maps = new ArrayList<Map<Node, Atom>>();
   }
+  
+  public DefaultMapper(Molecule molecule)
+  {
+    this.query = new DefaultQuery(molecule);
+    this.maps = new ArrayList<Map<Node, Atom>>();
+  }
 
   public boolean hasMap(Molecule target)
   {
