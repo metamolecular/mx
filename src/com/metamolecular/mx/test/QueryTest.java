@@ -168,25 +168,6 @@ public class QueryTest extends TestCase
     assertTrue(matches(query, toluene));
   }
 
-  public void testItShouldNotThrowWhenCreatingFromCopiedMolecule()
-  {
-//    Molecule propane = Molecules.createPropane();
-//    Molecule copy = propane.copy();
-//    
-//    System.out.println(copy.getBond(0).getSource().getIndex());
-//    
-//    System.out.println(new MolfileWriter().write(copy));
-//
-//    try
-//    {
-//      query = new DefaultQuery(copy);
-//    }
-//    catch (Exception e)
-//    {
-//      fail(e.toString());
-//    }
-  }
-
   private boolean matches(Query query, Molecule molecule)
   {
     for (int i = 0; i < query.countNodes(); i++)
