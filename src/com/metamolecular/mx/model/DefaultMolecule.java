@@ -39,7 +39,6 @@ import javax.swing.event.ChangeListener;
  */
 public class DefaultMolecule implements Molecule
 {
-
   private VirtualHydrogenCounter hCounter;
   private List listeners;
   private List atoms;
@@ -340,18 +339,16 @@ public class DefaultMolecule implements Molecule
     for (int i = 0; i < atoms.size(); i++)
     {
       AtomImpl oldAtom = (AtomImpl) atoms.get(i);
-
-      result.atoms.add(new AtomImpl(result, oldAtom));
+      AtomImpl newAtom = new AtomImpl(result, oldAtom);
+      result.atoms.add(newAtom);
     }
-
+    
     for (int i = 0; i < bonds.size(); i++)
     {
       BondImpl oldBond = (BondImpl) bonds.get(i);
-      int sourceIndex = atoms.indexOf(oldBond.source);
-      int targetIndex = atoms.indexOf(oldBond.target);
-      BondImpl newBond = (BondImpl) result.connect((AtomImpl) result.atoms.get(sourceIndex),
-              (AtomImpl) result.atoms.get(targetIndex),
-              oldBond.type);
+      AtomImpl newSource = (AtomImpl) result.atoms.get(atoms.indexOf(oldBond.source));
+      AtomImpl newTarget = (AtomImpl) result.atoms.get(atoms.indexOf(oldBond.target));
+      BondImpl newBond = (BondImpl) result.connect(newSource, newTarget, oldBond.type);
 
       newBond.stereo = oldBond.stereo;
     }
@@ -511,10 +508,9 @@ public class DefaultMolecule implements Molecule
 
   private class AtomImpl implements Atom
   {
-
     private List neighbors;
     private List bonds;
-    private Molecule molecule;
+    private DefaultMolecule molecule;
     private String symbol;
     private double x;
     private double y;
@@ -524,7 +520,7 @@ public class DefaultMolecule implements Molecule
     private int radical;
     private boolean hasSingleIsotope;
 
-    private AtomImpl(Molecule parent, AtomImpl copyFrom)
+    private AtomImpl(DefaultMolecule parent, AtomImpl copyFrom)
     {
       this(parent);
 
@@ -538,7 +534,7 @@ public class DefaultMolecule implements Molecule
       hasSingleIsotope = copyFrom.hasSingleIsotope;
     }
 
-    private AtomImpl(Molecule parent)
+    private AtomImpl(DefaultMolecule parent)
     {
       neighbors = new ArrayList();
       bonds = new ArrayList();
@@ -577,7 +573,7 @@ public class DefaultMolecule implements Molecule
 
     public int getIndex()
     {
-      return DefaultMolecule.this.atoms.indexOf(this);
+      return molecule.atoms.indexOf(this);
     }
 
     public int getValence()
@@ -683,7 +679,6 @@ public class DefaultMolecule implements Molecule
 
   private class BondImpl implements Bond
   {
-
     private Atom source;
     private Atom target;
     private int type;
@@ -814,7 +809,6 @@ public class DefaultMolecule implements Molecule
 
   private class SuperatomImpl implements Superatom
   {
-
     private List atoms;
     private List bonds;
     private String label;
@@ -908,9 +902,9 @@ public class DefaultMolecule implements Molecule
       double x = bond.getTarget().getX() - bond.getSource().getX();
       double y = bond.getTarget().getY() - bond.getSource().getY();
       bondVectorMap.put(bond, new double[]
-              {
-                x, y
-              });
+        {
+          x, y
+        });
 
       fireChange();
     }
@@ -931,9 +925,9 @@ public class DefaultMolecule implements Molecule
     {
       assertCrossingBondBelongs(bond);
       bondVectorMap.put(bond, new double[]
-              {
-                x, y
-              });
+        {
+          x, y
+        });
       fireChange();
     }
 
@@ -968,5 +962,4 @@ public class DefaultMolecule implements Molecule
       }
     }
   }
-
 }

@@ -26,6 +26,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.io.mdl.MolfileWriter;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.DefaultAtomMatcher;
@@ -100,7 +101,7 @@ public class QueryTest extends TestCase
     Node node2 = query.addNode(new DefaultAtomMatcher());
 
     query.connect(node1, node2);
-    
+
     assertEquals(1, query.countEdges());
   }
 
@@ -124,62 +125,81 @@ public class QueryTest extends TestCase
 
     assertEquals(3, neighbors.size());
   }
-  
+
   public void testItShouldReturnATemplateQueryWithSevenNodesFromPhenol()
   {
     Molecule phenol = Molecules.createPhenol();
     query = new DefaultQuery(phenol);
-    
+
     assertEquals(7, query.countNodes());
   }
-  
+
   public void testItShouldReturnATemplateQueryWithSevenEdgesFromPhenol()
   {
     Molecule phenol = Molecules.createPhenol();
     query = new DefaultQuery(phenol);
-    
+
     assertEquals(7, query.countEdges());
   }
-  
+
   public void testItShouldReturnATemplateQueryThatMatchesPhenol()
   {
     Molecule phenol = Molecules.createPhenol();
     query = new DefaultQuery(phenol);
-    
+
     assertTrue(matches(query, phenol));
   }
-  
+
   public void testItShouldReturnABenzeneTemplateThatMatchesPhenol()
   {
     Molecule phenol = Molecules.createPhenol();
     Molecule benzene = Molecules.createBenzene();
     query = new DefaultQuery(benzene);
-    
+
     assertTrue(matches(query, phenol));
   }
-  
+
   public void testItShouldReturnABenzeneTemplateThatMatchesToluene()
   {
     Molecule toluene = Molecules.createToluene();
     Molecule benzene = Molecules.createBenzene();
     query = new DefaultQuery(benzene);
-    
+
     assertTrue(matches(query, toluene));
   }
-   
+
+  public void testItShouldNotThrowWhenCreatingFromCopiedMolecule()
+  {
+//    Molecule propane = Molecules.createPropane();
+//    Molecule copy = propane.copy();
+//    
+//    System.out.println(copy.getBond(0).getSource().getIndex());
+//    
+//    System.out.println(new MolfileWriter().write(copy));
+//
+//    try
+//    {
+//      query = new DefaultQuery(copy);
+//    }
+//    catch (Exception e)
+//    {
+//      fail(e.toString());
+//    }
+  }
+
   private boolean matches(Query query, Molecule molecule)
   {
     for (int i = 0; i < query.countNodes(); i++)
     {
       Node node = query.getNode(i);
       Atom atom = molecule.getAtom(i);
-      
+
       if (!node.getAtomMatcher().matches(atom))
       {
         return false;
       }
     }
-    
+
     return true;
   }
 }

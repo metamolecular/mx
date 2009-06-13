@@ -282,6 +282,16 @@ public class MoleculeTest extends TestCase
       
     }
   }
+  
+  public void testCopiedMethaneGivesAtomWithCorrectIndex()
+  {
+    Molecule molecule = new DefaultMolecule();
+    molecule.addAtom("C");
+    
+    Molecule copy = molecule.copy();
+    
+    assertEquals(0, copy.getAtom(0).getIndex());
+  }
 
   private class Listener implements ChangeListener
   {
