@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MX Test Environment" default="compile" basedir=".">
+  <!-- properties -->
+  <property name="full-name" value="MX Test Environment" />
+  <property name="unix-name" value="mx-test" />
+  <property name="source.dir" location="src" />
+  <property name="lib.dir" location="lib" />
+  <property name="build.dir" location="build" />
+  <property name="class.dir" location="${build.dir}/classes" />
+  <property name="junit.lib" value="${lib.dir}/junit-4.5.jar" />
+  <property name="test.class" value = "TestEnvironment" />
+  <!-- filesets -->
+  <fileset dir="${lib.dir}" id="libs">
+    <include name="**/*.jar" />
+  </fileset>
+  <!-- targets -->
+  <target name="init" description="Create build directories." >
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${class.dir}" />
+  </target>
+  <target name="clean" description="Remove build directories.">
+    <delete dir="${build.dir}" />
+  </target>
+  <target name="compile" depends="init" description="Compile sources.">
+    <javac srcdir="${source.dir}" destdir="${class.dir}" debug="on" source="1.5" target="1.5">
+      <classpath>
+        <fileset refid="libs" />
+      </classpath>
+    </javac>
+  </target>
+  <target name="test" depends="compile" description="Run JUnit tests.">
+    <java classname="${test.class}" fork = "true" dir="${build.dir}">
+      <classpath>
+        <pathelement path="${class.dir}" />
+        <fileset refid="libs" />
+      </classpath>
+    </java>
+  </target>
+</project>
+
