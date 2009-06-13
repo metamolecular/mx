@@ -14,6 +14,7 @@
   <property name="doc.dir" location="${build.dir}/doc" />
   <property name="dist.dir" location="${build.dir}/dist" />
   <property name="test.dir" location="${build.dir}/test" />
+  <property name="testenv.dir" location ="testenv" />
   <property name="lib-licenses.file" location="${lib.dir}/LICENSES.txt" />
   <property name="license.file" location="LICENSE.txt" />
   <property name="junit.lib" value="${lib.dir}/junit-4.5.jar" />
@@ -42,6 +43,17 @@
       </classpath>
     </javac>
     <copy file="${resource.dir}/atomic_system.xml" todir="${class.dir}/com/metamolecular/mx/model" />
+  </target>
+  <target name="testenv" depends="jar" description="Create a test environment in this directory.">
+    <copy todir="${testenv.dir}">
+      <fileset dir="${resource.dir}/testenv" />
+    </copy>
+    <copy todir="${testenv.dir}/lib">
+      <fileset dir="${lib.dir}" includes="*.jar" />
+    </copy>
+    <copy todir="${testenv.dir}/lib">
+      <fileset dir="${jar.dir}" includes="*.jar" />
+    </copy>
   </target>
   <target name="test" depends="compile" description="Run JUnit tests.">
     <java classname="${test.class}" fork = "true" dir="${build.dir}">
