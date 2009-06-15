@@ -63,6 +63,7 @@ public class MXTest
     suite.addTestSuite(QueryDefaultStateTest.class);
     suite.addTestSuite(SuperatomTest.class);
     suite.addTestSuite(MolfileWriterTest.class);
+    suite.addTestSuite(ReducerTest.class);
 
     TestRunner.run(suite);
   }

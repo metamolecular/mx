@@ -49,20 +49,7 @@ public class DefaultQuery implements Query
   {
     this();
 
-    for (int i = 0; i < molecule.countAtoms(); i++)
-    {
-      Atom atom = molecule.getAtom(i);
-      AtomMatcher matcher = new DefaultAtomMatcher(atom);
-
-      addNode(matcher);
-    }
-
-    for (int i = 0; i < molecule.countBonds(); i++)
-    {
-      Bond bond = molecule.getBond(i);
-
-      connect(nodes.get(bond.getSource().getIndex()), nodes.get(bond.getTarget().getIndex()));
-    }
+    build(molecule);
   }
 
   public Iterable<Edge> edges()
@@ -132,13 +119,39 @@ public class DefaultQuery implements Query
 
     sourceImpl.neighbors.add(targetImpl);
     targetImpl.neighbors.add(sourceImpl);
-    
+
     sourceImpl.edges.add(edge);
     targetImpl.edges.add(edge);
 
     edges.add(edge);
 
     return edge;
+  }
+
+  private void build(Molecule molecule)
+  {
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+      AtomMatcher matcher = createMatcher(atom);
+
+      if (matcher != null)
+      {
+        addNode(matcher);
+      }
+    }
+
+    for (int i = 0; i < molecule.countBonds(); i++)
+    {
+      Bond bond = molecule.getBond(i);
+
+      connect(nodes.get(bond.getSource().getIndex()), nodes.get(bond.getTarget().getIndex()));
+    }
+  }
+
+  private AtomMatcher createMatcher(Atom atom)
+  {
+    return new DefaultAtomMatcher(atom);
   }
 
   private class NodeImpl implements Node

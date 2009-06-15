@@ -45,7 +45,6 @@ import junit.framework.TestCase;
  */
 public class DefaultQueryMapperTest extends TestCase
 {
-
   private Molecule hexane;
   private Molecule benzene;
   private Molecule pyridine;
@@ -100,11 +99,11 @@ public class DefaultQueryMapperTest extends TestCase
 
     assertTrue(mapper.hasMap(hexane));
   }
-  
+
   public void testItShouldMatchHexaneToHexaneWhenUsingMolecule()
   {
     Mapper mapper = new DefaultMapper(hexane);
-    
+
     assertTrue(mapper.hasMap(hexane));
   }
 
@@ -237,6 +236,17 @@ public class DefaultQueryMapperTest extends TestCase
 
     assertEquals(2, maps.size());
   }
+
+//  public void testItShouldMapBlockedPropaneOntoPropane()
+//  {
+//    Molecule blockedPropane = Molecules.createPropane();
+//
+//    blockedPropane.connect(blockedPropane.addAtom("H"), blockedPropane.getAtom(1), 1);
+//
+//    Mapper mapper = new DefaultMapper(blockedPropane);
+//
+//    assertTrue(mapper.hasMap(propane));
+//  }
 
   private Molecule create4Toluene()
   {
