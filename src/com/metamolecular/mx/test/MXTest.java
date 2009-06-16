@@ -64,7 +64,7 @@ public class MXTest
     suite.addTestSuite(SuperatomTest.class);
     suite.addTestSuite(MolfileWriterTest.class);
     suite.addTestSuite(ReducerTest.class);
-    suite.addTestSuite(FooberTest.class);
+    suite.addTestSuite(TemplateCompilerTest.class);
 
     TestRunner.run(suite);
   }

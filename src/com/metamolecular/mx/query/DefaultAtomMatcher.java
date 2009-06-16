@@ -65,6 +65,8 @@ public class DefaultAtomMatcher implements AtomMatcher
   public DefaultAtomMatcher(Atom template, int blockedPositions)
   {
     this(template);
+    
+    this.maximumNeighbors = template.countNeighbors() + template.countVirtualHydrogens() - blockedPositions;
   }
 
   public boolean matches(Atom atom)

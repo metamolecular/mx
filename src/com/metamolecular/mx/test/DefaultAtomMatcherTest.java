@@ -266,6 +266,14 @@ public class DefaultAtomMatcherTest extends TestCase
     assertFalse(matcher.matches(acetone.getAtom(3)));
   }
   
+  public void testItDoesntMatchDoublyBlockedSecondaryCarbonToQuatCarbon()
+  {
+    Molecule neopentane = Molecules.createNeopentane();
+    matcher = new DefaultAtomMatcher(Molecules.createPropane().getAtom(1), 2);
+    
+    assertFalse(matcher.matches(neopentane.getAtom(0)));
+  }
+  
   private Molecule createEthylene()
   {
     Molecule result = new DefaultMolecule();
