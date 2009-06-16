@@ -26,6 +26,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.DefaultAtomMatcher;
 import junit.framework.TestCase;
@@ -91,40 +92,40 @@ public class DefaultAtomMatcherTest extends TestCase
     assertFalse(matcher.matches(phenol.getAtom(6)));
   }
   
-  public void testItShouldMatchBasedOnMinimumValence()
+  public void testItShouldMatchBasedOnMinimumUnsaturation()
   {
-    matcher.setMinimumValence(3);
+    matcher.setMinimumUnsaturation(1);
     
     assertTrue(matcher.matches(phenol.getAtom(0)));
   }
   
-  public void testItShouldNotMatchBasedOnMinimumValence()
+  public void testItShouldNotMatchBasedOnMinimumUnsaturation()
   {
-    matcher.setMinimumValence(4);
+    matcher.setMinimumUnsaturation(4);
     
     assertFalse(matcher.matches(phenol.getAtom(0)));
   }
   
-  public void testItShouldMatchBasedOnMaximumValence()
+  public void testItShouldMatchBasedOnMaximumUnsaturation()
   {
-    matcher.setMaximumValence(3);
+    matcher.setMaximumUnsaturation(3);
     
     assertTrue(matcher.matches(phenol.getAtom(0)));
   }
   
-  public void testItShouldNotMatchBasedOnMaximumValence()
+  public void testItShouldNotMatchBasedOnMaximumUnsaturation()
   {
-    matcher.setMaximumValence(2);
+    matcher.setMaximumUnsaturation(0);
     
     assertFalse(matcher.matches(phenol.getAtom(0)));
   }
   
-  public void testItThrowsWhenMaximumValenceLessThanMinimumaValence()
+  public void testItThrowsWhenMaximumUnsaturationLessThanMinimumaUnsaturation()
   {
-    matcher.setMinimumValence(3);
+    matcher.setMinimumUnsaturation(3);
     try
     {
-      matcher.setMaximumValence(2);
+      matcher.setMaximumUnsaturation(2);
       fail();
     }
     
@@ -134,13 +135,13 @@ public class DefaultAtomMatcherTest extends TestCase
     }
   }
   
-  public void testItThrowsWhenMinimumValenceGreaterThanMaximumValence()
+  public void testItThrowsWhenMinimumUnsaturationGreaterThanMaximumUnsaturation()
   {
-    matcher.setMaximumValence(3);
+    matcher.setMaximumUnsaturation(3);
     
     try
     {
-      matcher.setMinimumValence(4);
+      matcher.setMinimumUnsaturation(4);
       fail();
     }
     
@@ -199,5 +200,100 @@ public class DefaultAtomMatcherTest extends TestCase
     matcher = new DefaultAtomMatcher(Molecules.createCyclohexane().getAtom(0));
     
     assertFalse(matcher.matches(phenol.getAtom(2)));
+  }
+  
+  public void testItDoesntMatchTolueneQuatToNeopentaneQuat()
+  {
+    Molecule toluene = Molecules.createToluene();
+    Molecule neopentane = Molecules.createNeopentane();
+    matcher = new DefaultAtomMatcher(toluene.getAtom(0));
+ 
+    assertFalse(matcher.matches(neopentane.getAtom(0)));
+  }
+  
+  public void testItMatchesEthyleneCarbonToAlleneQuatCarbon()
+  {
+    Molecule ethylene = createEthylene();
+    Molecule allene = createAllene();
+    matcher = new DefaultAtomMatcher(ethylene.getAtom(0));
+    
+    assertTrue(matcher.matches(allene.getAtom(1)));
+  }
+  
+  public void testItDoesntMatchAlleneQuatCarbonToEthyleneCarbon()
+  {
+    Molecule ethylene = createEthylene();
+    Molecule allene = createAllene();
+    matcher = new DefaultAtomMatcher(allene.getAtom(1));
+    
+    assertFalse(matcher.matches(ethylene.getAtom(0)));
+  }
+  
+  public void testItMatchesEthyleneCarbonToAcetyleneCarbon()
+  {
+    Molecule ethylene = createEthylene();
+    Molecule acetylene = createAcetylene();
+    matcher = new DefaultAtomMatcher(ethylene.getAtom(0));
+    
+    assertTrue(matcher.matches(acetylene.getAtom(0)));
+  }
+  
+  public void testItDoesntMatchAcetyleneCarbonToEthyleneCarbon()
+  {
+    Molecule ethylene = createEthylene();
+    Molecule acetylene = createAcetylene();
+    matcher = new DefaultAtomMatcher(acetylene.getAtom(0));
+    
+    assertFalse(matcher.matches(ethylene.getAtom(0)));
+  }
+  
+  public void testItDoesntMatchAcetoneOxygenToIsopropanolOxygen()
+  {
+    Molecule acetone = Molecules.createAcetone();
+    Molecule ipa = createIsopropanol();
+    matcher = new DefaultAtomMatcher(acetone.getAtom(3));
+    
+    assertFalse(matcher.matches(ipa.getAtom(3)));
+  }
+  
+  public void testItDoesntMatchIsopropanolOxygenToAcetoneOxygen()
+  {
+    Molecule acetone = Molecules.createAcetone();
+    Molecule ipa = createIsopropanol();
+    matcher = new DefaultAtomMatcher(ipa.getAtom(3));
+    
+    assertFalse(matcher.matches(acetone.getAtom(3)));
+  }
+  
+  private Molecule createEthylene()
+  {
+    Molecule result = new DefaultMolecule();
+    result.connect(result.addAtom("C"), result.addAtom("C"), 2);
+    
+    return result;
+  }
+  
+  private Molecule createAcetylene()
+  {
+    Molecule result = createEthylene();
+    result.getBond(0).setType(3);
+    
+    return result;
+  }
+  
+  private Molecule createAllene()
+  {
+    Molecule result = createEthylene();
+    result.connect(result.getAtom(1), result.addAtom("C"), 2);
+    
+    return result;
+  }
+  
+  private Molecule createIsopropanol()
+  {
+    Molecule result = Molecules.createAcetone();
+    result.getBond(2).setType(1);
+    
+    return result;
   }
 }
