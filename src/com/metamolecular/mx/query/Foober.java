@@ -7,20 +7,35 @@ package com.metamolecular.mx.query;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.model.Reducer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class Foober
 {
+  private Reducer reducer;
+  private Map<Atom, Integer> reductions;
+
+  public Foober()
+  {
+    reducer = new Reducer();
+    reductions = new HashMap();
+  }
+
   public Query foo(Molecule molecule)
   {
     Molecule copy = molecule.copy();
-    
-    return build(copy);
+
+    reductions.clear();
+    reducer.reduce(copy, reductions);
+
+    return build(copy, reductions);
   }
 
-  private Query build(Molecule molecule)
+  private Query build(Molecule molecule, Map<Atom, Integer> reductions)
   {
     DefaultQuery result = new DefaultQuery();
 

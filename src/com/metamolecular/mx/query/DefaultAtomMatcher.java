@@ -61,6 +61,11 @@ public class DefaultAtomMatcher implements AtomMatcher
       this.maximumUnsaturation = 0;
     }
   }
+  
+  public DefaultAtomMatcher(Atom template, int blockedPositions)
+  {
+    this(template);
+  }
 
   public boolean matches(Atom atom)
   {

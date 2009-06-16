@@ -202,6 +202,7 @@ public class DefaultAtomMatcherTest extends TestCase
     assertFalse(matcher.matches(phenol.getAtom(2)));
   }
   
+
   public void testItDoesntMatchTolueneQuatToNeopentaneQuat()
   {
     Molecule toluene = Molecules.createToluene();
@@ -219,7 +220,7 @@ public class DefaultAtomMatcherTest extends TestCase
     
     assertTrue(matcher.matches(allene.getAtom(1)));
   }
-  
+
   public void testItDoesntMatchAlleneQuatCarbonToEthyleneCarbon()
   {
     Molecule ethylene = createEthylene();

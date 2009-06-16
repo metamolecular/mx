@@ -34,7 +34,31 @@ public class FooberTest extends TestCase
     assertEquals(3, query.countNodes());
   }
   
-    private Molecule createBlockedPropane()
+  public void testBlockedPropaneReducedNodeMatchesUnreducedAtom()
+  {
+    Molecule propane = createBlockedPropane();
+    Query query = foober.foo(propane);
+    
+    assertTrue(query.getNode(1).getAtomMatcher().matches(propane.getAtom(1)));
+  }
+  
+  public void testDoubleBlockedPropaneReducedNodeMatchesUnreducedAtom()
+  {
+    Molecule propane = createDoubleBlockedPropane();
+    Query query = foober.foo(propane);
+    
+    assertTrue(query.getNode(1).getAtomMatcher().matches(propane.getAtom(1)));
+  }
+  
+  public void testBlockedSecondaryCarbonDoesntMatchQuatCarbon()
+  {
+    Molecule propane = createBlockedPropane();
+    Query query = foober.foo(propane);
+    
+//    assertFalse(query.getNode(1).getAtomMatcher().matches(Molecules.createNeopentane().getAtom(0)));
+  }
+  
+  private Molecule createBlockedPropane()
   {
     Molecule result = Molecules.createPropane();
 
