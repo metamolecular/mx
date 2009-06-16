@@ -96,7 +96,7 @@ public class MolfileWriter
 
   private void writeComments(Molecule molecule, Writer writer)
   {
-    writer.writeLine("Created with ChemWriter - http://metamolecular.com/chemwriter");
+    writer.writeLine("Created with MX - http://rapodaca.github.com/mx");
   }
 
   private void writeCounts(Molecule molecule, Writer writer)

@@ -8,12 +8,12 @@ import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.map.DefaultState;
 import com.metamolecular.mx.map.Match;
 import com.metamolecular.mx.query.Node;
 import com.metamolecular.mx.query.Query;
 import com.metamolecular.mx.map.State;
+import com.metamolecular.mx.query.TemplateCompiler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ import junit.framework.TestCase;
  */
 public class QueryDefaultStateTest extends TestCase
 {
-
+  private TemplateCompiler compiler;
   private Molecule benzene;
   private Query benzeneQuery;
   private Molecule toluene;
@@ -38,16 +38,21 @@ public class QueryDefaultStateTest extends TestCase
 
   public QueryDefaultStateTest()
   {
+    compiler = new TemplateCompiler();
     benzene = Molecules.createBenzene();
-    benzeneQuery = new DefaultQuery(benzene);
     toluene = Molecules.createToluene();
-    tolueneQuery = new DefaultQuery(toluene);
     phenol = Molecules.createPhenol();
     naphthalene = Molecules.createNaphthalene();
     hexane = Molecules.createHexane();
-    hexaneQuery = new DefaultQuery(hexane);
     acetone = Molecules.createAcetone();
-    acetoneQuery = new DefaultQuery(acetone);
+    compiler.setMolecule(acetone);
+    acetoneQuery = compiler.compile();
+    compiler.setMolecule(benzene);
+    benzeneQuery = compiler.compile();
+    compiler.setMolecule(toluene);
+    tolueneQuery = compiler.compile();
+    compiler.setMolecule(hexane);
+    hexaneQuery = compiler.compile();
   }
 
   @Override
@@ -268,7 +273,8 @@ public class QueryDefaultStateTest extends TestCase
   public void testItShouldClearAtomMappingsWhenAChildIsBacktracked()
   {
     Molecule m = create2MethylPentane();
-    DefaultQuery mQuery = new DefaultQuery(m);
+    compiler.setMolecule(m);
+    Query mQuery = compiler.compile();
     State state0 = new DefaultState(mQuery, m);
     Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
 
@@ -294,7 +300,8 @@ public class QueryDefaultStateTest extends TestCase
   public void testItShouldNotRemoveAnyAtomMappingsWhenHeadOfChildIsFullyMapped()
   {
     Molecule m = create2MethylPentane();
-    DefaultQuery mQuery = new DefaultQuery(m);
+    compiler.setMolecule(m);
+    Query mQuery = compiler.compile();
     State state0 = new DefaultState(mQuery, m);
     Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
 
@@ -370,7 +377,8 @@ public class QueryDefaultStateTest extends TestCase
   public void testItShouldBeAbleToMapADeepSymmetricallyBranchingMolecule()
   {
     Molecule m = create2MethylPentane();
-    Query mQuery = new DefaultQuery(m);
+    compiler.setMolecule(m);
+    Query mQuery = compiler.compile();//new DefaultQuery(m);
 
     State state0 = new DefaultState(mQuery, m);
     Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));

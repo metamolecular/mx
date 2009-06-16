@@ -25,9 +25,6 @@
  */
 package com.metamolecular.mx.query;
 
-import com.metamolecular.mx.model.Atom;
-import com.metamolecular.mx.model.Bond;
-import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,26 +40,6 @@ public class DefaultQuery implements Query
   {
     nodes = new ArrayList();
     edges = new ArrayList();
-  }
-
-  public DefaultQuery(Molecule molecule)
-  {
-    this();
-
-    for (int i = 0; i < molecule.countAtoms(); i++)
-    {
-      Atom atom = molecule.getAtom(i);
-      AtomMatcher matcher = new DefaultAtomMatcher(atom);
-
-      addNode(matcher);
-    }
-
-    for (int i = 0; i < molecule.countBonds(); i++)
-    {
-      Bond bond = molecule.getBond(i);
-
-      connect(nodes.get(bond.getSource().getIndex()), nodes.get(bond.getTarget().getIndex()));
-    }
   }
 
   public Iterable<Edge> edges()
@@ -132,7 +109,7 @@ public class DefaultQuery implements Query
 
     sourceImpl.neighbors.add(targetImpl);
     targetImpl.neighbors.add(sourceImpl);
-    
+
     sourceImpl.edges.add(edge);
     targetImpl.edges.add(edge);
 

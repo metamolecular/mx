@@ -28,7 +28,6 @@ package com.metamolecular.mx.test;
 import junit.framework.TestCase;
 import com.metamolecular.mx.model.*;
 import com.metamolecular.mx.io.Molecules;
-import com.metamolecular.mx.io.mdl.MolfileReader;
 
 import java.io.*;
 
@@ -37,34 +36,53 @@ import java.io.*;
  */
 public class MolfileWriterTest extends TestCase
 {
-    public void testWriterOutputsSubstructure()
-    {
-        Molecule ethylbenzene = Molecules.createEthylbenzeneWithSuperatom();
+  public void testCommentLineShouldGiveMXNameAndURL() throws Exception
+  {
+    Molecule benzene = Molecules.createBenzene();
+    String molfile = MoleculeKit.writeMolfile(benzene);
+    LineNumberReader reader =
+      new LineNumberReader(new StringReader(molfile));
+    
+    reader.readLine();
+    reader.readLine();
+    
+    assertEquals("Created with MX - http://rapodaca.github.com/mx", reader.readLine());
+  
+  }
 
-        String molfile = MoleculeKit.writeMolfile(ethylbenzene);
-        Molecule molecule = MoleculeKit.readMolfile(molfile);
-        assertEquals(1, molecule.countSuperatoms());
+  public void testWriterOutputsSubstructure()
+  {
+    Molecule ethylbenzene = Molecules.createEthylbenzeneWithSuperatom();
+
+    String molfile = MoleculeKit.writeMolfile(ethylbenzene);
+    Molecule molecule = MoleculeKit.readMolfile(molfile);
+    assertEquals(1, molecule.countSuperatoms());
+  }
+
+  public void testWriterOutputReaderInput() throws IOException
+  {
+    File[] molfiles = new File("../resources/molfiles").listFiles();
+    for (File molfile : molfiles)
+    {
+      String content = null;
+      content = getFileContent(molfile);
+      Molecule molecule1 = MoleculeKit.readMolfile(content);
+      String molfile1 = MoleculeKit.writeMolfile(molecule1);
+      Molecule molecule2 = MoleculeKit.readMolfile(molfile1);
+      String molfile2 = MoleculeKit.writeMolfile(molecule2);
+      assertEquals(molfile1, molfile2);
     }
-    public void testWriterOutputReaderInput() throws IOException {
-        File[] molfiles = new File("../resources/molfiles").listFiles();
-        for (File molfile : molfiles)
-        {
-            String content = null;
-            content = getFileContent(molfile);
-            Molecule molecule1 = MoleculeKit.readMolfile(content);
-            String molfile1 = MoleculeKit.writeMolfile(molecule1);
-            Molecule molecule2 = MoleculeKit.readMolfile(molfile1);
-            String molfile2 = MoleculeKit.writeMolfile(molecule2);
-            assertEquals(molfile1,molfile2);
-        }
+  }
+
+  private String getFileContent(File file) throws IOException
+  {
+    StringBuffer stringBuffer = new StringBuffer();
+    BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+    String line;
+    while ((line = bufferedReader.readLine()) != null)
+    {
+      stringBuffer.append(line + "\n");
     }
-    private String getFileContent(File file) throws IOException {
-        StringBuffer stringBuffer = new StringBuffer();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            stringBuffer.append(line+"\n");
-        }
-        return stringBuffer.toString();
-    }
+    return stringBuffer.toString();
+  }
 }

@@ -51,7 +51,7 @@ public class DefaultMapper implements Mapper
   
   public DefaultMapper(Molecule molecule)
   {
-    this.query = new DefaultQuery(molecule);
+    this.query = TemplateCompiler.compile(molecule);
     this.maps = new ArrayList<Map<Node, Atom>>();
   }
 
