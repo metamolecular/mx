@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class QueryDefaultStateTest extends TestCase
+public class DefaultStateTest extends TestCase
 {
   private TemplateCompiler compiler;
   private Molecule benzene;
@@ -36,7 +36,7 @@ public class QueryDefaultStateTest extends TestCase
   private Molecule acetone;
   private Query acetoneQuery;
 
-  public QueryDefaultStateTest()
+  public DefaultStateTest()
   {
     compiler = new TemplateCompiler();
     benzene = Molecules.createBenzene();

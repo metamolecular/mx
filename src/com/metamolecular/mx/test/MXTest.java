@@ -59,8 +59,8 @@ public class MXTest
     suite.addTestSuite(HanserRingFinderTest.class);
     suite.addTestSuite(DefaultAtomMatcherTest.class);
     suite.addTestSuite(QueryTest.class);
-    suite.addTestSuite(DefaultQueryMapperTest.class);
-    suite.addTestSuite(QueryDefaultStateTest.class);
+    suite.addTestSuite(DefaultMapperTest.class);
+    suite.addTestSuite(DefaultStateTest.class);
     suite.addTestSuite(SuperatomTest.class);
     suite.addTestSuite(MolfileWriterTest.class);
     suite.addTestSuite(ReducerTest.class);

@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * @author Richard L. Apodaca
  */
-public class DefaultQueryMapperTest extends TestCase
+public class DefaultMapperTest extends TestCase
 {
   private Molecule hexane;
   private Molecule benzene;
