@@ -99,7 +99,8 @@ public class PathFingerprinter
       {
         appendAtom(atom, pathString);
       }
-
+      
+      result.add(pathString.toString());
       appendRingClosure(path, pathString);
       result.add(pathString.toString());
     }
