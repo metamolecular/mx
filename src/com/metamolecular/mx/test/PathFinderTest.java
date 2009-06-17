@@ -194,4 +194,43 @@ public class PathFinderTest extends TestCase
     
     assertTrue(paths.contains(test));
   }
+  
+  public void testItShouldFindPathsExtendingFullDepthOfMolecule()
+  {
+    PathFinder finder = new PathFinder();
+    List<List<Atom>> paths = finder.findAllPaths(phenol.getAtom(6));
+ 
+    assertEquals(2, paths.size());
+ 
+    for (List<Atom> path : paths)
+    {
+      assertEquals(7, path.size());
+    }
+  }
+ 
+  public void testItShouldFindPathsOfLengthFiveOnly()
+  {
+    PathFinder finder = new PathFinder();
+    
+    finder.setMaximumDepth(5);
+    
+    List<List<Atom>> paths = finder.findAllPaths(phenol.getAtom(6));
+ 
+    assertEquals(2, paths.size());
+ 
+    for (List<Atom> path : paths)
+    {
+      assertEquals(5, path.size());
+    }
+  }
+  
+  public void testItShouldPlacePathsIntoAnExternallySuppliedCollection()
+  {
+    PathFinder finder = new PathFinder();
+    List<List<Atom>> paths = new ArrayList();
+    
+    finder.findAllPaths(phenol.getAtom(6), paths);
+    
+    assertEquals(2, paths.size());
+  }
 }

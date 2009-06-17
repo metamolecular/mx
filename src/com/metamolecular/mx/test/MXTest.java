@@ -65,6 +65,7 @@ public class MXTest
     suite.addTestSuite(MolfileWriterTest.class);
     suite.addTestSuite(ReducerTest.class);
     suite.addTestSuite(TemplateCompilerTest.class);
+    suite.addTestSuite(PathFingerprinterTest.class);
 
     TestRunner.run(suite);
   }
