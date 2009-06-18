@@ -38,15 +38,17 @@ import java.util.Set;
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class PathFingerprinter
+public class PathFingerprinter implements Fingerprinter
 {
   private int length;
   private PathFinder pathFinder;
+  private PathWriter writer;
 
   public PathFingerprinter()
   {
     this.length = 1024;
     pathFinder = new PathFinder();
+    writer = new PathWriter();
   }
 
   public void setMaximumPathDepth(int maxDepth)
@@ -57,6 +59,16 @@ public class PathFingerprinter
   public int getMaximumPathDepth()
   {
     return pathFinder.getMaximumDepth();
+  }
+  
+  public void setFingerprintLength(int length)
+  {
+    this.length = length;
+  }
+
+  public int getFingerprintLength()
+  {
+    return length;
   }
 
   public BitSet getFingerprint(Molecule molecule)
@@ -80,8 +92,7 @@ public class PathFingerprinter
 
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
-      Atom atom = molecule.getAtom(i);
-      paths.addAll(pathFinder.findAllPaths(atom));
+      pathFinder.findAllPaths(molecule.getAtom(i), paths);
     }
 
     return compilePaths(paths);
@@ -93,59 +104,9 @@ public class PathFingerprinter
 
     for (List<Atom> path : paths)
     {
-      StringBuffer pathString = new StringBuffer();
-
-      for (Atom atom : path)
-      {
-        appendAtom(atom, pathString);
-      }
-      
-      result.add(pathString.toString());
-      appendRingClosure(path, pathString);
-      result.add(pathString.toString());
+      writer.write(path, result);
     }
 
-    return result;
-  }
-
-  private void appendAtom(Atom atom, StringBuffer pathString)
-  {
-    String key = atom.getSymbol();
-    int unsaturation = atom.getValence() - atom.countNeighbors();
-
-    if (unsaturation > 0)
-    {
-      key += unsaturation;
-    }
-    
-    pathString.append(key);
-  }
-  
-  private void appendRingClosure(List<Atom> path, StringBuffer pathString)
-  {
-    int closure = getRingClosure(path);
-    
-    if (closure > 0)
-    {
-      pathString.append("-" + closure);
-    }
-  }
-  
-  private int getRingClosure(List<Atom> path)
-  {
-    int result = 0;
-    Atom tail = path.get(path.size() - 1);
-    
-    for (int i = path.size() - 3; i >= 0; i--)
-    {
-      Atom atom = path.get(i);
-      
-      if (atom.isConnectedTo(tail))
-      {
-        result = path.size() - i;
-      }
-    }
-    
     return result;
   }
 }

@@ -27,6 +27,7 @@ package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.fingerprint.PathFingerprinter;
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import java.util.BitSet;
 import junit.framework.TestCase;
@@ -36,7 +37,6 @@ import junit.framework.TestCase;
  */
 public class PathFingerprinterTest extends TestCase
 {
-
   private PathFingerprinter fingerprinter;
 
   @Override
@@ -160,13 +160,13 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(match(cyclohexane, hexane));
   }
 
-//  public void testItShouldMatchHexaneToCyclohexane()
-//  {
-//    BitSet cyclohexane = fingerprinter.getFingerprint(Molecules.createCyclohexane());
-//    BitSet hexane = fingerprinter.getFingerprint(Molecules.createHexane());
-//
-//    assertTrue(match(hexane, cyclohexane));
-//  }
+  public void testItShouldMatchHexaneToCyclohexane()
+  {
+    BitSet cyclohexane = fingerprinter.getFingerprint(Molecules.createCyclohexane());
+    BitSet hexane = fingerprinter.getFingerprint(Molecules.createHexane());
+
+    assertTrue(match(hexane, cyclohexane));
+  }
 
   public void testItShouldNotMatchCyclopropaneToPropane()
   {
@@ -176,12 +176,45 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(match(cyclopropane, propane));
   }
 
-  public boolean match(BitSet bitset, BitSet other)
+  public void testItShouldMatchPropaneToCyclopropane()
+  {
+    BitSet cyclopropane = fingerprinter.getFingerprint(Molecules.createCyclopropane());
+    BitSet propane = fingerprinter.getFingerprint(Molecules.createPropane());
+
+    assertTrue(match(propane, cyclopropane));
+  }
+
+  public void testItShouldMatchEtheneToEthyne()
+  {
+    BitSet ethene = fingerprinter.getFingerprint(createEthene());
+    BitSet ethyne = fingerprinter.getFingerprint(createEthyne());
+
+    assertTrue(match(ethene, ethyne));
+  }
+
+  private boolean match(BitSet bitset, BitSet other)
   {
     BitSet intersection = (BitSet) other;
 
     intersection.and(bitset);
 
     return intersection.equals(bitset);
+  }
+  
+  private Molecule createEthene()
+  {
+    Molecule result = new DefaultMolecule();
+    
+    result.connect(result.addAtom("C"), result.addAtom("C"), 2);
+    
+    return result;
+  }
+  
+  private Molecule createEthyne()
+  {
+    Molecule result = createEthene();
+    result.getBond(0).setType(3);
+    
+    return result;
   }
 }
