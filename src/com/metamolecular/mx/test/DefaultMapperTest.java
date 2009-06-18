@@ -219,7 +219,7 @@ public class DefaultMapperTest extends TestCase
     assertEquals(2, maps.size());
   }
 
-  public void testItShouldMapBlockedPropaneOntoPropane()
+  public void testItMapsBlockedPropaneOntoPropane()
   {
     Molecule blockedPropane = Molecules.createPropane();
 
@@ -228,6 +228,22 @@ public class DefaultMapperTest extends TestCase
     Mapper mapper = new DefaultMapper(blockedPropane);
 
     assertTrue(mapper.hasMap(propane));
+  }
+
+  public void testItMapsBlockedBenzaldehydeOntoBenzaldehyde()
+  {
+    Molecule blockedBenzaldehyde = this.createBlockedBenzaldehyde();
+    Mapper mapper = new DefaultMapper(blockedBenzaldehyde);
+
+    assertTrue(mapper.hasMap(createBenzaldehyde()));
+  }
+
+  public void testItDoesntMapBlockedBenzaldehydeOntoBenzoicAcid()
+  {
+    Molecule blockedBenzaldehyde = this.createBlockedBenzaldehyde();
+    Mapper mapper = new DefaultMapper(blockedBenzaldehyde);
+
+    assertFalse(mapper.hasMap(createBenzoicAcid()));
   }
 
   private Molecule create4Toluene()
@@ -248,6 +264,48 @@ public class DefaultMapperTest extends TestCase
     result.connect(c5, c6, 1);
     result.connect(c6, c1, 2);
     result.connect(c7, c4, 1);
+
+    return result;
+  }
+
+  private Molecule createBenzaldehyde()
+  {
+    Molecule result = new DefaultMolecule();
+    Atom c1 = result.addAtom("C");
+    Atom c2 = result.addAtom("C");
+    Atom c3 = result.addAtom("C");
+    Atom c4 = result.addAtom("C");
+    Atom c5 = result.addAtom("C");
+    Atom c6 = result.addAtom("C");
+    Atom c7 = result.addAtom("C");
+    Atom o8 = result.addAtom("O");
+
+    result.connect(c1, c2, 1);
+    result.connect(c2, c3, 2);
+    result.connect(c3, c4, 1);
+    result.connect(c4, c5, 2);
+    result.connect(c5, c6, 1);
+    result.connect(c6, c1, 2);
+    result.connect(c7, c1, 1);
+    result.connect(c7, o8, 2);
+
+    return result;
+  }
+
+  private Molecule createBenzoicAcid()
+  {
+    Molecule result = createBenzaldehyde();
+
+    result.connect(result.getAtom(6), result.addAtom("O"), 1);
+
+    return result;
+  }
+
+  private Molecule createBlockedBenzaldehyde()
+  {
+    Molecule result = createBenzaldehyde();
+
+    result.connect(result.getAtom(6), result.addAtom("H"), 1);
 
     return result;
   }
