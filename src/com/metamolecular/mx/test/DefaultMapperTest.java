@@ -26,6 +26,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.io.daylight.SMILESReader;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
@@ -33,6 +34,8 @@ import com.metamolecular.mx.model.MoleculeKit;
 import com.metamolecular.mx.map.DefaultMapper;
 import com.metamolecular.mx.map.Mapper;
 import com.metamolecular.mx.query.Node;
+import com.metamolecular.mx.query.Query;
+import com.metamolecular.mx.query.TemplateCompiler;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
@@ -244,6 +247,30 @@ public class DefaultMapperTest extends TestCase
     Mapper mapper = new DefaultMapper(blockedBenzaldehyde);
 
     assertFalse(mapper.hasMap(createBenzoicAcid()));
+  }
+
+  public void testDoesntMapImineToAmine()
+  {
+    Mapper mapper = new DefaultMapper(createSimpleImine());
+    Map<Node, Atom> map = mapper.getFirstMap(createSimpleAmine());
+    
+    assertEquals(0, map.size());
+  }
+  
+  private Molecule createSimpleImine()
+  {
+    Molecule result = new DefaultMolecule();
+    result.connect(result.addAtom("C"), result.addAtom("N"), 2);
+    
+    return result;
+  }
+  
+  private Molecule createSimpleAmine()
+  {
+    Molecule result = new DefaultMolecule();
+    result.connect(result.addAtom("C"), result.addAtom("N"), 1);
+    
+    return result;
   }
 
   private Molecule create4Toluene()
