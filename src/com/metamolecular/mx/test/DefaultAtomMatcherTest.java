@@ -78,19 +78,19 @@ public class DefaultAtomMatcherTest extends TestCase
     assertFalse(matcher.matches(phenol.getAtom(0)));
   }
 
-  public void testItShouldMatcBasedOnMinimumNeighbors()
-  {
-    matcher.setMinimumNeighbors(1);
-
-    assertTrue(matcher.matches(phenol.getAtom(6)));
-  }
-
-  public void testItShouldNotMatchBasedOnMinimumNeighbors()
-  {
-    matcher.setMinimumNeighbors(2);
-
-    assertFalse(matcher.matches(phenol.getAtom(6)));
-  }
+//  public void testItShouldMatcBasedOnMinimumNeighbors()
+//  {
+//    matcher.setMinimumNeighbors(1);
+//
+//    assertTrue(matcher.matches(phenol.getAtom(6)));
+//  }
+//
+//  public void testItShouldNotMatchBasedOnMinimumNeighbors()
+//  {
+//    matcher.setMinimumNeighbors(2);
+//
+//    assertFalse(matcher.matches(phenol.getAtom(6)));
+//  }
   
   public void testItShouldMatchBasedOnMinimumUnsaturation()
   {
@@ -151,35 +151,35 @@ public class DefaultAtomMatcherTest extends TestCase
     }
   }
 
-  public void testItShouldThrowWhenMinimumNeighborsSetHigherThanMaximumNeighbors()
-  {
-    matcher.setMinimumNeighbors(2);
-
-    try
-    {
-      matcher.setMaximumNeighbors(1);
-
-      fail();
-    }
-    catch (IllegalStateException ignore)
-    {
-    }
-  }
-
-  public void testItShouldThrowWhenMaximumNeighborsSetLowerThanMinimumNeighbors()
-  {
-    matcher.setMaximumNeighbors(2);
-
-    try
-    {
-      matcher.setMinimumNeighbors(3);
-
-      fail();
-    }
-    catch (IllegalStateException ignore)
-    {
-    }
-  }
+//  public void testItShouldThrowWhenMinimumNeighborsSetHigherThanMaximumNeighbors()
+//  {
+//    matcher.setMinimumNeighbors(2);
+//
+//    try
+//    {
+//      matcher.setMaximumNeighbors(1);
+//
+//      fail();
+//    }
+//    catch (IllegalStateException ignore)
+//    {
+//    }
+//  }
+//
+//  public void testItShouldThrowWhenMaximumNeighborsSetLowerThanMinimumNeighbors()
+//  {
+//    matcher.setMaximumNeighbors(2);
+//
+//    try
+//    {
+//      matcher.setMinimumNeighbors(3);
+//
+//      fail();
+//    }
+//    catch (IllegalStateException ignore)
+//    {
+//    }
+//  }
   
   public void testItShouldCreateATemplateMatcherThatMatchesPhenolOxygen()
   {

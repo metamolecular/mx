@@ -195,6 +195,11 @@ public class DefaultState implements State
 
   private boolean matchAtoms(Match match)
   {
+    if (match.getQueryNode().countNeighbors() > match.getTargetAtom().countNeighbors())
+    {
+      return false;
+    }
+    
     return match.getQueryNode().getAtomMatcher().matches(match.getTargetAtom());
   }
 

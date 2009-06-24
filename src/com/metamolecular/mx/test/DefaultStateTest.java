@@ -13,23 +13,25 @@ import com.metamolecular.mx.map.Match;
 import com.metamolecular.mx.query.Node;
 import com.metamolecular.mx.query.Query;
 import com.metamolecular.mx.map.State;
-import com.metamolecular.mx.query.TemplateCompiler;
+import com.metamolecular.mx.model.Bond;
+import com.metamolecular.mx.query.AtomMatcher;
+import com.metamolecular.mx.query.BondMatcher;
+import com.metamolecular.mx.query.DefaultQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class DefaultStateTest extends TestCase
 {
-  private TemplateCompiler compiler;
   private Molecule benzene;
   private Query benzeneQuery;
   private Molecule toluene;
   private Query tolueneQuery;
-  private Molecule phenol;
   private Molecule naphthalene;
   private Molecule hexane;
   private Query hexaneQuery;
@@ -38,21 +40,15 @@ public class DefaultStateTest extends TestCase
 
   public DefaultStateTest()
   {
-    compiler = new TemplateCompiler();
     benzene = Molecules.createBenzene();
     toluene = Molecules.createToluene();
-    phenol = Molecules.createPhenol();
     naphthalene = Molecules.createNaphthalene();
     hexane = Molecules.createHexane();
     acetone = Molecules.createAcetone();
-    compiler.setMolecule(acetone);
-    acetoneQuery = compiler.compile();
-    compiler.setMolecule(benzene);
-    benzeneQuery = compiler.compile();
-    compiler.setMolecule(toluene);
-    tolueneQuery = compiler.compile();
-    compiler.setMolecule(hexane);
-    hexaneQuery = compiler.compile();
+    acetoneQuery = createQuery(acetone);
+    benzeneQuery = createQuery(benzene);
+    tolueneQuery = createQuery(toluene);
+    hexaneQuery = createQuery(hexane);
   }
 
   @Override
@@ -60,7 +56,30 @@ public class DefaultStateTest extends TestCase
   {
   }
 
-  public void testItShouldFindAllMatchCandidatesInTheRootState()
+  public void testIsMatchFeasibleCallsAtomMatchInPrimaryState()
+  {
+    State primary = new DefaultState(hexaneQuery, hexane);
+    AtomMatcher matcher = hexaneQuery.getNode(0).getAtomMatcher();
+    Match match = new Match(hexaneQuery.getNode(0), hexane.getAtom(0));
+    primary.isMatchFeasible(match);
+
+    verify(matcher).matches(hexane.getAtom(0));
+  }
+
+  public void testIsMatchFeasibleCallsBondMatchWhenAtomsMatchInSecondaryState()
+  {
+    State primary = new DefaultState(hexaneQuery, hexane);
+    Match match = new Match(hexaneQuery.getNode(0), hexane.getAtom(0));
+    State secondary = primary.nextState(match);
+    BondMatcher matcher = hexaneQuery.getEdge(0).getBondMatcher();
+    match = new Match(hexaneQuery.getNode(1), hexane.getAtom(1));
+
+    secondary.isMatchFeasible(match);
+
+    verify(matcher).matches(hexane.getBond(0));
+  }
+
+  public void testItFindsAllMatchCandidatesInTheRootState()
   {
     State state = new DefaultState(benzeneQuery, benzene);
     int count = 0;
@@ -75,7 +94,7 @@ public class DefaultStateTest extends TestCase
     assertEquals(benzene.countAtoms() * benzene.countAtoms(), count);
   }
 
-  public void testItShoudFindAllMatchCandidatesInThePrimaryState()
+  public void testItFindsAllMatchCandidatesInThePrimaryState()
   {
     State state = new DefaultState(benzeneQuery, benzene);
     Match match = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
@@ -90,7 +109,7 @@ public class DefaultStateTest extends TestCase
     assertEquals(4, candidates.size());
   }
 
-  public void testItShouldFindAllMatchCandidatesInTheSecondaryState()
+  public void testItFindsAllMatchCandidatesInTheSecondaryState()
   {
     State state0 = new DefaultState(benzeneQuery, benzene);
     Match match0 = new Match(benzeneQuery.getNode(0), benzene.getAtom(0));
@@ -198,15 +217,16 @@ public class DefaultStateTest extends TestCase
     assertFalse(state.isMatchFeasible(fail));
   }
 
-  public void testItShouldDetermineFeasibilityByAtomSymbol()
+  public void testItRejectsSecondaryAtomAsFeasibleMatchForPrimaryAtom()
   {
-    State state = new DefaultState(tolueneQuery, phenol);
-    Match fail = new Match(tolueneQuery.getNode(6), phenol.getAtom(6));
+    Query query = createQuery(hexane);
+    State state = new DefaultState(query, hexane);
+    Match match = new Match(query.getNode(1), hexane.getAtom(0));
 
-    assertFalse(state.isMatchFeasible(fail));
+    assertFalse(state.isMatchFeasible(match));
   }
 
-  public void testItShouldBeDeadIfQueryHasMoreAtoms()
+  public void testItIsDeadIfQueryHasMoreAtomsThanTarget()
   {
     State state = new DefaultState(tolueneQuery, benzene);
 
@@ -273,8 +293,7 @@ public class DefaultStateTest extends TestCase
   public void testItShouldClearAtomMappingsWhenAChildIsBacktracked()
   {
     Molecule m = create2MethylPentane();
-    compiler.setMolecule(m);
-    Query mQuery = compiler.compile();
+    Query mQuery = createQuery(m);
     State state0 = new DefaultState(mQuery, m);
     Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
 
@@ -300,8 +319,7 @@ public class DefaultStateTest extends TestCase
   public void testItShouldNotRemoveAnyAtomMappingsWhenHeadOfChildIsFullyMapped()
   {
     Molecule m = create2MethylPentane();
-    compiler.setMolecule(m);
-    Query mQuery = compiler.compile();
+    Query mQuery = createQuery(m);
     State state0 = new DefaultState(mQuery, m);
     Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
 
@@ -326,7 +344,7 @@ public class DefaultStateTest extends TestCase
     assertEquals(5, state0.getMap().size());
   }
 
-  public void testItShouldNotMatchACandidateIfQueryAtomHasAlreadyBeenMapped()
+  public void testItDoesNotMatchACandidateIfQueryAtomHasAlreadyBeenMapped()
   {
     State state0 = new DefaultState(acetoneQuery, acetone);
     Match match0 = new Match(acetoneQuery.getNode(3), acetone.getAtom(3));
@@ -350,7 +368,7 @@ public class DefaultStateTest extends TestCase
     assertFalse(state3.isMatchFeasible(match3));
   }
 
-  public void testItShouldNotMatchACandidateIfTargetAtomHasAlreadyBeenMapped()
+  public void testItDoesNotMatchACandidateIfTargetAtomHasAlreadyBeenMapped()
   {
     State state0 = new DefaultState(acetoneQuery, acetone);
     Match match0 = new Match(acetoneQuery.getNode(3), acetone.getAtom(3));
@@ -374,68 +392,40 @@ public class DefaultStateTest extends TestCase
     assertFalse(state3.isMatchFeasible(match3));
   }
 
-  public void testItShouldBeAbleToMapADeepSymmetricallyBranchingMolecule()
+  public void testItMapsADeepSymmetricallyBranchingMolecule()
   {
     Molecule m = create2MethylPentane();
-    compiler.setMolecule(m);
-    Query mQuery = compiler.compile();//new DefaultQuery(m);
-
-    State state0 = new DefaultState(mQuery, m);
-    Match match0 = new Match(mQuery.getNode(0), m.getAtom(0));
-
-    assertTrue(state0.isMatchFeasible(match0));
-
-    State state1 = state0.nextState(match0);
-    Match match1 = new Match(mQuery.getNode(1), m.getAtom(1));
-
-    assertTrue(state1.isMatchFeasible(match1));
-
-    State state2 = state1.nextState(match1);
-    Match match2 = new Match(mQuery.getNode(2), m.getAtom(2));
-
-    assertTrue(state2.isMatchFeasible(match2));
-
-    State state3 = state2.nextState(match2);
-    Match match3 = new Match(mQuery.getNode(3), m.getAtom(3));
-
-    assertTrue(state3.isMatchFeasible(match3));
-
-    State state4 = state3.nextState(match3);
-    Match match4 = new Match(mQuery.getNode(4), m.getAtom(4));
-
-    assertFalse(state4.isMatchFeasible(match4));
-    assertTrue(state2.isMatchFeasible(match4));
+    Query mQuery = createQuery(m);
+    State state = new DefaultState(mQuery, m);
+    Match match = new Match(mQuery.getNode(0), m.getAtom(0));
+    
+    for (int i = 1; i < 5; i++)
+    {
+      assertTrue(state.isMatchFeasible(match));
+      
+      state = state.nextState(match);
+      match = new Match(mQuery.getNode(i), m.getAtom(i));
+    }
+    
+    assertFalse(state.hasNextCandidate());
   }
 
-  public void testItShouldBeAbleToMapAShallowSymmetricallyBranchingMolecule()
+  private AtomMatcher mockAtomMatcher()
   {
-    State state0 = new DefaultState(acetoneQuery, acetone);
-    Match match0 = new Match(acetoneQuery.getNode(0), acetone.getAtom(0));
+    AtomMatcher result = mock(AtomMatcher.class);
 
-    assertTrue(state0.isMatchFeasible(match0));
+    when(result.matches(any(Atom.class))).thenReturn(true);
 
-    State state1 = state0.nextState(match0);
-    Match match1 = new Match(acetoneQuery.getNode(1), acetone.getAtom(1));
+    return result;
+  }
 
-    assertTrue(state1.isMatchFeasible(match1));
+  private BondMatcher mockBondMatcher()
+  {
+    BondMatcher result = mock(BondMatcher.class);
 
-    State state2 = state1.nextState(match1);
-    Match match2 = new Match(acetoneQuery.getNode(2), acetone.getAtom(2));
+    when(result.matches(any(Bond.class))).thenReturn(true);
 
-    assertTrue(state2.isMatchFeasible(match2));
-
-    Match failMatch2 = new Match(acetoneQuery.getNode(2), acetone.getAtom(3));
-
-    assertFalse(state2.isMatchFeasible(failMatch2));
-
-    State state3 = state2.nextState(match2);
-    Match match3 = new Match(acetoneQuery.getNode(3), acetone.getAtom(3));
-
-    assertTrue(state2.isMatchFeasible(match3));
-
-    State state4 = state2.nextState(match3);
-
-    assertTrue(state4.isGoal());
+    return result;
   }
 
   private Molecule create2MethylPentane()
@@ -453,6 +443,25 @@ public class DefaultStateTest extends TestCase
     result.connect(c2, c3, 1);
     result.connect(c1, c4, 1);
     result.connect(c4, c5, 1);
+
+    return result;
+  }
+
+  private Query createQuery(Molecule molecule)
+  {
+    DefaultQuery result = new DefaultQuery();
+
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      result.addNode(mockAtomMatcher());
+    }
+
+    for (int i = 0; i < molecule.countBonds(); i++)
+    {
+      Bond bond = molecule.getBond(i);
+
+      result.connect(result.getNode(bond.getSource().getIndex()), result.getNode(bond.getTarget().getIndex()), mockBondMatcher());
+    }
 
     return result;
   }
