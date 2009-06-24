@@ -69,8 +69,8 @@ public class MXTest
     suite.addTestSuite(PathWriterTest.class);
     
     
-    suite.addTestSuite(DefaultBondMatcherTest2.class);
-    suite.addTestSuite(DefaultAtomMatcherTest2.class);
+    suite.addTestSuite(DefaultBondMatcherTest.class);
+    suite.addTestSuite(NewDefaultAtomMatcherTest.class);
 
     TestRunner.run(suite);
   }

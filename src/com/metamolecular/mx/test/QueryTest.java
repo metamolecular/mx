@@ -25,7 +25,9 @@
  */
 package com.metamolecular.mx.test;
 
+import com.metamolecular.mx.query.BondMatcher;
 import com.metamolecular.mx.query.DefaultAtomMatcher;
+import com.metamolecular.mx.query.DefaultBondMatcher;
 import com.metamolecular.mx.query.DefaultQuery;
 import com.metamolecular.mx.query.Edge;
 import com.metamolecular.mx.query.Node;
@@ -73,10 +75,21 @@ public class QueryTest extends TestCase
     Node node1 = query.addNode(new DefaultAtomMatcher());
     Node node2 = query.addNode(new DefaultAtomMatcher());
 
-    query.connect(node1, node2);
+    query.connect(node1, node2, new DefaultBondMatcher());
 
     assertEquals(1, node1.countNeighbors());
     assertEquals(1, node2.countNeighbors());
+  }
+
+  public void testItReturnsAQueryWithBondMatcherInEdge()
+  {
+    Node node1 = query.addNode(new DefaultAtomMatcher());
+    Node node2 = query.addNode(new DefaultAtomMatcher());
+    BondMatcher matcher = new DefaultBondMatcher();
+
+    query.connect(node1, node2, matcher);
+
+    assertEquals(matcher, query.getEdge(0).getBondMatcher());
   }
 
   public void testItShouldReturnAnEdgeWithTheCorrectNodesAfterConnecting()
@@ -84,7 +97,7 @@ public class QueryTest extends TestCase
     Node node1 = query.addNode(new DefaultAtomMatcher());
     Node node2 = query.addNode(new DefaultAtomMatcher());
 
-    Edge edge = query.connect(node1, node2);
+    Edge edge = query.connect(node1, node2, new DefaultBondMatcher());
 
     assertEquals(node1, edge.getSource());
     assertEquals(node2, edge.getTarget());
@@ -95,7 +108,7 @@ public class QueryTest extends TestCase
     Node node1 = query.addNode(new DefaultAtomMatcher());
     Node node2 = query.addNode(new DefaultAtomMatcher());
 
-    query.connect(node1, node2);
+    query.connect(node1, node2, new DefaultBondMatcher());
 
     assertEquals(1, query.countEdges());
   }
@@ -107,9 +120,9 @@ public class QueryTest extends TestCase
     Node node3 = query.addNode(new DefaultAtomMatcher());
     Node node4 = query.addNode(new DefaultAtomMatcher());
 
-    query.connect(node1, node2);
-    query.connect(node1, node3);
-    query.connect(node1, node4);
+    query.connect(node1, node2, new DefaultBondMatcher());
+    query.connect(node1, node3, new DefaultBondMatcher());
+    query.connect(node1, node4, new DefaultBondMatcher());
 
     List neighbors = new ArrayList();
 

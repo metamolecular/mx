@@ -26,14 +26,27 @@
 
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Atom;
+
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Edge
+public class NewDefaultAtomMatcher implements AtomMatcher
 {
-  public Node getSource();
+  private String symbol;
   
-  public Node getTarget();
+  public NewDefaultAtomMatcher()
+  {
+    symbol = null;
+  }
   
-  public BondMatcher getBondMatcher();
+  public boolean matches(Atom atom)
+  {
+    return symbol.equals(atom.getSymbol());
+  }
+  
+  public void setSymbol(String symbol)
+  {
+    this.symbol = symbol;
+  }
 }

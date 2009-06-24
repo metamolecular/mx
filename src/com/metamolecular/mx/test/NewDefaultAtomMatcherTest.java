@@ -24,16 +24,44 @@
  * THE SOFTWARE.
  */
 
-package com.metamolecular.mx.query;
+package com.metamolecular.mx.test;
+
+import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.query.NewDefaultAtomMatcher;
+import junit.framework.TestCase;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Edge
+public class NewDefaultAtomMatcherTest extends TestCase
 {
-  public Node getSource();
-  
-  public Node getTarget();
-  
-  public BondMatcher getBondMatcher();
+
+  private NewDefaultAtomMatcher matcher;
+  private Molecule phenol;
+
+  public NewDefaultAtomMatcherTest()
+  {
+    phenol = Molecules.createPhenol();
+  }
+
+  @Override
+  protected void setUp() throws Exception
+  {
+    matcher = new NewDefaultAtomMatcher();
+  }
+
+  public void testItShouldMatchBasedOnAtomLabel()
+  {
+    matcher.setSymbol("O");
+
+    assertTrue(matcher.matches(phenol.getAtom(6)));
+  }
+
+  public void testItShouldNotMatchBasedOnAtomLabel()
+  {
+    matcher.setSymbol("O");
+
+    assertFalse(matcher.matches(phenol.getAtom(0)));
+  }
 }

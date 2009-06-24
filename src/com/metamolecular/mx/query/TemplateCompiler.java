@@ -96,7 +96,7 @@ public class TemplateCompiler implements QueryCompiler
     {
       Bond bond = molecule.getBond(i);
 
-      result.connect(result.getNode(bond.getSource().getIndex()), result.getNode(bond.getTarget().getIndex()));
+      result.connect(result.getNode(bond.getSource().getIndex()), result.getNode(bond.getTarget().getIndex()), new DefaultBondMatcher(bond));
     }
 
     return result;

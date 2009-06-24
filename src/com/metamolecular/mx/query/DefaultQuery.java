@@ -101,11 +101,11 @@ public class DefaultQuery implements Query
     return edges.size();
   }
 
-  public Edge connect(Node source, Node target)
+  public Edge connect(Node source, Node target, BondMatcher matcher)
   {
     NodeImpl sourceImpl = (NodeImpl) source;
     NodeImpl targetImpl = (NodeImpl) target;
-    EdgeImpl edge = new EdgeImpl(sourceImpl, targetImpl);
+    EdgeImpl edge = new EdgeImpl(sourceImpl, targetImpl, matcher);
 
     sourceImpl.neighbors.add(targetImpl);
     targetImpl.neighbors.add(sourceImpl);
@@ -151,11 +151,13 @@ public class DefaultQuery implements Query
   {
     private NodeImpl source;
     private NodeImpl target;
+    private BondMatcher matcher;
 
-    private EdgeImpl(NodeImpl source, NodeImpl target)
+    private EdgeImpl(NodeImpl source, NodeImpl target, BondMatcher matcher)
     {
       this.source = source;
       this.target = target;
+      this.matcher = matcher;
     }
 
     public Node getSource()
@@ -166,6 +168,11 @@ public class DefaultQuery implements Query
     public Node getTarget()
     {
       return target;
+    }
+    
+    public BondMatcher getBondMatcher()
+    {
+      return matcher;
     }
   }
 }

@@ -26,14 +26,27 @@
 
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Bond;
+
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Edge
+public class DefaultBondMatcher implements BondMatcher
 {
-  public Node getSource();
+  private int bondOrder;
   
-  public Node getTarget();
+  public DefaultBondMatcher()
+  {
+    this.bondOrder = -1;
+  }
   
-  public BondMatcher getBondMatcher();
+  public DefaultBondMatcher(Bond bond)
+  {
+    this.bondOrder = bond.getType();
+  }
+  
+  public boolean matches(Bond bond)
+  {
+    return bondOrder == bond.getType();
+  }
 }

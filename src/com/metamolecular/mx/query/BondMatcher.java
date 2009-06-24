@@ -26,14 +26,12 @@
 
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Bond;
+
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Edge
+public interface BondMatcher
 {
-  public Node getSource();
-  
-  public Node getTarget();
-  
-  public BondMatcher getBondMatcher();
+  public boolean matches(Bond bond);
 }
