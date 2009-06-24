@@ -35,17 +35,11 @@ public class DefaultAtomMatcher implements AtomMatcher
 
   private String symbol;
   private int maximumNeighbors;
-//  private int minimumNeighbors;
-  private int minimumUnsaturation;
-  private int maximumUnsaturation;
 
   public DefaultAtomMatcher()
   {
     symbol = null;
     maximumNeighbors = -1;
-//    minimumNeighbors = -1;
-    minimumUnsaturation = -1;
-    maximumUnsaturation = -1;
   }
 
   public DefaultAtomMatcher(Atom atom)
@@ -53,13 +47,6 @@ public class DefaultAtomMatcher implements AtomMatcher
     this();
 
     this.symbol = atom.getSymbol();
-//    this.minimumNeighbors = atom.countNeighbors();
-    this.minimumUnsaturation = getUnsaturation(atom);
-    
-    if (minimumUnsaturation == 0)
-    {
-      this.maximumUnsaturation = 0;
-    }
   }
   
   public DefaultAtomMatcher(Atom template, int blockedPositions)
@@ -80,71 +67,18 @@ public class DefaultAtomMatcher implements AtomMatcher
     {
       return false;
     }
-
-//    if (!matchMinimumNeighbors(atom))
-//    {
-//      return false;
-//    }
     
-    if (!matchMinimumUnsaturation(atom))
-    {
-      return false;
-    }
-    
-    if (!matchMaximumUnsaturation(atom))
-    {
-      return false;
-    }
-
     return true;
-  }
-  
-  public void setMinimumUnsaturation(int minimum)
-  {
-    if (minimum > maximumUnsaturation && maximumUnsaturation != -1)
-    {
-      throw new IllegalStateException("Minimum " + minimum + " exceeds maximum");
-    }
-    this.minimumUnsaturation = minimum;
-  }
-  
-  public void setMaximumUnsaturation(int maximum)
-  {
-    if (maximum < minimumUnsaturation)
-    {
-      throw new IllegalStateException("Maximum " + maximum + " less than minimum");
-    }
-    this.maximumUnsaturation = maximum;
   }
 
   public void setMaximumNeighbors(int maximum)
   {
-//    if (maximum < minimumNeighbors)
-//    {
-//      throw new IllegalStateException("Maximum " + maximum + " exceeds minimum " + minimumNeighbors);
-//    }
-
     this.maximumNeighbors = maximum;
   }
-
-//  public void setMinimumNeighbors(int minimum)
-//  {
-//    if (minimum > maximumNeighbors && maximumNeighbors != -1)
-//    {
-//      throw new IllegalStateException("Minimum " + minimum + " exceeds maximum " + maximumNeighbors);
-//    }
-//
-//    this.minimumNeighbors = minimum;
-//  }
 
   public void setSymbol(String symbol)
   {
     this.symbol = symbol;
-  }
-  
-  private int getUnsaturation(Atom atom)
-  {
-    return atom.getValence() - atom.countNeighbors();
   }
 
   private boolean matchSymbol(Atom atom)
@@ -165,35 +99,5 @@ public class DefaultAtomMatcher implements AtomMatcher
     }
 
     return atom.countNeighbors() <= maximumNeighbors;
-  }
-
-//  private boolean matchMinimumNeighbors(Atom atom)
-//  {
-//    if (minimumNeighbors == -1)
-//    {
-//      return true;
-//    }
-//
-//    return atom.countNeighbors() >= minimumNeighbors;
-//  }
-  
-  private boolean matchMinimumUnsaturation(Atom atom)
-  {
-    if (minimumUnsaturation == -1)
-    {
-      return true;
-    }
-    
-    return getUnsaturation(atom) >= this.minimumUnsaturation;
-  }
-  
-  private boolean matchMaximumUnsaturation(Atom atom)
-  {
-    if (maximumUnsaturation == -1)
-    {
-      return true;
-    }
-    
-    return getUnsaturation(atom) <= this.maximumUnsaturation;
   }
 }

@@ -50,136 +50,33 @@ public class DefaultAtomMatcherTest extends TestCase
     matcher = new DefaultAtomMatcher();
   }
 
-  public void testItShouldMatchBasedOnAtomLabel()
+  public void testItMatchesBasedOnAtomLabel()
   {
     matcher.setSymbol("O");
 
     assertTrue(matcher.matches(phenol.getAtom(6)));
   }
 
-  public void testItShouldNotMatchBasedOnAtomLabel()
+  public void testItFailsMatchBasedOnAtomLabel()
   {
     matcher.setSymbol("O");
 
     assertFalse(matcher.matches(phenol.getAtom(0)));
   }
 
-  public void testItShouldMatchBasedOnMaximumNeighbors()
+  public void testItMatchesBasedOnMaximumNeighbors()
   {
     matcher.setMaximumNeighbors(1);
 
     assertTrue(matcher.matches(phenol.getAtom(6)));
   }
 
-  public void testItShouldNotMatchBasedOnMaximumNeighbors()
+  public void testItFailsMatchBasedOnMaximumNeighbors()
   {
     matcher.setMaximumNeighbors(1);
 
     assertFalse(matcher.matches(phenol.getAtom(0)));
   }
-
-//  public void testItShouldMatcBasedOnMinimumNeighbors()
-//  {
-//    matcher.setMinimumNeighbors(1);
-//
-//    assertTrue(matcher.matches(phenol.getAtom(6)));
-//  }
-//
-//  public void testItShouldNotMatchBasedOnMinimumNeighbors()
-//  {
-//    matcher.setMinimumNeighbors(2);
-//
-//    assertFalse(matcher.matches(phenol.getAtom(6)));
-//  }
-  
-  public void testItShouldMatchBasedOnMinimumUnsaturation()
-  {
-    matcher.setMinimumUnsaturation(1);
-    
-    assertTrue(matcher.matches(phenol.getAtom(0)));
-  }
-  
-  public void testItShouldNotMatchBasedOnMinimumUnsaturation()
-  {
-    matcher.setMinimumUnsaturation(4);
-    
-    assertFalse(matcher.matches(phenol.getAtom(0)));
-  }
-  
-  public void testItShouldMatchBasedOnMaximumUnsaturation()
-  {
-    matcher.setMaximumUnsaturation(3);
-    
-    assertTrue(matcher.matches(phenol.getAtom(0)));
-  }
-  
-  public void testItShouldNotMatchBasedOnMaximumUnsaturation()
-  {
-    matcher.setMaximumUnsaturation(0);
-    
-    assertFalse(matcher.matches(phenol.getAtom(0)));
-  }
-  
-  public void testItThrowsWhenMaximumUnsaturationLessThanMinimumaUnsaturation()
-  {
-    matcher.setMinimumUnsaturation(3);
-    try
-    {
-      matcher.setMaximumUnsaturation(2);
-      fail();
-    }
-    
-    catch(IllegalStateException e)
-    {
-      
-    }
-  }
-  
-  public void testItThrowsWhenMinimumUnsaturationGreaterThanMaximumUnsaturation()
-  {
-    matcher.setMaximumUnsaturation(3);
-    
-    try
-    {
-      matcher.setMinimumUnsaturation(4);
-      fail();
-    }
-    
-    catch(IllegalStateException e)
-    {
-      
-    }
-  }
-
-//  public void testItShouldThrowWhenMinimumNeighborsSetHigherThanMaximumNeighbors()
-//  {
-//    matcher.setMinimumNeighbors(2);
-//
-//    try
-//    {
-//      matcher.setMaximumNeighbors(1);
-//
-//      fail();
-//    }
-//    catch (IllegalStateException ignore)
-//    {
-//    }
-//  }
-//
-//  public void testItShouldThrowWhenMaximumNeighborsSetLowerThanMinimumNeighbors()
-//  {
-//    matcher.setMaximumNeighbors(2);
-//
-//    try
-//    {
-//      matcher.setMinimumNeighbors(3);
-//
-//      fail();
-//    }
-//    catch (IllegalStateException ignore)
-//    {
-//    }
-//  }
   
   public void testItShouldCreateATemplateMatcherThatMatchesPhenolOxygen()
   {
@@ -193,77 +90,6 @@ public class DefaultAtomMatcherTest extends TestCase
     matcher = new DefaultAtomMatcher(phenol.getAtom(5));
     
     assertTrue(matcher.matches(phenol.getAtom(5)));
-  }
-  
-  public void testItDoesntMatchCyclohexaneCarbonToPhenolCarbon()
-  {
-    matcher = new DefaultAtomMatcher(Molecules.createCyclohexane().getAtom(0));
-    
-    assertFalse(matcher.matches(phenol.getAtom(2)));
-  }
-  
-
-  public void testItDoesntMatchTolueneQuatToNeopentaneQuat()
-  {
-    Molecule toluene = Molecules.createToluene();
-    Molecule neopentane = Molecules.createNeopentane();
-    matcher = new DefaultAtomMatcher(toluene.getAtom(0));
- 
-    assertFalse(matcher.matches(neopentane.getAtom(0)));
-  }
-  
-  public void testItMatchesEthyleneCarbonToAlleneQuatCarbon()
-  {
-    Molecule ethylene = createEthylene();
-    Molecule allene = createAllene();
-    matcher = new DefaultAtomMatcher(ethylene.getAtom(0));
-    
-    assertTrue(matcher.matches(allene.getAtom(1)));
-  }
-
-  public void testItDoesntMatchAlleneQuatCarbonToEthyleneCarbon()
-  {
-    Molecule ethylene = createEthylene();
-    Molecule allene = createAllene();
-    matcher = new DefaultAtomMatcher(allene.getAtom(1));
-    
-    assertFalse(matcher.matches(ethylene.getAtom(0)));
-  }
-  
-  public void testItMatchesEthyleneCarbonToAcetyleneCarbon()
-  {
-    Molecule ethylene = createEthylene();
-    Molecule acetylene = createAcetylene();
-    matcher = new DefaultAtomMatcher(ethylene.getAtom(0));
-    
-    assertTrue(matcher.matches(acetylene.getAtom(0)));
-  }
-  
-  public void testItDoesntMatchAcetyleneCarbonToEthyleneCarbon()
-  {
-    Molecule ethylene = createEthylene();
-    Molecule acetylene = createAcetylene();
-    matcher = new DefaultAtomMatcher(acetylene.getAtom(0));
-    
-    assertFalse(matcher.matches(ethylene.getAtom(0)));
-  }
-  
-  public void testItDoesntMatchAcetoneOxygenToIsopropanolOxygen()
-  {
-    Molecule acetone = Molecules.createAcetone();
-    Molecule ipa = createIsopropanol();
-    matcher = new DefaultAtomMatcher(acetone.getAtom(3));
-    
-    assertFalse(matcher.matches(ipa.getAtom(3)));
-  }
-  
-  public void testItDoesntMatchIsopropanolOxygenToAcetoneOxygen()
-  {
-    Molecule acetone = Molecules.createAcetone();
-    Molecule ipa = createIsopropanol();
-    matcher = new DefaultAtomMatcher(ipa.getAtom(3));
-    
-    assertFalse(matcher.matches(acetone.getAtom(3)));
   }
   
   public void testItDoesntMatchDoublyBlockedSecondaryCarbonToQuatCarbon()
