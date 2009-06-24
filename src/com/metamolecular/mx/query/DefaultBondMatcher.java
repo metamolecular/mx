@@ -23,9 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.query;
 
+import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 
 /**
@@ -34,19 +34,42 @@ import com.metamolecular.mx.model.Bond;
 public class DefaultBondMatcher implements BondMatcher
 {
   private int bondOrder;
-  
+  private int unsaturation;
+
   public DefaultBondMatcher()
   {
     this.bondOrder = -1;
+    this.unsaturation = -1;
   }
-  
+
   public DefaultBondMatcher(Bond bond)
   {
     this.bondOrder = bond.getType();
+    this.unsaturation = getUnsaturation(bond);
   }
-  
+
   public boolean matches(Bond bond)
   {
-    return bondOrder == bond.getType();
+    if (bondOrder == bond.getType())
+    {
+      return true;
+    }
+    
+    if (this.unsaturation == getUnsaturation(bond))
+    {
+      return true;
+    }
+    
+    return false;
+  }
+
+  private int getUnsaturation(Bond bond)
+  {
+    return getUnsaturation(bond.getSource()) + getUnsaturation(bond.getTarget());
+  }
+
+  private int getUnsaturation(Atom atom)
+  {
+    return atom.getValence() - atom.countNeighbors();
   }
 }

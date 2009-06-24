@@ -26,7 +26,6 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
-import com.metamolecular.mx.io.daylight.SMILESReader;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
@@ -34,8 +33,6 @@ import com.metamolecular.mx.model.MoleculeKit;
 import com.metamolecular.mx.map.DefaultMapper;
 import com.metamolecular.mx.map.Mapper;
 import com.metamolecular.mx.query.Node;
-import com.metamolecular.mx.query.Query;
-import com.metamolecular.mx.query.TemplateCompiler;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;

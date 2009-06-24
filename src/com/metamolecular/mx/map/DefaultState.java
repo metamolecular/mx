@@ -262,7 +262,7 @@ public class DefaultState implements State
 
   private boolean matchBond(Edge edge, Bond targetBond)
   {
-    return true;
+    return edge.getBondMatcher().matches(targetBond);
   }
 
   private boolean isHeadMapped()

@@ -26,6 +26,7 @@
 
 package com.metamolecular.mx.test;
 
+import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.DefaultBondMatcher;
@@ -68,6 +69,14 @@ public class DefaultBondMatcherTest extends TestCase
     matcher = new DefaultBondMatcher(ethene.getBond(0));
     
     assertFalse(matcher.matches(ethane.getBond(0)));
+  }
+  
+  public void testItMatchesKekuleCCBond()
+  {
+    Molecule benzene = Molecules.createBenzene();
+    matcher = new DefaultBondMatcher(benzene.getBond(0));
+    
+    assertTrue(matcher.matches(benzene.getBond(1)));
   }
   
   private Molecule createEthane()
