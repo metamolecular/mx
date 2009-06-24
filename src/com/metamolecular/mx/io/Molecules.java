@@ -33,9 +33,35 @@ import com.metamolecular.mx.model.*;
  */
 public class Molecules
 {
-
   private Molecules()
   {
+  }
+
+  public static Molecule createDimethylsulfide()
+  {
+    Molecule result = new DefaultMolecule();
+    result.connect(result.addAtom("C"), result.addAtom("S"), 1);
+    result.connect(result.getAtom(1), result.addAtom("C"), 1);
+
+    return result;
+  }
+
+  public static Molecule createChargelessDMSO()
+  {
+    Molecule result = createDimethylsulfide();
+    result.connect(result.getAtom(1), result.addAtom("O"), 2);
+
+    return result;
+  }
+
+  public static Molecule createChargedDMSO()
+  {
+    Molecule result = createChargelessDMSO();
+    result.getBond(2).setType(1);
+    result.getAtom(3).setCharge(-1);
+    result.getAtom(1).setCharge(1);
+
+    return result;
   }
 
   public static Molecule createMethane()
@@ -296,7 +322,7 @@ public class Molecules
     Atom c3 = result.addAtom("C");
     Atom c4 = result.addAtom("C");
     Atom c5 = result.addAtom("C");
-    
+
     result.connect(c0, c1, 1);
     result.connect(c1, c2, 1);
     result.connect(c2, c3, 1);
@@ -304,26 +330,25 @@ public class Molecules
     result.connect(c4, c5, 1);
     result.connect(c5, c0, 1);
     result.connect(c2, c5, 1);
-    
+
     return result;
   }
 
   public static Molecule createEthylbenzeneWithSuperatom()
   {
     Molecule result = Molecules.createBenzene();
-    Atom carbon1=result.addAtom("C");
-    Atom carbon2=result.addAtom("C");
-    Bond crossingBond=result.connect(result.getAtom(0),carbon1,1);
-    result.connect(carbon1,carbon2,1);
+    Atom carbon1 = result.addAtom("C");
+    Atom carbon2 = result.addAtom("C");
+    Bond crossingBond = result.connect(result.getAtom(0), carbon1, 1);
+    result.connect(carbon1, carbon2, 1);
 
-    Superatom substructure=result.addSuperatom();
+    Superatom substructure = result.addSuperatom();
     substructure.addAtom(carbon1);
     substructure.addAtom(carbon2);
     substructure.addCrossingBond(crossingBond);
-    substructure.setCrossingVector(crossingBond,0.1,0.1);
+    substructure.setCrossingVector(crossingBond, 0.1, 0.1);
     substructure.setLabel("Ethyl");
 
     return result;
   }
-
 }

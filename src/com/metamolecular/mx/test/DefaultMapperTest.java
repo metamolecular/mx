@@ -26,6 +26,7 @@
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.io.Molecules;
+import com.metamolecular.mx.io.daylight.SMILESReader;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
@@ -246,27 +247,48 @@ public class DefaultMapperTest extends TestCase
     assertFalse(mapper.hasMap(createBenzoicAcid()));
   }
 
+  public void testItMapsDimethylsulfideToChargelessDMSO()
+  {
+    Mapper mapper = new DefaultMapper(Molecules.createDimethylsulfide());
+
+    assertTrue(mapper.hasMap(Molecules.createChargelessDMSO()));
+  }
+
+  public void testItMapsDimethylsulfideToChargedDMSO()
+  {
+    Mapper mapper = new DefaultMapper(Molecules.createDimethylsulfide());
+
+    assertTrue(mapper.hasMap(Molecules.createChargedDMSO()));
+  }
+
+//  public void testItMapsChargelessDMSOToChargeledDMSO()
+//  {
+//    Mapper mapper = new DefaultMapper(Molecules.createChargelessDMSO());
+//
+//    assertTrue(mapper.hasMap(Molecules.createChargedDMSO()));
+//  }
+
   public void testDoesntMapImineToAmine()
   {
     Mapper mapper = new DefaultMapper(createSimpleImine());
     Map<Node, Atom> map = mapper.getFirstMap(createSimpleAmine());
-    
+
     assertEquals(0, map.size());
   }
-  
+
   private Molecule createSimpleImine()
   {
     Molecule result = new DefaultMolecule();
     result.connect(result.addAtom("C"), result.addAtom("N"), 2);
-    
+
     return result;
   }
-  
+
   private Molecule createSimpleAmine()
   {
     Molecule result = new DefaultMolecule();
     result.connect(result.addAtom("C"), result.addAtom("N"), 1);
-    
+
     return result;
   }
 
