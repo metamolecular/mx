@@ -67,6 +67,10 @@ public class MXTest
     suite.addTestSuite(TemplateCompilerTest.class);
     suite.addTestSuite(PathFingerprinterTest.class);
     suite.addTestSuite(PathWriterTest.class);
+    
+    
+    suite.addTestSuite(DefaultBondMatcherTest2.class);
+    suite.addTestSuite(DefaultAtomMatcherTest2.class);
 
     TestRunner.run(suite);
   }
