@@ -602,6 +602,22 @@ public class DefaultMolecule implements Molecule
     {
       return (Bond[]) bonds.toArray(new Bond[0]);
     }
+    
+    public Bond getBond(Atom neighbor)
+    {
+      for (int i = 0; i < bonds.size(); i++)
+      {
+        Bond bond = (Bond) bonds.get(i);
+        Atom mate = bond.getMate(this);
+        
+        if (mate == neighbor)
+        {
+          return bond;
+        }
+      }
+      
+      throw new RuntimeException("Attempting to get Bond to non-neighbor Atom " + neighbor);
+    }
 
     public int getCharge()
     {

@@ -55,6 +55,8 @@ public interface Atom
   
   public Bond[] getBonds();
   
+  public Bond getBond(Atom neighbor);
+  
   public int countNeighbors();
   
   public boolean isConnectedTo(Atom atom);

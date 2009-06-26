@@ -26,6 +26,7 @@
 
 package com.metamolecular.mx.test;
 
+import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
@@ -38,6 +39,31 @@ import junit.framework.TestCase;
  */
 public class AtomTest extends TestCase
 {
+  public void testItReturnsBondToNeighbor()
+  {
+    Molecule propane = Molecules.createPropane();
+    Atom atom1 = propane.getAtom(1);
+    
+    assertEquals(propane.getBond(atom1, propane.getAtom(0)), atom1.getBond(propane.getAtom(0)));
+  }
+  
+  public void testItThrowsWhenFindingBondToNonexistantNeighbor()
+  {
+    Molecule propane = Molecules.createPropane();
+    Atom atom0 = propane.getAtom(0);
+    
+    try
+    {
+      atom0.getBond(propane.getAtom(2)); 
+      fail();
+    }
+    
+    catch(RuntimeException ignore)
+    {
+      
+    }
+  }
+  
   public void testItShouldUpdateItsPropertiesWhenChargeIsSet()
   {
     Molecule molecule = new DefaultMolecule();
