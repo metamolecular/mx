@@ -120,6 +120,14 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(match(benzene, cyclohexane));
   }
 
+  public void testItGivesTheSameFingerprintFromOXyleneForAlternateKekuleForm()
+  {
+    BitSet xylene = fingerprinter.getFingerprint(createXylene());
+    BitSet kekule = fingerprinter.getFingerprint(createKekuleXylene());
+    
+    assertEquals(xylene, kekule);
+  }
+
   public void testItShouldGiveAFingerprintFromBenzeneThatDoesntMatchCyclohexane()
   {
     BitSet benzene = fingerprinter.getFingerprint(Molecules.createBenzene());
@@ -200,21 +208,48 @@ public class PathFingerprinterTest extends TestCase
 
     return intersection.equals(bitset);
   }
-  
+
   private Molecule createEthene()
   {
     Molecule result = new DefaultMolecule();
-    
+
     result.connect(result.addAtom("C"), result.addAtom("C"), 2);
-    
+
     return result;
   }
-  
+
   private Molecule createEthyne()
   {
     Molecule result = createEthene();
     result.getBond(0).setType(3);
+
+    return result;
+  }
+  
+  private Molecule createXylene()
+  {
+    Molecule result = Molecules.createCyclohexane();
+    result.getBond(result.getAtom(0), result.getAtom(1)).setType(2);
+    result.getBond(result.getAtom(2), result.getAtom(3)).setType(2);
+    result.getBond(result.getAtom(4), result.getAtom(5)).setType(2);
+
+    result.connect(result.getAtom(0), result.addAtom("C"), 1);
+    result.connect(result.getAtom(5), result.addAtom("C"), 1);
+
+    return result;
+  }
+
+  private Molecule createKekuleXylene()
+  {
+    Molecule result = Molecules.createCyclohexane();
+
+    result.getBond(result.getAtom(1), result.getAtom(2)).setType(2);
+    result.getBond(result.getAtom(3), result.getAtom(4)).setType(2);
+    result.getBond(result.getAtom(5), result.getAtom(0)).setType(2);
     
+    result.connect(result.getAtom(0), result.addAtom("C"), 1);
+    result.connect(result.getAtom(5), result.addAtom("C"), 1);
+
     return result;
   }
 }
