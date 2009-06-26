@@ -27,6 +27,7 @@ package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.path.PathWriter;
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -96,36 +97,90 @@ public class PathWriterTest extends TestCase
       ".", "..", "...", "....", ".....", "......",
       "......-3", "......-4", "......-6")), paths);
   }
-  
-  public void testItWritesLeadingAromaticAtoms()
+
+  public void testItWritesAllIntermediatePathsAndUnsaturatedRingClosureOfCycle()
+  {
+    cycle(6);
+    Bond db = mock(Bond.class);
+    when(db.getType()).thenReturn(2);
+    when(path.get(0).getBond(path.get(5))).thenReturn(db);
+    when(path.get(5).getBond(path.get(0))).thenReturn(db);
+    doWrite();
+
+    assertEquals(new HashSet(Arrays.asList(
+      ".%", ".%.", ".%..", ".%...", ".%....", ".%.....%", ".%.....%-6")), paths);
+  }
+
+  public void testItWritesAromaticAtoms()
   {
     chain(3);
     aromatics.add(path.get(0));
     aromatics.add(path.get(1));
     doWrite();
-    
+
     assertEquals(new HashSet(Arrays.asList(
       ".%", ".%.%", ".%.%.")), paths);
   }
 
-//  public void testItWritesSP2()
-//  {
-//    benzene();
-//    doWrite();
-//
-//    assertEquals(new HashSet(Arrays.asList(
-//      "C%", "C%C%", "C%C%C%", "C%C%C%C%", "C%C%C%C%C%",
-//      "C%C%C%C%C%C%", "C%C%C%C%C%C%-6")), paths);
-//  }
-//
-//  public void testItWritesSP3()
-//  {
-//    ethyne();
-//    doWrite();
-//
-//    assertEquals(new HashSet(Arrays.asList(
-//      "C%", "C%C%")), paths);
-//  }
+  public void testItWritesTerminalSP2()
+  {
+    chain(4);
+    Bond db = mock(Bond.class);
+    when(db.getType()).thenReturn(2);
+    when(path.get(0).getBond(path.get(1))).thenReturn(db);
+    when(path.get(1).getBond(path.get(0))).thenReturn(db);
+    doWrite();
+
+    assertEquals(new HashSet(Arrays.asList(
+      ".%", ".%.%", ".%.%.", ".%.%..")), paths);
+  }
+
+  public void testItWritesInternalSP2()
+  {
+    chain(4);
+    Bond db = mock(Bond.class);
+    when(db.getType()).thenReturn(2);
+    when(path.get(1).getBond(path.get(2))).thenReturn(db);
+    when(path.get(2).getBond(path.get(1))).thenReturn(db);
+    doWrite();
+
+    assertEquals(new HashSet(Arrays.asList(
+      ".", "..%", "..%.%", "..%.%.")), paths);
+  }
+
+  public void testItWritesTerminalSP3()
+  {
+    chain(4);
+    Bond db = mock(Bond.class);
+    when(db.getType()).thenReturn(3);
+    when(path.get(0).getBond(path.get(1))).thenReturn(db);
+    when(path.get(1).getBond(path.get(0))).thenReturn(db);
+    doWrite();
+
+    assertEquals(new HashSet(Arrays.asList(
+      ".#", ".#.#", ".#.#.", ".#.#..")), paths);
+  }
+
+  public void testItWritesInternalSP3()
+  {
+    chain(4);
+    Bond db = mock(Bond.class);
+    when(db.getType()).thenReturn(3);
+    when(path.get(1).getBond(path.get(2))).thenReturn(db);
+    when(path.get(2).getBond(path.get(1))).thenReturn(db);
+    doWrite();
+
+    assertEquals(new HashSet(Arrays.asList(
+      ".", "..#", "..#.#", "..#.#.")), paths);
+  }
+
+  public void testItClearsSP2BetweenInvocations()
+  {
+    testItWritesInternalSP2();
+    path.clear();
+    paths.clear();
+    testItWritesTerminalSP2();
+  }
 
   private void doWrite()
   {
@@ -134,12 +189,17 @@ public class PathWriterTest extends TestCase
 
   private void chain(int length)
   {
+    Bond single = mock(Bond.class);
+
+    when(single.getType()).thenReturn(1);
+
     for (int i = 0; i < length; i++)
     {
       Atom atom = mock(Atom.class);
 
       when(atom.getSymbol()).thenReturn(".");
       when(atom.isConnectedTo(any(Atom.class))).thenReturn(false);
+      when(atom.getBond(any(Atom.class))).thenReturn(single);
 
       path.add(atom);
     }

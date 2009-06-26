@@ -27,6 +27,7 @@ package com.metamolecular.mx.path;
 
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -38,15 +39,19 @@ import java.util.Set;
 public class PathWriter
 {
   private Set<Atom> sp2;
+  private Set<Atom> sp;
+  private List<Integer> ringClosures;
   
   public PathWriter()
   {
     sp2 = new HashSet();
+    sp = new HashSet();
+    ringClosures = new ArrayList();
   }
 
   public void write(List<Atom> path, Collection<String> strings, Collection<Atom> aromatics)
   {
-    loadSP2(path);
+    loadUnsaturatedBonds(path);
     StringBuffer pathString = new StringBuffer();
 
     for (Atom atom : path)
@@ -55,7 +60,7 @@ public class PathWriter
       strings.add(pathString.toString());
     }
 
-    appendRingClosures(path, pathString, strings);
+    appendRingClosures(pathString, strings);
   }
 
   private void appendAtom(Atom atom, StringBuffer pathString, Collection<Atom> aromatics)
@@ -68,28 +73,69 @@ public class PathWriter
     {
       pathString.append("%");
     }
-  }
-
-  private void appendRingClosures(List<Atom> path, StringBuffer rootPathString, Collection<String> pathStrings)
-  {
-    Atom tail = path.get(path.size() - 1);
-
-    for (int i = path.size() - 3; i >= 0; i--)
+    
+    if (sp.contains(atom))
     {
-      Atom atom = path.get(i);
-
-      if (atom.isConnectedTo(tail))
-      {
-        pathStrings.add(rootPathString + "-" + (path.size() - i));
-      }
+      pathString.append("#");
     }
   }
 
-  private void loadSP2(List<Atom> path)
+  private void appendRingClosures(StringBuffer rootPathString, Collection<String> pathStrings)
   {
-    for (int i = 0; i < path.size(); i++)
+    for (Integer closure : ringClosures)
+    {
+      pathStrings.add(rootPathString + "-" + closure);
+    }
+  }
+
+  private void loadUnsaturatedBonds(List<Atom> path)
+  {
+    sp2.clear();
+    sp.clear();
+    ringClosures.clear();
+    
+    for (int i = 1; i < path.size(); i++)
     {
       Atom atom = path.get(i);
+      Atom left = path.get(i-1);
+      Bond bond = atom.getBond(left);
+      
+      if (bond.getType() == 2)
+      {
+        sp2.add(left);
+        sp2.add(atom);
+      }
+      
+      if (bond.getType() == 3)
+      {
+        sp.add(left);
+        sp.add(atom);
+      }
+    }
+    
+    Atom tail = path.get(path.size() - 1);
+    
+    for (int i = path.size() - 3; i >= 0; i--)
+    {
+      Atom atom = path.get(i);
+      
+      if (atom.isConnectedTo(tail))
+      {
+        ringClosures.add(path.size() - i);
+        Bond bond = atom.getBond(tail);
+        
+        if (bond.getType() == 2)
+        {
+          sp2.add(atom);
+          sp2.add(tail);
+        }
+        
+        if (bond.getType() == 3)
+        {
+          sp.add(atom);
+          sp.add(tail);
+        }
+      }
     }
   }
 }
