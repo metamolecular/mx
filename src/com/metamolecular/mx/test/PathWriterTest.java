@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.fingerprint.PathWriter;
@@ -37,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import junit.framework.TestCase;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -55,40 +55,47 @@ public class PathWriterTest extends TestCase
     writer = new PathWriter();
   }
 
-  public void testItWritesLinearChain()
+  public void testItWritesAllIntermediatePathsOfLinearChain()
   {
-    hexane();
+    chain(6);
     doWrite();
 
     assertEquals(new HashSet(Arrays.asList(
-      "C", "CC", "CCC", "CCCC", "CCCCC", "CCCCCC")), paths);
+      ".", "..", "...", "....", ".....", "......")), paths);
   }
 
-  public void testItWritesCycle()
+  public void testItWritesAllIntermediatePathsAndRingClosureOfCycle()
   {
-    cyclohexane();
+    cycle(6);
     doWrite();
 
     assertEquals(new HashSet(Arrays.asList(
-      "C", "CC", "CCC", "CCCC", "CCCCC", "CCCCCC", "CCCCCC-6")), paths);
+      ".", "..", "...", "....", ".....", "......", "......-6")), paths);
   }
 
-  public void testItWritesDoublyClosedCycle()
+  public void testItWritesAllIntermediatePathsAndBothRingClosuresOfBicycle()
   {
-    bicyclo220hexane();
+    cycle(6);
+    when(path.get(2).isConnectedTo(path.get(5))).thenReturn(true);
+    when(path.get(5).isConnectedTo((path.get(2)))).thenReturn(true);
     doWrite();
+
     assertEquals(new HashSet(Arrays.asList(
-      "C", "CC", "CCC", "CCCC", "CCCCC", "CCCCCC", "CCCCCC-4", "CCCCCC-6")), paths);
+      ".", "..", "...", "....", ".....", "......", "......-4", "......-6")), paths);
   }
 
-  public void testItWritesTriplyClosedCycle()
+  public void testItWritesAllIntermediatePathsAndThreeRingClosuresOfTricycle()
   {
-    tricyclo2002hexane();
+    cycle(6);
+    when(path.get(2).isConnectedTo(path.get(5))).thenReturn(true);
+    when(path.get(5).isConnectedTo((path.get(2)))).thenReturn(true);
+    when(path.get(3).isConnectedTo(path.get(5))).thenReturn(true);
+    when(path.get(5).isConnectedTo((path.get(3)))).thenReturn(true);
     doWrite();
 
     assertEquals(new HashSet(Arrays.asList(
-      "C", "CC", "CCC", "CCCC", "CCCCC", "CCCCCC",
-      "CCCCCC-3", "CCCCCC-4", "CCCCCC-6")), paths);
+      ".", "..", "...", "....", ".....", "......",
+      "......-3", "......-4", "......-6")), paths);
   }
 
   public void testItWritesSP2()
@@ -160,5 +167,25 @@ public class PathWriterTest extends TestCase
     {
       path.add(molecule.getAtom(i));
     }
+  }
+
+  private void chain(int length)
+  {
+    for (int i = 0; i < length; i++)
+    {
+      Atom atom = mock(Atom.class);
+
+      when(atom.getSymbol()).thenReturn(".");
+      when(atom.isConnectedTo(any(Atom.class))).thenReturn(false);
+
+      path.add(atom);
+    }
+  }
+
+  private void cycle(int size)
+  {
+    chain(size);
+    when(path.get(0).isConnectedTo(path.get(size - 1))).thenReturn(true);
+    when(path.get(size - 1).isConnectedTo((path.get(0)))).thenReturn(true);
   }
 }
