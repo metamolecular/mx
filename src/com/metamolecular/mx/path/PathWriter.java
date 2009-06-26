@@ -26,16 +26,27 @@
 package com.metamolecular.mx.path;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class PathWriter
 {
+  private Set<Atom> sp2;
+  
+  public PathWriter()
+  {
+    sp2 = new HashSet();
+  }
+
   public void write(List<Atom> path, Collection<String> strings, Collection<Atom> aromatics)
   {
+    loadSP2(path);
     StringBuffer pathString = new StringBuffer();
 
     for (Atom atom : path)
@@ -50,17 +61,12 @@ public class PathWriter
   private void appendAtom(Atom atom, StringBuffer pathString, Collection<Atom> aromatics)
   {
     String key = atom.getSymbol();
-    
+
     pathString.append(key);
-    
-    if (aromatics.contains(atom))
+
+    if (aromatics.contains(atom) || sp2.contains(atom))
     {
       pathString.append("%");
-    }
-    
-    else
-    {
-      // TODO: check for explicit double bond
     }
   }
 
@@ -76,6 +82,14 @@ public class PathWriter
       {
         pathStrings.add(rootPathString + "-" + (path.size() - i));
       }
+    }
+  }
+
+  private void loadSP2(List<Atom> path)
+  {
+    for (int i = 0; i < path.size(); i++)
+    {
+      Atom atom = path.get(i);
     }
   }
 }
