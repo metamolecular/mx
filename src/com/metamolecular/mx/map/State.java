@@ -27,7 +27,6 @@
 package com.metamolecular.mx.map;
 
 import com.metamolecular.mx.query.*;
-import com.metamolecular.mx.map.Match;
 import com.metamolecular.mx.model.Atom;
 import java.util.Map;
 

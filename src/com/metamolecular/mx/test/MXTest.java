@@ -68,6 +68,8 @@ public class MXTest
     suite.addTestSuite(PathFingerprinterTest.class);
     suite.addTestSuite(PathWriterTest.class);    
     suite.addTestSuite(DefaultBondMatcherTest.class);
+    suite.addTestSuite(RingFilterTest.class);
+    suite.addTestSuite(AromaticAtomFilterTest.class);
 
     TestRunner.run(suite);
   }
