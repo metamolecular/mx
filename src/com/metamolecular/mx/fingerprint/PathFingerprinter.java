@@ -25,6 +25,7 @@
  */
 package com.metamolecular.mx.fingerprint;
 
+import com.metamolecular.mx.path.PathWriter;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.path.PathFinder;
@@ -101,10 +102,11 @@ public class PathFingerprinter implements Fingerprinter
   private Set<String> compilePaths(List<List<Atom>> paths)
   {
     Set<String> result = new HashSet();
+    List<Atom> aromatics = new ArrayList();
 
     for (List<Atom> path : paths)
     {
-      writer.write(path, result);
+      writer.write(path, result, aromatics);
     }
 
     return result;

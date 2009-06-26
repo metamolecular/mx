@@ -25,15 +25,17 @@
  */
 package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.fingerprint.PathWriter;
+import com.metamolecular.mx.path.PathWriter;
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import junit.framework.TestCase;
 import static org.mockito.Mockito.*;
@@ -46,6 +48,7 @@ public class PathWriterTest extends TestCase
   private Set<String> paths;
   private PathWriter writer;
   private List<Atom> path;
+  private List<Atom> aromatics;
 
   @Override
   protected void setUp() throws Exception
@@ -53,6 +56,7 @@ public class PathWriterTest extends TestCase
     paths = new HashSet();
     path = new ArrayList();
     writer = new PathWriter();
+    aromatics = new ArrayList();
   }
 
   public void testItWritesAllIntermediatePathsOfLinearChain()
@@ -97,6 +101,17 @@ public class PathWriterTest extends TestCase
       ".", "..", "...", "....", ".....", "......",
       "......-3", "......-4", "......-6")), paths);
   }
+  
+  public void testItWritesLeadingAromaticAtoms()
+  {
+    chain(3);
+    aromatics.add(path.get(0));
+    aromatics.add(path.get(1));
+    doWrite();
+    
+    assertEquals(new HashSet(Arrays.asList(
+      ".%", ".%.%", ".%.%.")), paths);
+  }
 
   public void testItWritesSP2()
   {
@@ -119,7 +134,7 @@ public class PathWriterTest extends TestCase
 
   private void doWrite()
   {
-    writer.write(path, paths);
+    writer.write(path, paths, aromatics);
   }
 
   private void ethyne()

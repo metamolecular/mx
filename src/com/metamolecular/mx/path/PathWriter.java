@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.metamolecular.mx.fingerprint;
+package com.metamolecular.mx.path;
 
 import com.metamolecular.mx.model.Atom;
 import java.util.Collection;
@@ -34,30 +34,34 @@ import java.util.List;
  */
 public class PathWriter
 {
-  public void write(List<Atom> path, Collection<String> strings)
+  public void write(List<Atom> path, Collection<String> strings, Collection<Atom> aromatics)
   {
     StringBuffer pathString = new StringBuffer();
 
     for (Atom atom : path)
     {
-      appendAtom(atom, pathString);
+      appendAtom(atom, pathString, aromatics);
       strings.add(pathString.toString());
     }
 
     appendRingClosures(path, pathString, strings);
   }
 
-  public void appendAtom(Atom atom, StringBuffer pathString)
+  private void appendAtom(Atom atom, StringBuffer pathString, Collection<Atom> aromatics)
   {
     String key = atom.getSymbol();
-    int unsaturation = atom.getValence() - atom.countNeighbors();
-
-    if (unsaturation > 0)
-    {
-      key += "%";
-    }
-
+    
     pathString.append(key);
+    
+    if (aromatics.contains(atom))
+    {
+      pathString.append("%");
+    }
+    
+    else
+    {
+      // TODO: check for explicit double bond
+    }
   }
 
   private void appendRingClosures(List<Atom> path, StringBuffer rootPathString, Collection<String> pathStrings)
