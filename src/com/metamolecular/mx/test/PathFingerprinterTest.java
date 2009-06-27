@@ -124,7 +124,7 @@ public class PathFingerprinterTest extends TestCase
   {
     BitSet xylene = fingerprinter.getFingerprint(createXylene());
     BitSet kekule = fingerprinter.getFingerprint(createKekuleXylene());
-    
+
     assertEquals(xylene, kekule);
   }
 
@@ -200,6 +200,14 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(match(ethene, ethyne));
   }
 
+  public void testItMatchesPropaneToAcetone()
+  {
+    BitSet propane = fingerprinter.getFingerprint(Molecules.createPropane());
+    BitSet acetone = fingerprinter.getFingerprint(Molecules.createAcetone());
+
+    assertTrue(match(propane, acetone));
+  }
+
   private boolean match(BitSet bitset, BitSet other)
   {
     BitSet intersection = (BitSet) other;
@@ -225,7 +233,7 @@ public class PathFingerprinterTest extends TestCase
 
     return result;
   }
-  
+
   private Molecule createXylene()
   {
     Molecule result = Molecules.createCyclohexane();
@@ -246,7 +254,7 @@ public class PathFingerprinterTest extends TestCase
     result.getBond(result.getAtom(1), result.getAtom(2)).setType(2);
     result.getBond(result.getAtom(3), result.getAtom(4)).setType(2);
     result.getBond(result.getAtom(5), result.getAtom(0)).setType(2);
-    
+
     result.connect(result.getAtom(0), result.addAtom("C"), 1);
     result.connect(result.getAtom(5), result.addAtom("C"), 1);
 

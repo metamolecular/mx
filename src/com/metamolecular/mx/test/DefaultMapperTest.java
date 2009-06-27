@@ -267,6 +267,13 @@ public class DefaultMapperTest extends TestCase
 //
 //    assertTrue(mapper.hasMap(Molecules.createChargedDMSO()));
 //  }
+  
+  public void testItMapsPropaneToAcetone()
+  {
+    Mapper mapper = new DefaultMapper(Molecules.createPropane());
+    
+    assertTrue(mapper.hasMap(Molecules.createAcetone()));
+  }
 
   public void testDoesntMapImineToAmine()
   {

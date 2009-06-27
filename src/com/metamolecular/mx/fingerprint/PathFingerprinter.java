@@ -29,6 +29,9 @@ import com.metamolecular.mx.path.PathWriter;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.path.PathFinder;
+import com.metamolecular.mx.query.AromaticAtomFilter;
+import com.metamolecular.mx.ring.HanserRingFinder;
+import com.metamolecular.mx.ring.RingFilter;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
@@ -44,12 +47,16 @@ public class PathFingerprinter implements Fingerprinter
   private int length;
   private PathFinder pathFinder;
   private PathWriter writer;
+  private RingFilter filter;
+  Set<Atom> aromatics;
 
   public PathFingerprinter()
   {
     this.length = 1024;
     pathFinder = new PathFinder();
     writer = new PathWriter();
+    filter = new RingFilter(new AromaticAtomFilter(), new HanserRingFinder());
+    aromatics = null;
   }
 
   public void setMaximumPathDepth(int maxDepth)
@@ -61,7 +68,7 @@ public class PathFingerprinter implements Fingerprinter
   {
     return pathFinder.getMaximumDepth();
   }
-  
+
   public void setFingerprintLength(int length)
   {
     this.length = length;
@@ -74,6 +81,7 @@ public class PathFingerprinter implements Fingerprinter
 
   public BitSet getFingerprint(Molecule molecule)
   {
+    aromatics = filter.filterAtoms(molecule);
     BitSet result = new BitSet(length);
     Set<String> paths = getPaths(molecule);
 
@@ -102,7 +110,6 @@ public class PathFingerprinter implements Fingerprinter
   private Set<String> compilePaths(List<List<Atom>> paths)
   {
     Set<String> result = new HashSet();
-    List<Atom> aromatics = new ArrayList();
 
     for (List<Atom> path : paths)
     {
