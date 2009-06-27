@@ -52,11 +52,26 @@ public class PathFingerprinter implements Fingerprinter
 
   public PathFingerprinter()
   {
+    this(new RingFilter(new AromaticAtomFilter(), new HanserRingFinder()));
+  }
+  
+  public PathFingerprinter(RingFilter filter)
+  {
     this.length = 1024;
-    pathFinder = new PathFinder();
+    this.pathFinder = new PathFinder();
+    this.filter = filter;
     writer = new PathWriter();
-    filter = new RingFilter(new AromaticAtomFilter(), new HanserRingFinder());
     aromatics = null;
+  }
+  
+  public RingFilter getRingFilter()
+  {
+    return filter;
+  }
+  
+  public void setRingFilter(RingFilter filter)
+  {
+    this.filter = filter;
   }
 
   public void setMaximumPathDepth(int maxDepth)

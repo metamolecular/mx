@@ -29,8 +29,10 @@ import com.metamolecular.mx.fingerprint.PathFingerprinter;
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.ring.RingFilter;
 import java.util.BitSet;
 import junit.framework.TestCase;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -43,6 +45,14 @@ public class PathFingerprinterTest extends TestCase
   protected void setUp() throws Exception
   {
     fingerprinter = new PathFingerprinter();
+  }
+  
+  public void testItIsCreatedWithACustomRingFilter()
+  {
+    RingFilter filter = mock(RingFilter.class);
+    PathFingerprinter custom = new PathFingerprinter(filter);
+    
+    assertEquals(filter, custom.getRingFilter());
   }
 
   public void testItShouldCreateANonemptyFingerprint()
