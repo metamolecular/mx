@@ -1,0 +1,41 @@
+MX - Essential Cheminformatics
+
+Website:      http://metamolecular.com/mx
+Source Repo:  http://github.com/metamolecular/mx
+
+MX is a library of essential cheminformatics models and routines. It
+was created with the goal of providing a clean, well-tested
+platform for chemistry applications.
+
+MX currently supports:
+
+- Substructure search and atom mapping based on the VF algorithm
+- Exhaustive ring perception based on the Hanser algorithm
+- Flexible query atom support
+- Flexible generation of path-based binary fingerprints
+- Depth-First traversal
+- Implicit hydrogen detection
+- Complete system of atomic masses and isotopes based on the IUPAC Technical Report.
+- Model objects (Molecule, Atom, Bond, Superatom) based on MDL CTfile specification
+- Molfile/SDFile reader and writer
+
+Language:
+
+MX is written in Java and has been used with Scala in addition to
+Ruby and Python through the JRuby and Jython interpreters.
+
+Dependencies:
+
+-  JDK 1.5 or higher
+-  Ant (to compile and run tests)
+
+Contributors:
+
+Richard L. Apodaca        http://depth-first.com
+Duan Lian                 http://chemhack.com
+Fredrik Wallner           http://www.wallner.nu/fredrik
+
+History:
+
+MX was factored out of ChemWriter, the 2D chemical structure editor developed
+by Metamolecular, LLC. 
