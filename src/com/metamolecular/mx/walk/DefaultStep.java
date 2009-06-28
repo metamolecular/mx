@@ -52,6 +52,11 @@ public class DefaultStep implements Step
     
     loadBonds();
   }
+  
+  private DefaultStep(Step step, Bond bond)
+  {
+    
+  }
 
   public Atom getAtom()
   {
@@ -83,7 +88,7 @@ public class DefaultStep implements Step
 
   public Step nextStep(Bond bond)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return new DefaultStep(this, bond);
   }
 
   public boolean closesRingWith(Bond bond)

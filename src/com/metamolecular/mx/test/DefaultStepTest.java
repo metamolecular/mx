@@ -43,45 +43,68 @@ public class DefaultStepTest extends TestCase
   @Override
   protected void setUp() throws Exception
   {
+    step = null;
     atom = mock(Atom.class);
     bond = mock(Bond.class);
-    step = new DefaultStep(atom);    
-  }
-
-  public void testItHasNoAtomsInPathToStart()
-  {
-    Bond[] bonds = new Bond[]
-    {
-      bond
-    };
-    
-    when(atom.getBonds()).thenReturn(bonds);
-    assertEquals(bonds, atom.getBonds());
-//    assertEquals(0, step.getPath().size());
   }
 
   public void testItHasAtom()
   {
+    atomWithOneBond();
     assertEquals(atom, step.getAtom());
   }
 
-  public void testItHasNextBondInInitialState()
+  public void testItHasNoAtomsInPathToStart()
   {
-    Bond[] bonds = new Bond[]
-    {
-      bond
-    };
-    when(atom.getBonds()).thenReturn(bonds);
+    atomWithOneBond();
+    assertEquals(0, step.getPath().size());
+  }
+
+  public void testItHasNextBondWhenAtomHasOneBond()
+  {
+    atomWithOneBond();
     assertTrue(step.hasNextBond());
   }
 
-  public void testItReturnsNextBondInInitialState()
+  public void testItReturnsNextBondWhenAtomHasOneBond()
+  {
+    atomWithOneBond();
+    assertEquals(bond, step.nextBond());
+  }
+
+  public void testItDoesntHaveNextBondWhenAtomHasNoBonds()
+  {
+    atomWithNoBonds();
+    assertFalse(step.hasNextBond());
+  }
+  
+  public void testItCreatesANewStepFromNextBond()
+  {
+    atomWithOneBond();
+    
+    Bond next = step.nextBond();
+    
+    assertNotNull(step.nextStep(next));
+  }
+
+  private void atomWithNoBonds()
+  {
+    Bond[] bonds = new Bond[]
+    {
+    };
+
+    when(atom.getBonds()).thenReturn(bonds);
+    step = new DefaultStep(atom);
+  }
+
+  private void atomWithOneBond()
   {
     Bond[] bonds = new Bond[]
     {
       bond
     };
+
     when(atom.getBonds()).thenReturn(bonds);
-    assertEquals(bond, step.nextBond());
+    step = new DefaultStep(atom);
   }
 }
