@@ -27,6 +27,7 @@
 package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import java.util.List;
 
 /**
@@ -34,13 +35,15 @@ import java.util.List;
  */
 public interface Step
 {
-  public Atom getAtom();
+  public Atom getRoot();
   
   public List<Atom> getPath();
   
   public boolean hasNextBranch();
   
-  public Step nextStep(Atom atom);
+  public Step nextStep(Bond bond);
   
-  public Atom nextBranch();
+  public Bond nextBranch();
+  
+  public boolean closesRingWith(Bond bond);
 }

@@ -25,7 +25,7 @@
  */
 package com.metamolecular.mx.walk;
 
-import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -46,7 +46,7 @@ public class DefaultWalker implements Walker
 
   public void step(Step step, Reporter reporter)
   {
-    reporter.atomFound(step.getAtom());
+    reporter.atomFound(step.getRoot());
 
     if (abort(step))
     {
@@ -59,15 +59,22 @@ public class DefaultWalker implements Walker
     {
       if (step.hasNextBranch())
       {
-        Atom atom = step.nextBranch();
+        Bond bond = step.nextBranch();
 
         if (inBranch)
         {
           reporter.branchStart();
         }
-        
-        step(step.nextStep(atom), reporter);
-        
+
+        if (step.closesRingWith(bond))
+        {
+          reporter.ringClosed(bond);
+        }
+        else
+        {
+          step(step.nextStep(bond), reporter);
+        }
+
         if (inBranch)
         {
           reporter.branchEnd();

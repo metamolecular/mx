@@ -27,6 +27,7 @@
 package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class DefaultStep implements Step
     path = new ArrayList();
   }
 
-  public Atom getAtom()
+  public Atom getRoot()
   {
     throw new UnsupportedOperationException("Not supported yet.");
   }
@@ -57,14 +58,18 @@ public class DefaultStep implements Step
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public Atom nextBranch()
+  public Bond nextBranch()
   {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public Step nextStep(Atom atom)
+  public Step nextStep(Bond bond)
   {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  public boolean closesRingWith(Bond bond)
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 }
