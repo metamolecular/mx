@@ -46,7 +46,7 @@ public class DefaultWalker implements Walker
 
   public void step(Step step, Reporter reporter)
   {
-    reporter.atomFound(step.getRoot());
+    reporter.atomFound(step.getAtom());
 
     if (abort(step))
     {
@@ -57,9 +57,9 @@ public class DefaultWalker implements Walker
 
     while (true)
     {
-      if (step.hasNextBranch())
+      if (step.hasNextBond())
       {
-        Bond bond = step.nextBranch();
+        Bond bond = step.nextBond();
 
         if (inBranch)
         {

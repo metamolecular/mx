@@ -50,4 +50,14 @@ public class DefaultStepTest extends TestCase
   {
     assertEquals(0, step.getPath().size());
   }
+  
+  public void testItHasAtom()
+  {
+    assertEquals(atom, step.getAtom());
+  }
+  
+  public void testItHasNextBondForChainTerminus()
+  {
+    assertTrue(step.hasNextBond());
+  }
 }

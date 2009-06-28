@@ -35,15 +35,15 @@ import java.util.List;
  */
 public interface Step
 {
-  public Atom getRoot();
+  public Atom getAtom();
   
   public List<Atom> getPath();
   
-  public boolean hasNextBranch();
+  public boolean hasNextBond();
   
   public Step nextStep(Bond bond);
   
-  public Bond nextBranch();
+  public Bond nextBond();
   
   public boolean closesRingWith(Bond bond);
 }

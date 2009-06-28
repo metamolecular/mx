@@ -29,7 +29,9 @@ package com.metamolecular.mx.walk;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -37,15 +39,19 @@ import java.util.List;
 public class DefaultStep implements Step
 {
   private List<Atom> path;
+  private Atom focus;
+  private Set<Bond> visited;
   
-  public DefaultStep(Atom root)
+  public DefaultStep(Atom focus)
   {
+    this.focus = focus;
     path = new ArrayList();
+    visited = new HashSet();
   }
 
-  public Atom getRoot()
+  public Atom getAtom()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return focus;
   }
   
   public List<Atom> getPath()
@@ -53,12 +59,17 @@ public class DefaultStep implements Step
     return path;
   }
 
-  public boolean hasNextBranch()
+  public boolean hasNextBond()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    for (Bond bond : focus.getBonds())
+    {
+      
+    }
+    
+    return false;
   }
 
-  public Bond nextBranch()
+  public Bond nextBond()
   {
     throw new UnsupportedOperationException("Not supported yet.");
   }

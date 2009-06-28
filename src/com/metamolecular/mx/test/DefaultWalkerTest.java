@@ -70,9 +70,9 @@ public class DefaultWalkerTest extends TestCase
   {
     walker.setMaximumDepth(5);
     when(path.size()).thenReturn(0, 1, 2, 3, 4, 5);
-    when(step.hasNextBranch()).thenReturn(true, true, true, true, true, false);
+    when(step.hasNextBond()).thenReturn(true, true, true, true, true, false);
     when(step.nextStep(bond)).thenReturn(step);
-    when(step.nextBranch()).thenReturn(bond);
+    when(step.nextBond()).thenReturn(bond);
     doStep();
 
     verify(step, times(5)).nextStep(bond);
@@ -82,9 +82,9 @@ public class DefaultWalkerTest extends TestCase
   {
     walker.setMaximumDepth(0);
     when(path.size()).thenReturn(0, 1, 2);
-    when(step.hasNextBranch()).thenReturn(true, true, true, false);
+    when(step.hasNextBond()).thenReturn(true, true, true, false);
     when(step.nextStep(bond)).thenReturn(step);
-    when(step.nextBranch()).thenReturn(bond);
+    when(step.nextBond()).thenReturn(bond);
     doStep();
 
     verify(step, times(3)).nextStep(bond);
@@ -94,8 +94,8 @@ public class DefaultWalkerTest extends TestCase
   {
     walker.setMaximumDepth(6);
 
-    when(step.hasNextBranch()).thenReturn(true, true, true, true, true, false);
-    when(step.nextBranch()).thenReturn(bond);
+    when(step.hasNextBond()).thenReturn(true, true, true, true, true, false);
+    when(step.nextBond()).thenReturn(bond);
     when(step.nextStep(bond)).thenReturn(step);
     doStep();
 
@@ -144,7 +144,7 @@ public class DefaultWalkerTest extends TestCase
 
   public void testItReportsAtomWhenTerminal()
   {
-    when(step.getRoot()).thenReturn(atom);
+    when(step.getAtom()).thenReturn(atom);
     doStep();
 
     verify(reporter, times(1)).atomFound(atom);
@@ -152,10 +152,10 @@ public class DefaultWalkerTest extends TestCase
 
   public void testItFindsAllAtomsInChain()
   {
-    when(step.hasNextBranch()).thenReturn(true, true, true, true, true, false);
-    when(step.nextBranch()).thenReturn(bond);
+    when(step.hasNextBond()).thenReturn(true, true, true, true, true, false);
+    when(step.nextBond()).thenReturn(bond);
     when(step.nextStep(bond)).thenReturn(step);
-    when(step.getRoot()).thenReturn(atom);
+    when(step.getAtom()).thenReturn(atom);
     doStep();
 
     verify(reporter, times(6)).atomFound(atom);
@@ -163,24 +163,24 @@ public class DefaultWalkerTest extends TestCase
 
   private void singleBranchedAtom()
   {
-    when(step.hasNextBranch()).thenReturn(true, true, false, true, false, false);
-    when(step.nextBranch()).thenReturn(bond, bond);
+    when(step.hasNextBond()).thenReturn(true, true, false, true, false, false);
+    when(step.nextBond()).thenReturn(bond, bond);
     when(step.nextStep(bond)).thenReturn(step, step);
     when(path.size()).thenReturn(1);
   }
 
   private void unbranchedAtom()
   {
-    when(step.hasNextBranch()).thenReturn(true, false);
-    when(step.nextBranch()).thenReturn(bond);
+    when(step.hasNextBond()).thenReturn(true, false);
+    when(step.nextBond()).thenReturn(bond);
     when(step.nextStep(bond)).thenReturn(step);
     when(path.size()).thenReturn(1);
   }
 
   private void cyclicAtom()
   {
-    when(step.hasNextBranch()).thenReturn(true, true, true, false, false, false);
-    when(step.nextBranch()).thenReturn(bond);
+    when(step.hasNextBond()).thenReturn(true, true, true, false, false, false);
+    when(step.nextBond()).thenReturn(bond);
     when(step.nextStep(bond)).thenReturn(step);
     when(step.closesRingWith(bond)).thenReturn(false, false, true);
     when(path.size()).thenReturn(1);
