@@ -70,6 +70,8 @@ public class MXTest
     suite.addTestSuite(DefaultBondMatcherTest.class);
     suite.addTestSuite(RingFilterTest.class);
     suite.addTestSuite(AromaticAtomFilterTest.class);
+    suite.addTestSuite(DefaultWalkerTest.class);
+    suite.addTestSuite(DefaultStepTest.class);
 
     TestRunner.run(suite);
   }
