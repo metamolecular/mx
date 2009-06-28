@@ -23,10 +23,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.model.Atom;
+import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.walk.DefaultStep;
 import junit.framework.TestCase;
 import static org.mockito.Mockito.*;
@@ -38,26 +38,50 @@ public class DefaultStepTest extends TestCase
 {
   private DefaultStep step;
   private Atom atom;
+  private Bond bond;
 
   @Override
   protected void setUp() throws Exception
   {
     atom = mock(Atom.class);
-    step = new DefaultStep(atom);
+    bond = mock(Bond.class);
+    step = new DefaultStep(atom);    
   }
-  
+
   public void testItHasNoAtomsInPathToStart()
   {
-    assertEquals(0, step.getPath().size());
+    Bond[] bonds = new Bond[]
+    {
+      bond
+    };
+    
+    when(atom.getBonds()).thenReturn(bonds);
+    assertEquals(bonds, atom.getBonds());
+//    assertEquals(0, step.getPath().size());
   }
-  
+
   public void testItHasAtom()
   {
     assertEquals(atom, step.getAtom());
   }
-  
-  public void testItHasNextBondForChainTerminus()
+
+  public void testItHasNextBondInInitialState()
   {
+    Bond[] bonds = new Bond[]
+    {
+      bond
+    };
+    when(atom.getBonds()).thenReturn(bonds);
     assertTrue(step.hasNextBond());
+  }
+
+  public void testItReturnsNextBondInInitialState()
+  {
+    Bond[] bonds = new Bond[]
+    {
+      bond
+    };
+    when(atom.getBonds()).thenReturn(bonds);
+    assertEquals(bond, step.nextBond());
   }
 }

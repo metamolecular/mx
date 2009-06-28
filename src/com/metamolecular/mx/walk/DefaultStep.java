@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
@@ -38,22 +37,27 @@ import java.util.Set;
  */
 public class DefaultStep implements Step
 {
+
   private List<Atom> path;
   private Atom focus;
   private Set<Bond> visited;
-  
+  private List<Bond> bonds;
+
   public DefaultStep(Atom focus)
   {
     this.focus = focus;
     path = new ArrayList();
     visited = new HashSet();
+    bonds = new ArrayList();
+    
+    loadBonds();
   }
 
   public Atom getAtom()
   {
     return focus;
   }
-  
+
   public List<Atom> getPath()
   {
     return path;
@@ -61,17 +65,20 @@ public class DefaultStep implements Step
 
   public boolean hasNextBond()
   {
-    for (Bond bond : focus.getBonds())
+    for (Bond bond : bonds)
     {
-      
+      if (!visited.contains(bond))
+      {
+        return true;
+      }
     }
-    
+
     return false;
   }
 
   public Bond nextBond()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return bonds.remove(bonds.size() - 1);
   }
 
   public Step nextStep(Bond bond)
@@ -82,5 +89,16 @@ public class DefaultStep implements Step
   public boolean closesRingWith(Bond bond)
   {
     throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  private void loadBonds()
+  {
+    for (Bond bond : focus.getBonds())
+    {
+      if (!path.contains(bond))
+      {
+        bonds.add(bond);
+      }
+    }
   }
 }
