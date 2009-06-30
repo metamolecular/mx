@@ -57,6 +57,7 @@ public class DefaultWalkerTest extends TestCase
     bond = mock(Bond.class);
 
     when(step.getPath()).thenReturn(path);
+    when(step.getAtom()).thenReturn(atom);
   }
 
   public void testItSetsMaximumDepth()
@@ -66,124 +67,145 @@ public class DefaultWalkerTest extends TestCase
     assertEquals(5, walker.getMaximumDepth());
   }
 
-  public void testItStopsBranchingWhenMaximumDepthReached()
+  public void testItDoesntRequestNextBondWhenMaximumDepthReached()
   {
-    walker.setMaximumDepth(5);
-    when(path.size()).thenReturn(0, 1, 2, 3, 4, 5);
-    when(step.hasNextBond()).thenReturn(true, true, true, true, true, false);
-    when(step.nextStep(bond)).thenReturn(step);
-    when(step.nextBond()).thenReturn(bond);
+    walker.setMaximumDepth(2);
+    when(path.size()).thenReturn(2);
     doStep();
-
-    verify(step, times(5)).nextStep(bond);
+    verify(step, never()).nextBond();
   }
 
-  public void testItIgnoresMaxDepthWhenSetToZero()
+  public void testItRequestsNextBondWhenMaximumDepthNotReached()
   {
+    Step branch1 = mock(Step.class);
+    
+    walker.setMaximumDepth(2);
+    when(path.size()).thenReturn(1);
+    when(step.hasNextBond()).thenReturn(true, false);
+    when(step.nextBond()).thenReturn(bond);
+    when(step.nextStep(bond)).thenReturn(branch1);
+    doStep();
+    verify(step, times(1)).nextBond();
+  }
+
+  public void testItRequestsNextBondWhenMaximumDepthNotSet()
+  {
+    Step branch1 = mock(Step.class);
+
     walker.setMaximumDepth(0);
-    when(path.size()).thenReturn(0, 1, 2);
-    when(step.hasNextBond()).thenReturn(true, true, true, false);
-    when(step.nextStep(bond)).thenReturn(step);
+
+    when(path.size()).thenReturn(2);
+    when(step.hasNextBond()).thenReturn(true, false);
     when(step.nextBond()).thenReturn(bond);
-    doStep();
+    when(branch1.getAtom()).thenReturn(atom);
+    when(step.nextStep(bond)).thenReturn(branch1);
 
-    verify(step, times(3)).nextStep(bond);
+    doStep();
+    verify(step, times(1)).nextBond();
   }
 
-  public void testItRequestsNextStepUntilNoneLeft()
+  public void testItDoesntCheckPathDepthWhenNotSet()
   {
-    walker.setMaximumDepth(6);
-
-    when(step.hasNextBond()).thenReturn(true, true, true, true, true, false);
-    when(step.nextBond()).thenReturn(bond);
-    when(step.nextStep(bond)).thenReturn(step);
     doStep();
-
-    verify(step, times(5)).nextStep(bond);
+    verify(path, never()).size();
   }
 
-  public void testItDoesntReportBranchEndForUnbranchedAtom()
+  public void testItReportsAtomWhenNextBondUnavailable()
   {
-    unbranchedAtom();
     doStep();
-
-    verify(reporter, never()).branchEnd();
-  }
-
-  public void testItDoesntReportBranchStartForUnbranchedAtom()
-  {
-    unbranchedAtom();
-    doStep();
-
-    verify(reporter, never()).branchStart();
-  }
-
-  public void testItReportsBranchStartOnceForSingleBranchedAtom()
-  {
-    singleBranchedAtom();
-    doStep();
-
-    verify(reporter, times(1)).branchStart();
-  }
-
-  public void testItReportsBranchEndOnceForSingleBranchedAtom()
-  {
-    singleBranchedAtom();
-    doStep();
-
-    verify(reporter, times(1)).branchEnd();
-  }
-
-  public void testItReportsRingClosureTerminationForCyclicAtom()
-  {
-    cyclicAtom();
-    doStep();
-
-    verify(reporter, times(1)).ringClosed(bond);
-  }
-
-  public void testItReportsAtomWhenTerminal()
-  {
-    when(step.getAtom()).thenReturn(atom);
-    doStep();
-
     verify(reporter, times(1)).atomFound(atom);
   }
 
-  public void testItFindsAllAtomsInChain()
+  public void testItReporstNoBranchStartWhenStepHasOneBond()
   {
-    when(step.hasNextBond()).thenReturn(true, true, true, true, true, false);
+    Step branch1 = mock(Step.class);
+
+    when(step.hasNextBond()).thenReturn(true, false);
     when(step.nextBond()).thenReturn(bond);
-    when(step.nextStep(bond)).thenReturn(step);
-    when(step.getAtom()).thenReturn(atom);
+    when(branch1.getAtom()).thenReturn(atom);
+    when(step.nextStep(any(Bond.class))).thenReturn(branch1);
+
     doStep();
-
-    verify(reporter, times(6)).atomFound(atom);
+    verify(reporter, times(0)).branchStart();
   }
 
-  private void singleBranchedAtom()
+  public void testItReportsNoBranchEndWhenStepHasOneBond()
   {
-    when(step.hasNextBond()).thenReturn(true, true, false, true, false, false);
-    when(step.nextBond()).thenReturn(bond, bond);
-    when(step.nextStep(bond)).thenReturn(step, step);
-    when(path.size()).thenReturn(1);
+    Step branch1 = mock(Step.class);
+
+    when(step.hasNextBond()).thenReturn(true, false);
+    when(step.nextBond()).thenReturn(bond);
+    when(branch1.getAtom()).thenReturn(atom);
+    when(step.nextStep(any(Bond.class))).thenReturn(branch1);
+
+    doStep();
+    verify(reporter, times(0)).branchEnd();
   }
 
-  private void unbranchedAtom()
+  public void testItReportsTwoBranchStartsWhenStepHasThreeBonds()
+  {
+    when(step.hasNextBond()).thenReturn(true, true, true, false);
+    when(step.nextBond()).thenReturn(bond);
+
+    Step branch1 = mock(Step.class);
+    Step branch2 = mock(Step.class);
+    Step branch3 = mock(Step.class);
+
+    when(branch1.getAtom()).thenReturn(atom);
+    when(branch2.getAtom()).thenReturn(atom);
+    when(branch3.getAtom()).thenReturn(atom);
+
+    when(step.nextStep(any(Bond.class))).thenReturn(branch1, branch2, branch3);
+
+    doStep();
+    verify(reporter, times(2)).branchStart();
+  }
+
+  public void testItReportsTwoBranchEndsWhenStepHasThreeBonds()
+  {
+    when(step.hasNextBond()).thenReturn(true, true, true, false);
+    when(step.nextBond()).thenReturn(bond);
+
+    Step branch1 = mock(Step.class);
+    Step branch2 = mock(Step.class);
+    Step branch3 = mock(Step.class);
+
+    when(branch1.getAtom()).thenReturn(atom);
+    when(branch2.getAtom()).thenReturn(atom);
+    when(branch3.getAtom()).thenReturn(atom);
+
+    when(step.nextStep(any(Bond.class))).thenReturn(branch1, branch2, branch3);
+
+    doStep();
+    verify(reporter, times(2)).branchEnd();
+  }
+
+  public void testItReportsRingClosureWhenStepNextBondClosesRing()
   {
     when(step.hasNextBond()).thenReturn(true, false);
     when(step.nextBond()).thenReturn(bond);
-    when(step.nextStep(bond)).thenReturn(step);
-    when(path.size()).thenReturn(1);
+
+    Step branch1 = mock(Step.class);
+    when(branch1.getAtom()).thenReturn(atom);
+    when(step.nextStep(bond)).thenReturn(branch1);
+    when(step.closesRingWith(bond)).thenReturn(true);
+
+    doStep();
+    verify(reporter, times(1)).ringClosed(bond);
   }
 
-  private void cyclicAtom()
+  public void testItDoesntReportRingClosureWhenStepNextBondDoesntCloseRing()
   {
-    when(step.hasNextBond()).thenReturn(true, true, true, false, false, false);
+    when(step.hasNextBond()).thenReturn(true, false);
     when(step.nextBond()).thenReturn(bond);
-    when(step.nextStep(bond)).thenReturn(step);
-    when(step.closesRingWith(bond)).thenReturn(false, false, true);
-    when(path.size()).thenReturn(1);
+
+    Step branch1 = mock(Step.class);
+    when(branch1.getAtom()).thenReturn(atom);
+    when(step.nextStep(bond)).thenReturn(branch1);
+    when(step.closesRingWith(bond)).thenReturn(false);
+
+    doStep();
+    verify(reporter, never()).ringClosed(bond);
   }
 
   private void doStep()
