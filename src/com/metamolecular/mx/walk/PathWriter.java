@@ -36,13 +36,13 @@ import java.util.Map;
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class Foober implements Reporter
+public class PathWriter implements Reporter
 {
   private Collection output;
   private Map<Atom, String> overrides;
   private List<Atom> path;
 
-  public Foober(Collection output)
+  public PathWriter(Collection output)
   {
     this.output = output;
     this.overrides = new HashMap();
@@ -57,7 +57,6 @@ public class Foober implements Reporter
 
   public void walkEnd(Atom root)
   {
-    writePath();
   }
 
   public void walkStart(Atom atom)
@@ -67,33 +66,61 @@ public class Foober implements Reporter
   public void atomFound(Atom atom)
   {
     path.add(atom);
+    output.add(getPathString());
   }
 
   public void branchEnd(Atom atom)
   {
-    writePath();
   }
 
   public void branchStart(Atom atom)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    int index = path.indexOf(atom) + 1;
+
+    if (index == 0)
+    {
+      throw new RuntimeException("Attempt to branch from nonexistant atom " + atom);
+    }
+
+    path = path.subList(0, path.indexOf(atom) + 1);
   }
 
   public void ringClosed(Bond bond)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (path.isEmpty())
+    {
+      throw new RuntimeException("Attempt to close empty path.");
+    }
+    
+    Atom last = path.get(path.size() - 1);
+    Atom inPath = bond.getMate(last);
+    int index = path.indexOf(inPath);
+    
+    if (index == -1)
+    {
+      throw new RuntimeException("Attempt to close nonexistant atom" + inPath);
+    }
+    
+    int ringSize = path.size() - index;
+    
+    if (ringSize < 3)
+    {
+      throw new RuntimeException("Atom closes rings with size less than three " + inPath);
+    }
+    
+    output.add(getPathString() + "-" + (ringSize));
   }
 
-  private void writePath()
+  private String getPathString()
   {
     StringBuffer buffer = new StringBuffer();
-    
+
     for (Atom atom : path)
     {
       write(atom, buffer);
     }
-    
-    output.add(buffer.toString());
+
+    return buffer.toString();
   }
 
   private void write(Atom atom, StringBuffer buffer)
