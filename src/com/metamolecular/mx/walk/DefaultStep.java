@@ -37,11 +37,10 @@ import java.util.Set;
  */
 public class DefaultStep implements Step
 {
-
-  private List<Atom> path;
   private Atom focus;
-  private Set<Bond> visited;
+  private List<Atom> path;
   private List<Bond> bonds;
+  private Set<Bond> visited;
 
   public DefaultStep(Atom focus)
   {
@@ -49,13 +48,22 @@ public class DefaultStep implements Step
     path = new ArrayList();
     visited = new HashSet();
     bonds = new ArrayList();
+
+    loadBonds();
+    path.add(focus);
+  }
+
+  private DefaultStep(DefaultStep step, Bond bond)
+  {
+    this.focus = bond.getMate(step.getAtom());
+    this.path = new ArrayList(step.path);
+    this.bonds = new ArrayList();
+    this.visited = step.visited;
+
+    path.add(focus);
+    visited.add(bond);
     
     loadBonds();
-  }
-  
-  private DefaultStep(Step step, Bond bond)
-  {
-    
   }
 
   public Atom getAtom()
@@ -93,7 +101,9 @@ public class DefaultStep implements Step
 
   public boolean closesRingWith(Bond bond)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    Atom mate = bond.getMate(focus);
+    
+    return path.contains(mate);
   }
 
   private void loadBonds()

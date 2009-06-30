@@ -28,6 +28,8 @@ package com.metamolecular.mx.test;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import com.metamolecular.mx.walk.DefaultStep;
+import com.metamolecular.mx.walk.Step;
+import java.util.Arrays;
 import junit.framework.TestCase;
 import static org.mockito.Mockito.*;
 
@@ -48,16 +50,17 @@ public class DefaultStepTest extends TestCase
     bond = mock(Bond.class);
   }
 
-  public void testItHasAtom()
+  public void testItHasAtomInInitialState()
   {
     atomWithOneBond();
     assertEquals(atom, step.getAtom());
   }
 
-  public void testItHasNoAtomsInPathToStart()
+  public void testItHasPathWithAtomInInitialState()
   {
     atomWithOneBond();
-    assertEquals(0, step.getPath().size());
+
+    assertEquals(Arrays.asList(atom), step.getPath());
   }
 
   public void testItHasNextBondWhenAtomHasOneBond()
@@ -77,14 +80,63 @@ public class DefaultStepTest extends TestCase
     atomWithNoBonds();
     assertFalse(step.hasNextBond());
   }
+
+  public void testItCreatesNextStepWithBondMateAsAtom()
+  {
+    atomWithOneBond();
+    Atom mate = mock(Atom.class);
+    Bond[] mateBonds = new Bond[]
+    {
+    };
+    when(mate.getBonds()).thenReturn(mateBonds);
+    when(bond.getMate(atom)).thenReturn(mate);
+
+    Step nextStep = step.nextStep(step.nextBond());
+
+    assertEquals(mate, nextStep.getAtom());
+  }
+
+  public void testItAddsNewAtomToPathOfNextStep()
+  {
+    atomWithOneBond();
+    Atom mate = mock(Atom.class);
+    Bond[] mateBonds = new Bond[]
+    {
+    };
+    when(mate.getBonds()).thenReturn(mateBonds);
+    when(bond.getMate(atom)).thenReturn(mate);
+
+    Step nextStep = step.nextStep(step.nextBond());
+
+    assertEquals(Arrays.asList(atom, mate), nextStep.getPath());
+  }
+
+  public void testItExcludesConnectingBondFromBondsOfNewStep()
+  {
+    atomWithOneBond();
+    Atom mate = mock(Atom.class);
+    Bond mateBond = mock(Bond.class);
+    Bond[] mateBonds = new Bond[]
+    {
+      bond, mateBond
+    };
+    when(mate.getBonds()).thenReturn(mateBonds);
+    when(bond.getMate(atom)).thenReturn(mate);
+
+    Step nextStep = step.nextStep(step.nextBond());
+
+    assertEquals(mateBond, nextStep.nextBond());
+    assertFalse(nextStep.hasNextBond());
+  }
   
-  public void testItCreatesANewStepFromNextBond()
+  public void testItClosesRingWhenBondMateInPath()
   {
     atomWithOneBond();
     
-    Bond next = step.nextBond();
+    Bond closure = mock(Bond.class);
+    when(closure.getMate(atom)).thenReturn(atom);
     
-    assertNotNull(step.nextStep(next));
+    assertTrue(step.closesRingWith(closure));
   }
 
   private void atomWithNoBonds()
