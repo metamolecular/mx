@@ -72,6 +72,7 @@ public class MXTest
     suite.addTestSuite(AromaticAtomFilterTest.class);
     suite.addTestSuite(DefaultWalkerTest.class);
     suite.addTestSuite(DefaultStepTest.class);
+    suite.addTestSuite(BloomFilterTest.class);
 
     TestRunner.run(suite);
   }
