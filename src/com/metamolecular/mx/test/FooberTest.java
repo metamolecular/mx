@@ -23,26 +23,69 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.metamolecular.mx.test;
 
-package com.metamolecular.mx.walk;
-
+import com.metamolecular.mx.walk.Foober;
 import com.metamolecular.mx.model.Atom;
-import com.metamolecular.mx.model.Bond;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import junit.framework.TestCase;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Reporter
+public class FooberTest extends TestCase
 {
-  public void walkStart(Atom atom);
-  
-  public void atomFound(Atom atom);
-  
-  public void branchStart(Atom atom);
-  
-  public void branchEnd(Atom atom);
-  
-  public void ringClosed(Bond bond);
-  
-  public void walkEnd(Atom atom);
+  private Foober foober;
+  private Collection<String> paths;
+  private Atom atom;
+  private Map<Atom, String> dictionary;
+
+  @Override
+  protected void setUp() throws Exception
+  {
+    atom = mock(Atom.class);
+    paths = mock(Set.class);
+    foober = null;
+    dictionary = new HashMap();
+
+    when(atom.getSymbol()).thenReturn(".");
+  }
+
+  public void testItWritesCarbonAtomAfterWalkEnd()
+  {
+    doNew();
+    foober.atomFound(atom);
+    foober.walkEnd(atom);
+
+    verify(paths, times(1)).add(".");
+  }
+
+  public void testItWritesCarbonAtomAfterBranchEnd()
+  {
+    doNew();
+    foober.atomFound(atom);
+    foober.branchEnd(atom);
+
+    verify(paths, times(1)).add(".");
+  }
+
+  public void testItWritesAtomInDictionaryAfterWalkEnd()
+  {
+    doNew();
+    dictionary.put(atom, ".%");
+    foober.setDictionary(dictionary);
+    foober.atomFound(atom);
+    foober.walkEnd(atom);
+
+    verify(paths, times(1)).add(".%");
+  }
+
+  private void doNew()
+  {
+    foober = new Foober(paths);
+  }
 }

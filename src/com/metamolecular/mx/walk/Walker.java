@@ -26,6 +26,8 @@
 
 package com.metamolecular.mx.walk;
 
+import com.metamolecular.mx.model.Atom;
+
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
@@ -34,6 +36,8 @@ public interface Walker
   public void setMaximumDepth(int depth);
   
   public int getMaximumDepth();
+  
+  public void walk(Atom atom, Reporter reporter);
   
   public void step(Step step, Reporter reporter);
 }

@@ -1,8 +1,8 @@
 /*
  * MX Cheminformatics Tools for Java
- * 
- * Copyright (c) 2007-2009 Metamolecular, LLC
- * 
+ *
+ * Copyright (c) 2007-2008 Metamolecular, LLC
+ *
  * http://metamolecular.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,80 +27,84 @@ package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public class DefaultWalker implements Walker
+public class Foober implements Reporter
 {
-  private int maximumDepth;
+  private Collection output;
+  private Map<Atom, String> overrides;
+  private List<Atom> path;
 
-  public int getMaximumDepth()
+  public Foober(Collection output)
   {
-    return maximumDepth;
+    this.output = output;
+    this.overrides = new HashMap();
+    path = new ArrayList();
   }
 
-  public void setMaximumDepth(int depth)
+  public void setDictionary(Map<Atom, String> overrides)
   {
-    this.maximumDepth = depth;
+    this.overrides.clear();
+    this.overrides.putAll(overrides);
   }
 
-  public void walk(Atom atom, Reporter reporter)
+  public void walkEnd(Atom root)
   {
-    Step step = new DefaultStep(atom);
+    writePath();
+  }
+
+  public void walkStart(Atom atom)
+  {
+  }
+
+  public void atomFound(Atom atom)
+  {
+    path.add(atom);
+  }
+
+  public void branchEnd(Atom atom)
+  {
+    writePath();
+  }
+
+  public void branchStart(Atom atom)
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  public void ringClosed(Bond bond)
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  private void writePath()
+  {
+    StringBuffer buffer = new StringBuffer();
     
-    reporter.walkStart(atom);
-    step(step, reporter);
-    reporter.walkEnd(atom);
+    for (Atom atom : path)
+    {
+      write(atom, buffer);
+    }
+    
+    output.add(buffer.toString());
   }
 
-  public void step(Step step, Reporter reporter)
+  private void write(Atom atom, StringBuffer buffer)
   {
-    reporter.atomFound(step.getAtom());
+    String type = overrides.get(atom);
 
-    if (abort(step))
+    if (type == null)
     {
-      return;
+      type = atom.getSymbol();
     }
 
-    boolean inBranch = false;
-
-    while (true)
-    {
-      if (step.hasNextBond())
-      {
-        Bond bond = step.nextBond();
-
-        if (inBranch)
-        {
-          reporter.branchStart(step.getAtom());
-        }
-
-        if (step.closesRingWith(bond))
-        {
-          reporter.ringClosed(bond);
-        }
-        else
-        {
-          step(step.nextStep(bond), reporter);
-        }
-
-        if (inBranch)
-        {
-          reporter.branchEnd(step.getAtom());
-        }
-
-        inBranch = true;
-      }
-      else
-      {
-        break;
-      }
-    }
-  }
-
-  private boolean abort(Step step)
-  {
-    return (maximumDepth != 0 && step.getPath().size() >= maximumDepth);
+    buffer.append(type);
   }
 }

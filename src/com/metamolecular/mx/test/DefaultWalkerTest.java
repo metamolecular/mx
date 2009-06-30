@@ -32,6 +32,7 @@ import com.metamolecular.mx.walk.DefaultWalker;
 import com.metamolecular.mx.walk.Reporter;
 import java.util.List;
 import junit.framework.TestCase;
+import org.mockito.InOrder;
 import static org.mockito.Mockito.*;
 
 /**
@@ -67,6 +68,18 @@ public class DefaultWalkerTest extends TestCase
     assertEquals(5, walker.getMaximumDepth());
   }
 
+  public void testItReportsWalkStartThenAtomThenWalkEndWhenWalking()
+  {
+    when(atom.getBonds()).thenReturn(new Bond[0]);
+    doWalk();
+
+    InOrder inOrder = inOrder(reporter);
+
+    inOrder.verify(reporter).walkStart(atom);
+    inOrder.verify(reporter).atomFound(atom);
+    inOrder.verify(reporter).walkEnd(atom);
+  }
+
   public void testItDoesntRequestNextBondWhenMaximumDepthReached()
   {
     walker.setMaximumDepth(2);
@@ -78,7 +91,7 @@ public class DefaultWalkerTest extends TestCase
   public void testItRequestsNextBondWhenMaximumDepthNotReached()
   {
     Step branch1 = mock(Step.class);
-    
+
     walker.setMaximumDepth(2);
     when(path.size()).thenReturn(1);
     when(step.hasNextBond()).thenReturn(true, false);
@@ -126,7 +139,7 @@ public class DefaultWalkerTest extends TestCase
     when(step.nextStep(any(Bond.class))).thenReturn(branch1);
 
     doStep();
-    verify(reporter, times(0)).branchStart();
+    verify(reporter, times(0)).branchStart(any(Atom.class));
   }
 
   public void testItReportsNoBranchEndWhenStepHasOneBond()
@@ -139,7 +152,7 @@ public class DefaultWalkerTest extends TestCase
     when(step.nextStep(any(Bond.class))).thenReturn(branch1);
 
     doStep();
-    verify(reporter, times(0)).branchEnd();
+    verify(reporter, times(0)).branchEnd(any(Atom.class));
   }
 
   public void testItReportsTwoBranchStartsWhenStepHasThreeBonds()
@@ -158,7 +171,7 @@ public class DefaultWalkerTest extends TestCase
     when(step.nextStep(any(Bond.class))).thenReturn(branch1, branch2, branch3);
 
     doStep();
-    verify(reporter, times(2)).branchStart();
+    verify(reporter, times(2)).branchStart(atom);
   }
 
   public void testItReportsTwoBranchEndsWhenStepHasThreeBonds()
@@ -177,7 +190,7 @@ public class DefaultWalkerTest extends TestCase
     when(step.nextStep(any(Bond.class))).thenReturn(branch1, branch2, branch3);
 
     doStep();
-    verify(reporter, times(2)).branchEnd();
+    verify(reporter, times(2)).branchEnd(atom);
   }
 
   public void testItReportsRingClosureWhenStepNextBondClosesRing()
@@ -206,6 +219,11 @@ public class DefaultWalkerTest extends TestCase
 
     doStep();
     verify(reporter, never()).ringClosed(bond);
+  }
+
+  private void doWalk()
+  {
+    walker.walk(atom, reporter);
   }
 
   private void doStep()

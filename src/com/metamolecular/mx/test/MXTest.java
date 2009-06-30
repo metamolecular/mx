@@ -73,6 +73,7 @@ public class MXTest
     suite.addTestSuite(DefaultWalkerTest.class);
     suite.addTestSuite(DefaultStepTest.class);
     suite.addTestSuite(BloomFilterTest.class);
+    suite.addTestSuite(FooberTest.class);
 
     TestRunner.run(suite);
   }
