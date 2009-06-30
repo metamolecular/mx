@@ -58,7 +58,7 @@ public class BloomFilter<E> implements Set<E>
   
   /**
    * Simplified constructor that sets the number of expected elements equal to
-   * the number of bits (a standard practice for cheminformatics applications).
+   * the number of bits.
    * 
    * @param bitArraySize
    *            The number of bits in the bit array (often called 'm' in the

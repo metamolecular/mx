@@ -90,6 +90,25 @@ public class BloomFilterTest extends TestCase
 
     assertFalse(filter.contains("CCCCC"));
   }
+  
+  public void testItSetsBitsOnAddingString()
+  {
+    doNew();
+    
+    filter.add("Foo");
+    
+    assertFalse(filter.toBitSet().cardinality() == 0);
+  }
+  
+  public void testItClears()
+  {
+    doNew();
+    
+    filter.addAll(Arrays.asList("C", "CC", "CCC", "CCCC"));
+    filter.clear();
+    
+    assertEquals(0, filter.toBitSet().cardinality());
+  }
 
   public void testItGivesTheExpectedFalsePositiveRate()
   {
