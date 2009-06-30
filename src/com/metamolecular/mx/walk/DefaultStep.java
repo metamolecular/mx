@@ -28,9 +28,7 @@ package com.metamolecular.mx.walk;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -40,16 +38,14 @@ public class DefaultStep implements Step
   private Atom focus;
   private List<Atom> path;
   private List<Bond> bonds;
-  private Set<Bond> visited;
 
   public DefaultStep(Atom focus)
   {
     this.focus = focus;
     path = new ArrayList();
-    visited = new HashSet();
     bonds = new ArrayList();
 
-    loadBonds();
+    loadBonds(null);
     path.add(focus);
   }
 
@@ -58,12 +54,9 @@ public class DefaultStep implements Step
     this.focus = bond.getMate(step.getAtom());
     this.path = new ArrayList(step.path);
     this.bonds = new ArrayList();
-    this.visited = step.visited;
 
-    path.add(focus);
-    visited.add(bond);
-    
-    loadBonds();
+    path.add(focus);    
+    loadBonds(bond);
   }
 
   public Atom getAtom()
@@ -78,20 +71,24 @@ public class DefaultStep implements Step
 
   public boolean hasNextBond()
   {
-    for (Bond bond : bonds)
-    {
-      if (!visited.contains(bond))
-      {
-        return true;
-      }
-    }
-
-    return false;
+    return bonds.size() != 0;
   }
 
   public Bond nextBond()
   {
-    return bonds.remove(bonds.size() - 1);
+    Bond result = null;
+    
+    try
+    {
+      result = bonds.remove(bonds.size() - 1);
+    }
+    
+    catch (ArrayIndexOutOfBoundsException e)
+    {
+      throw new RuntimeException("Attempt to get nonexistant bond.", e);
+    }
+    
+    return result;
   }
 
   public Step nextStep(Bond bond)
@@ -106,11 +103,11 @@ public class DefaultStep implements Step
     return path.contains(mate);
   }
 
-  private void loadBonds()
+  private void loadBonds(Bond exclude)
   {
     for (Bond bond : focus.getBonds())
     {
-      if (!path.contains(bond))
+      if (bond != exclude)
       {
         bonds.add(bond);
       }

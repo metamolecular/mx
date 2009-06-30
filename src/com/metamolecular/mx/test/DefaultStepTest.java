@@ -75,12 +75,37 @@ public class DefaultStepTest extends TestCase
     assertEquals(bond, step.nextBond());
   }
 
+  public void testItLacksNextBondWhenAllBondsUsed()
+  {
+    atomWithOneBond();
+
+    step.nextBond();
+
+    assertFalse(step.hasNextBond());
+  }
+
   public void testItDoesntHaveNextBondWhenAtomHasNoBonds()
   {
     atomWithNoBonds();
     assertFalse(step.hasNextBond());
   }
 
+  public void testItThrowsWhenNextBondMissing()
+  {
+    atomWithNoBonds();
+    
+    try
+    {
+      step.nextBond();
+      fail();
+    }
+    
+    catch (RuntimeException ignore)
+    {
+      assertEquals("Attempt to get nonexistant bond.", ignore.getMessage());
+    }
+  }
+  
   public void testItCreatesNextStepWithBondMateAsAtom()
   {
     atomWithOneBond();
@@ -128,14 +153,14 @@ public class DefaultStepTest extends TestCase
     assertEquals(mateBond, nextStep.nextBond());
     assertFalse(nextStep.hasNextBond());
   }
-  
+
   public void testItClosesRingWhenBondMateInPath()
   {
     atomWithOneBond();
-    
+
     Bond closure = mock(Bond.class);
     when(closure.getMate(atom)).thenReturn(atom);
-    
+
     assertTrue(step.closesRingWith(closure));
   }
 
