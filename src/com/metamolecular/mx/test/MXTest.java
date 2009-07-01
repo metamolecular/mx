@@ -70,7 +70,7 @@ public class MXTest
     suite.addTestSuite(DefaultWalkerTest.class);
     suite.addTestSuite(DefaultStepTest.class);
     suite.addTestSuite(BloomFilterTest.class);
-    suite.addTestSuite(NewPathWriterTest.class);
+    suite.addTestSuite(PathWriterTest.class);
 
     TestRunner.run(suite);
   }
