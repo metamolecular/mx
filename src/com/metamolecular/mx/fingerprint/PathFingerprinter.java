@@ -33,10 +33,8 @@ import com.metamolecular.mx.ring.RingFilter;
 import com.metamolecular.mx.walk.DefaultWalker;
 import com.metamolecular.mx.walk.PathWriter;
 import com.metamolecular.mx.walk.Walker;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,8 +45,6 @@ public class PathFingerprinter implements Fingerprinter
   private PathWriter writer;
   private BloomFilter bloomFilter;
   private Walker walker;
-//  private PathFinder pathFinder;
-//  private PathWriter writer;
   private RingFilter filter;
 
   public PathFingerprinter()
@@ -61,7 +57,6 @@ public class PathFingerprinter implements Fingerprinter
     this.bloomFilter = new BloomFilter(1024);
     this.writer = new PathWriter(bloomFilter);
     this.walker = new DefaultWalker();
-//    this.pathFinder = new PathFinder();
     this.filter = filter;
   }
 
@@ -78,13 +73,11 @@ public class PathFingerprinter implements Fingerprinter
   public void setMaximumPathDepth(int maxDepth)
   {
     walker.setMaximumDepth(maxDepth);
-//    pathFinder.setMaximumDepth(maxDepth);
   }
 
   public int getMaximumPathDepth()
   {
     return walker.getMaximumDepth();
-  //    return pathFinder.getMaximumDepth();
   }
 
   public void setFingerprintLength(int length)
@@ -100,45 +93,23 @@ public class PathFingerprinter implements Fingerprinter
   public BitSet getFingerprint(Molecule molecule)
   {
     bloomFilter.clear();
-        Set<Atom> aromatics = new HashSet();
+    Set<Atom> aromatics = new HashSet();
     filter.filterAtoms(molecule, aromatics);
-    
+
     for (Atom atom : aromatics)
     {
       aromatics.add(atom);
     }
+    
     writer.setAromatics(aromatics);
 
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
       Atom atom = molecule.getAtom(i);
+      
       walker.walk(atom, writer);
     }
 
     return bloomFilter.toBitSet();
-  }
-
-  private Set<String> getPaths(Molecule molecule)
-  {
-    List<List<Atom>> paths = new ArrayList();
-
-    for (int i = 0; i < molecule.countAtoms(); i++)
-    {
-//      pathFinder.findAllPaths(molecule.getAtom(i), paths);
-    }
-
-    return compilePaths(paths);
-  }
-
-  private Set<String> compilePaths(List<List<Atom>> paths)
-  {
-    Set<String> result = new HashSet();
-
-    for (List<Atom> path : paths)
-    {
-//      writer.write(path, result, aromatics);
-    }
-
-    return result;
   }
 }

@@ -66,7 +66,6 @@ public class PathWriter implements Reporter
 
   public void walkStart(Atom atom)
   {
-//    System.out.println("walk start");
     atomPath.clear();
     bondPath.clear();
 
@@ -80,8 +79,7 @@ public class PathWriter implements Reporter
       throw new RuntimeException("Attempt to add Atom without first adding Bond");
     }
     atomPath.add(atom);
-//    output.add(getPathString());
-//    System.out.println(getPathString());
+
     pathDirty = true;
   }
 
@@ -175,18 +173,6 @@ public class PathWriter implements Reporter
       }
       output.add(buffer.toString());
     }
-
-//    for (Atom atom : atomPath)
-//    {
-//      write(atom, buffer);
-//      
-//      if (aromatics.contains(atom))
-//      {
-//        buffer.append("%");
-//      }
-//      
-//      output.add(buffer.toString());
-//    }
 
     if (ringSize != 0)
     {
