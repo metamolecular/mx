@@ -48,7 +48,7 @@ public class DefaultWalker implements Walker
   public void walk(Atom atom, Reporter reporter)
   {
     Step step = new DefaultStep(atom);
-    
+
     reporter.walkStart(atom);
     step(step, reporter);
     reporter.walkEnd(atom);
@@ -75,6 +75,8 @@ public class DefaultWalker implements Walker
         {
           reporter.branchStart(step.getAtom());
         }
+
+        reporter.bondFound(bond);
 
         if (step.closesRingWith(bond))
         {

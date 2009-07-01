@@ -24,27 +24,49 @@
  * THE SOFTWARE.
  */
 
-package com.metamolecular.mx.walk;
+package com.metamolecular.mx.fingerprint;
 
-import com.metamolecular.mx.model.Atom;
-import com.metamolecular.mx.model.Bond;
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.query.AtomMatcher;
+import com.metamolecular.mx.ring.HanserRingFinder;
+import com.metamolecular.mx.ring.RingFilter;
+import com.metamolecular.mx.ring.RingFinder;
+import java.util.BitSet;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Reporter
+public class NewPathFingerprinter implements Fingerprinter
 {
-  public void walkStart(Atom atom);
+  private RingFilter ringFilter;
+  private AtomMatcher atomFilter;
+  private RingFinder ringFinder;
   
-  public void atomFound(Atom atom);
+  public NewPathFingerprinter()
+  {
+    ringFinder = new HanserRingFinder();
+    ringFilter = new RingFilter(atomFilter, ringFinder);
+  }
   
-  public void bondFound(Bond bond);
+  public void setRingFinder(RingFinder ringFinder)
+  {
+    this.ringFinder = ringFinder;
+  }
   
-  public void branchStart(Atom atom);
+  public RingFinder getRingFinder()
+  {
+    return ringFinder;
+  }
   
-  public void branchEnd(Atom atom);
+  public BitSet getFingerprint(Molecule molecule)
+  {
+    detectAromaticAtoms(molecule);
+    
+    return null;
+  }
   
-  public void ringClosed(Bond bond);
-  
-  public void walkEnd(Atom atom);
+  private void detectAromaticAtoms(Molecule molecule)
+  {
+    ringFinder.findRings(molecule);
+  }
 }

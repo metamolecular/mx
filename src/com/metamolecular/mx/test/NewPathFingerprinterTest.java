@@ -24,27 +24,49 @@
  * THE SOFTWARE.
  */
 
-package com.metamolecular.mx.walk;
+package com.metamolecular.mx.test;
 
-import com.metamolecular.mx.model.Atom;
-import com.metamolecular.mx.model.Bond;
+import com.metamolecular.mx.fingerprint.NewPathFingerprinter;
+import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.ring.RingFinder;
+import junit.framework.TestCase;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
-public interface Reporter
+public class NewPathFingerprinterTest extends TestCase
 {
-  public void walkStart(Atom atom);
+  private NewPathFingerprinter fingerprinter;
+  private RingFinder ringFinder;
+  private Molecule molecule;
+
+  @Override
+  protected void setUp() throws Exception
+  {
+    molecule = mock(Molecule.class);
+    ringFinder = mock(RingFinder.class);
+    fingerprinter = new NewPathFingerprinter();
+  }
   
-  public void atomFound(Atom atom);
+  public void testItHasARingFinder()
+  {
+    assertNotNull(fingerprinter.getRingFinder());
+  }
   
-  public void bondFound(Bond bond);
+  public void testItSetsRingFilter()
+  {
+    fingerprinter.setRingFinder(ringFinder);
+    
+    assertEquals(ringFinder, fingerprinter.getRingFinder());
+  }
+
   
-  public void branchStart(Atom atom);
-  
-  public void branchEnd(Atom atom);
-  
-  public void ringClosed(Bond bond);
-  
-  public void walkEnd(Atom atom);
+  public void testItFiltersRingAtoms()
+  {
+    fingerprinter.setRingFinder(ringFinder);
+    fingerprinter.getFingerprint(molecule);
+    
+    verify(ringFinder, times(1)).findRings(molecule);
+  }
 }

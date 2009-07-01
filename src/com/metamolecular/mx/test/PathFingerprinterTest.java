@@ -46,12 +46,12 @@ public class PathFingerprinterTest extends TestCase
   {
     fingerprinter = new PathFingerprinter();
   }
-  
+
   public void testItIsCreatedWithACustomRingFilter()
   {
     RingFilter filter = mock(RingFilter.class);
     PathFingerprinter custom = new PathFingerprinter(filter);
-    
+
     assertEquals(filter, custom.getRingFilter());
   }
 
@@ -122,6 +122,9 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(fp6.equals(fpall));
   }
 
+  /**
+   * stopped here
+   */
   public void testItShouldGiveAFingerprintFromCyclohexaneThatDoesntMatchOneFromBenzene()
   {
     BitSet benzene = fingerprinter.getFingerprint(Molecules.createBenzene());
@@ -210,6 +213,14 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(match(ethene, ethyne));
   }
 
+  public void testItDoesntMatchEthaneToEthyne()
+  {
+    BitSet ethane = fingerprinter.getFingerprint(createEthane());
+    BitSet ethyne = fingerprinter.getFingerprint(createEthyne());
+
+    assertFalse(match(ethane, ethyne));
+  }
+
   public void testItMatchesPropaneToAcetone()
   {
     BitSet propane = fingerprinter.getFingerprint(Molecules.createPropane());
@@ -225,6 +236,15 @@ public class PathFingerprinterTest extends TestCase
     intersection.and(bitset);
 
     return intersection.equals(bitset);
+  }
+
+  private Molecule createEthane()
+  {
+    Molecule result = new DefaultMolecule();
+
+    result.connect(result.addAtom("C"), result.addAtom("C"), 1);
+
+    return result;
   }
 
   private Molecule createEthene()

@@ -74,6 +74,7 @@ public class MXTest
     suite.addTestSuite(DefaultStepTest.class);
     suite.addTestSuite(BloomFilterTest.class);
     suite.addTestSuite(NewPathWriterTest.class);
+    suite.addTestSuite(NewPathFingerprinterTest.class);
 
     TestRunner.run(suite);
   }

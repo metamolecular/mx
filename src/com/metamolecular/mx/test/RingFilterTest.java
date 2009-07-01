@@ -32,6 +32,7 @@ import com.metamolecular.mx.query.AtomMatcher;
 import com.metamolecular.mx.ring.RingFilter;
 import com.metamolecular.mx.ring.RingFinder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import junit.framework.TestCase;
@@ -47,6 +48,7 @@ public class RingFilterTest extends TestCase
   private AtomMatcher matcher;
   private RingFinder finder;
   private List<List<Atom>> rings;
+  private Set<Atom> matches;
 
   @Override
   protected void setUp() throws Exception
@@ -56,6 +58,7 @@ public class RingFilterTest extends TestCase
     molecule = mock(Molecule.class);
     rings = new ArrayList();
     ringFilter = new RingFilter(matcher, finder);
+    matches = new HashSet();
     
     when(finder.findRings(molecule)).thenReturn(rings);
   }
@@ -66,9 +69,9 @@ public class RingFilterTest extends TestCase
     addRing(6);
     molecule(6);
 
-    Set<Atom> found = ringFilter.filterAtoms(molecule);
-    assertEquals(6, found.size());
-    assertTrue(found.containsAll(rings.get(0)));
+    ringFilter.filterAtoms(molecule, matches);
+    assertEquals(6, matches.size());
+    assertTrue(matches.containsAll(rings.get(0)));
   }
   
   public void testItFindsAllAtomsWhenMatcherMatchesAllAtomsInTwoRings()
@@ -78,10 +81,10 @@ public class RingFilterTest extends TestCase
     addRing(6);
     molecule(12);
     
-    Set<Atom> found = ringFilter.filterAtoms(molecule);
-    assertEquals(12, found.size());
-    assertTrue(found.containsAll(rings.get(0)));
-    assertTrue(found.containsAll(rings.get(1)));
+    ringFilter.filterAtoms(molecule, matches);
+    assertEquals(12, matches.size());
+    assertTrue(matches.containsAll(rings.get(0)));
+    assertTrue(matches.containsAll(rings.get(1)));
   }
 
   public void testItFindsNoAtomsWhenMatcherMatchesNoAtomsInSingleRing()
@@ -90,7 +93,8 @@ public class RingFilterTest extends TestCase
     addRing(6);
     molecule(6);
     
-    assertEquals(0, ringFilter.filterAtoms(molecule).size());
+    ringFilter.filterAtoms(molecule, matches);
+    assertEquals(0, matches.size());
   }
   
   private void addRing(int size)

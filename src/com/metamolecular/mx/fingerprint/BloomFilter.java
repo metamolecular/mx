@@ -243,4 +243,9 @@ public class BloomFilter<E> implements Set<E>
     
     return result;
   }
+  
+  public int getBitArraySize()
+  {
+    return bitArraySize;
+  }
 }

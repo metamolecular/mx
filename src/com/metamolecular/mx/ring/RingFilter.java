@@ -30,34 +30,29 @@ import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.query.AtomMatcher;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class RingFilter
 {
-  private Set<Atom> atoms;
   private RingFinder ringFinder;
   private Comparator comparator;
   private AtomMatcher filter;
 
   public RingFilter(AtomMatcher filter, RingFinder finder)
   {
-    atoms = new HashSet();
     ringFinder = finder;
     comparator = new RingSizeComparator();
     this.filter = filter;
   }
 
-  public Set<Atom> filterAtoms(Molecule molecule)
+  public void filterAtoms(Molecule molecule, Collection<Atom> atoms)
   {
-    atoms.clear();
-    
     List<List<Atom>> rings = new ArrayList(ringFinder.findRings(molecule));
     Collections.sort(rings, comparator);
 
@@ -73,8 +68,6 @@ public class RingFilter
         atoms.addAll(ring);
       }
     }
-
-    return new HashSet(atoms);
   }
 
   private boolean ringMatches(List<Atom> ring)

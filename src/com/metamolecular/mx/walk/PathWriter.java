@@ -29,9 +29,9 @@ import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Bond;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -39,34 +39,55 @@ import java.util.Map;
 public class PathWriter implements Reporter
 {
   private Collection output;
-  private Map<Atom, String> overrides;
-  private List<Atom> path;
+  private Set<Atom> aromatics;
+  private List<Atom> atomPath;
+  private List<Bond> bondPath;
+  private boolean pathDirty;
 
   public PathWriter(Collection output)
   {
     this.output = output;
-    this.overrides = new HashMap();
-    path = new ArrayList();
+    this.aromatics = new HashSet();
+    atomPath = new ArrayList();
+    bondPath = new ArrayList();
+    pathDirty = false;
   }
 
-  public void setDictionary(Map<Atom, String> overrides)
+  public void setAromatics(Collection<Atom> aromatics)
   {
-    this.overrides.clear();
-    this.overrides.putAll(overrides);
+    this.aromatics.clear();
+    this.aromatics.addAll(aromatics);
   }
 
   public void walkEnd(Atom root)
   {
+    writePaths(0);
   }
 
   public void walkStart(Atom atom)
   {
+//    System.out.println("walk start");
+    atomPath.clear();
+    bondPath.clear();
+
+    pathDirty = false;
   }
 
   public void atomFound(Atom atom)
   {
-    path.add(atom);
-    output.add(getPathString());
+    if (atomPath.size() > 0 && (atomPath.size() != bondPath.size()))
+    {
+      throw new RuntimeException("Attempt to add Atom without first adding Bond");
+    }
+    atomPath.add(atom);
+//    output.add(getPathString());
+//    System.out.println(getPathString());
+    pathDirty = true;
+  }
+
+  public void bondFound(Bond bond)
+  {
+    bondPath.add(bond);
   }
 
   public void branchEnd(Atom atom)
@@ -75,62 +96,109 @@ public class PathWriter implements Reporter
 
   public void branchStart(Atom atom)
   {
-    int index = path.indexOf(atom) + 1;
+    writePaths(0);
+
+    int index = atomPath.indexOf(atom) + 1;
 
     if (index == 0)
     {
       throw new RuntimeException("Attempt to branch from nonexistant atom " + atom);
     }
 
-    path = path.subList(0, path.indexOf(atom) + 1);
+    atomPath = atomPath.subList(0, atomPath.indexOf(atom) + 1);
+    bondPath = bondPath.subList(0, atomPath.indexOf(atom));
   }
 
   public void ringClosed(Bond bond)
   {
-    if (path.isEmpty())
+    if (atomPath.isEmpty())
     {
       throw new RuntimeException("Attempt to close empty path.");
     }
-    
-    Atom last = path.get(path.size() - 1);
+
+    Atom last = atomPath.get(atomPath.size() - 1);
     Atom inPath = bond.getMate(last);
-    int index = path.indexOf(inPath);
-    
+    int index = atomPath.indexOf(inPath);
+
     if (index == -1)
     {
       throw new RuntimeException("Attempt to close nonexistant atom" + inPath);
     }
-    
-    int ringSize = path.size() - index;
-    
+
+    int ringSize = atomPath.size() - index;
+
     if (ringSize < 3)
     {
       throw new RuntimeException("Atom closes rings with size less than three " + inPath);
     }
-    
-    output.add(getPathString() + "-" + (ringSize));
+
+    writePaths(ringSize);
   }
 
-  private String getPathString()
+  private void writePaths(int ringSize)
   {
-    StringBuffer buffer = new StringBuffer();
-
-    for (Atom atom : path)
+    if (!pathDirty)
     {
-      write(atom, buffer);
+      return;
     }
 
-    return buffer.toString();
+    StringBuffer buffer = new StringBuffer();
+
+    for (int i = 0; i < atomPath.size(); i++)
+    {
+      Atom atom = atomPath.get(i);
+
+      write(atom, buffer);
+
+      if (aromatics.contains(atom))
+      {
+        buffer.append("%");
+      }
+      else
+      {
+        for (Bond bond : atom.getBonds())
+        {
+          if (bond.getType() == 2 && bondPath.contains(bond))
+          {
+            buffer.append("%");
+
+            break;
+          }
+          
+          if (bond.getType() == 3 && bondPath.contains(bond))
+          {
+            buffer.append("#");
+            
+            break;
+          }
+        }
+      }
+      output.add(buffer.toString());
+    }
+
+//    for (Atom atom : atomPath)
+//    {
+//      write(atom, buffer);
+//      
+//      if (aromatics.contains(atom))
+//      {
+//        buffer.append("%");
+//      }
+//      
+//      output.add(buffer.toString());
+//    }
+
+    if (ringSize != 0)
+    {
+      output.add(buffer.toString() + "-" + ringSize);
+    }
+
+    pathDirty = false;
   }
 
   private void write(Atom atom, StringBuffer buffer)
   {
-    String type = overrides.get(atom);
-
-    if (type == null)
-    {
-      type = atom.getSymbol();
-    }
+    String type = atom.getSymbol();
 
     buffer.append(type);
   }

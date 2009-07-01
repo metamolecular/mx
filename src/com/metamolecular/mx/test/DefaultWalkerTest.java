@@ -129,6 +129,12 @@ public class DefaultWalkerTest extends TestCase
     verify(reporter, times(1)).atomFound(atom);
   }
 
+  public void testItReportsNotBondWhenNextBondUnavailable()
+  {
+    doStep();
+    verify(reporter, never()).bondFound(any(Bond.class));
+  }
+
   public void testItReporstNoBranchStartWhenStepHasOneBond()
   {
     Step branch1 = mock(Step.class);
@@ -155,6 +161,26 @@ public class DefaultWalkerTest extends TestCase
     verify(reporter, times(0)).branchEnd(any(Atom.class));
   }
 
+  public void testItReportsAtomThenBondThenAtom()
+  {
+    Step branch1 = mock(Step.class);
+    Atom atom1 = mock(Atom.class);
+
+    when(step.hasNextBond()).thenReturn(true, false);
+    when(step.nextBond()).thenReturn(bond);
+    when(branch1.getAtom()).thenReturn(atom1);
+    when(step.nextStep(any(Bond.class))).thenReturn(branch1);
+
+    doStep();
+
+    InOrder sequence = inOrder(reporter);
+
+    sequence.verify(reporter).atomFound(atom);
+    sequence.verify(reporter).bondFound(bond);
+    sequence.verify(reporter).atomFound(atom1);
+    sequence.verify(reporter, never()).bondFound(any(Bond.class));
+  }
+
   public void testItReportsTwoBranchStartsWhenStepHasThreeBonds()
   {
     when(step.hasNextBond()).thenReturn(true, true, true, false);
@@ -172,6 +198,32 @@ public class DefaultWalkerTest extends TestCase
 
     doStep();
     verify(reporter, times(2)).branchStart(atom);
+  }
+
+  public void testItReportsBondAfterBranchStart()
+  {
+    when(step.hasNextBond()).thenReturn(true, true, false);
+    when(step.nextBond()).thenReturn(bond);
+
+    Step branch1 = mock(Step.class);
+    Step branch2 = mock(Step.class);
+
+    when(branch1.getAtom()).thenReturn(atom);
+    when(branch2.getAtom()).thenReturn(atom);
+
+    when(step.nextStep(any(Bond.class))).thenReturn(branch1, branch2);
+
+    doStep();
+
+    InOrder sequence = inOrder(reporter);
+
+    sequence.verify(reporter).atomFound(atom);
+    sequence.verify(reporter).bondFound(bond);
+    sequence.verify(reporter).branchStart(atom);
+    sequence.verify(reporter).bondFound(bond);
+    sequence.verify(reporter).atomFound(atom);
+    sequence.verify(reporter, never()).bondFound(any(Bond.class));
+    sequence.verify(reporter, never()).atomFound(any(Atom.class));
   }
 
   public void testItReportsTwoBranchEndsWhenStepHasThreeBonds()

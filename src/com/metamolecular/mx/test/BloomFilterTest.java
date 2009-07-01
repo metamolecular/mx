@@ -47,6 +47,13 @@ public class BloomFilterTest extends TestCase
     length = 1024;
     filter = null;
   }
+  
+  public void testItReturnsTheCorrectDefaultBitArraySize()
+  {
+    doNew();
+    
+    assertEquals(1024, filter.getBitArraySize());
+  }
 
   public void testItCreatesABitSetWithTheSpecifiedLength()
   {

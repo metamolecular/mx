@@ -25,18 +25,18 @@
  */
 package com.metamolecular.mx.fingerprint;
 
-import com.metamolecular.mx.path.PathWriter;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.path.PathFinder;
 import com.metamolecular.mx.query.AromaticAtomFilter;
 import com.metamolecular.mx.ring.HanserRingFinder;
 import com.metamolecular.mx.ring.RingFilter;
+import com.metamolecular.mx.walk.DefaultWalker;
+import com.metamolecular.mx.walk.PathWriter;
+import com.metamolecular.mx.walk.Walker;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -44,31 +44,32 @@ import java.util.Set;
  */
 public class PathFingerprinter implements Fingerprinter
 {
-  private int length;
-  private PathFinder pathFinder;
   private PathWriter writer;
+  private BloomFilter bloomFilter;
+  private Walker walker;
+//  private PathFinder pathFinder;
+//  private PathWriter writer;
   private RingFilter filter;
-  Set<Atom> aromatics;
 
   public PathFingerprinter()
   {
     this(new RingFilter(new AromaticAtomFilter(), new HanserRingFinder()));
   }
-  
+
   public PathFingerprinter(RingFilter filter)
   {
-    this.length = 1024;
-    this.pathFinder = new PathFinder();
+    this.bloomFilter = new BloomFilter(1024);
+    this.writer = new PathWriter(bloomFilter);
+    this.walker = new DefaultWalker();
+//    this.pathFinder = new PathFinder();
     this.filter = filter;
-    writer = new PathWriter();
-    aromatics = null;
   }
-  
+
   public RingFilter getRingFilter()
   {
     return filter;
   }
-  
+
   public void setRingFilter(RingFilter filter)
   {
     this.filter = filter;
@@ -76,38 +77,45 @@ public class PathFingerprinter implements Fingerprinter
 
   public void setMaximumPathDepth(int maxDepth)
   {
-    pathFinder.setMaximumDepth(maxDepth);
+    walker.setMaximumDepth(maxDepth);
+//    pathFinder.setMaximumDepth(maxDepth);
   }
 
   public int getMaximumPathDepth()
   {
-    return pathFinder.getMaximumDepth();
+    return walker.getMaximumDepth();
+  //    return pathFinder.getMaximumDepth();
   }
 
   public void setFingerprintLength(int length)
   {
-    this.length = length;
+    this.bloomFilter = new BloomFilter(length);
   }
 
   public int getFingerprintLength()
   {
-    return length;
+    return bloomFilter.getBitArraySize();
   }
 
   public BitSet getFingerprint(Molecule molecule)
   {
-    aromatics = filter.filterAtoms(molecule);
-    BitSet result = new BitSet(length);
-    Set<String> paths = getPaths(molecule);
-
-    for (String path : paths)
+    bloomFilter.clear();
+        Set<Atom> aromatics = new HashSet();
+    filter.filterAtoms(molecule, aromatics);
+    
+    for (Atom atom : aromatics)
     {
-      int position = new Random(path.hashCode()).nextInt(length);
+      aromatics.add(atom);
+    }
+    writer.setAromatics(aromatics);
 
-      result.set(position);
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+      walker.walk(atom, writer);
     }
 
-    return result;
+    return bloomFilter.toBitSet();
   }
 
   private Set<String> getPaths(Molecule molecule)
@@ -116,7 +124,7 @@ public class PathFingerprinter implements Fingerprinter
 
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
-      pathFinder.findAllPaths(molecule.getAtom(i), paths);
+//      pathFinder.findAllPaths(molecule.getAtom(i), paths);
     }
 
     return compilePaths(paths);
@@ -128,7 +136,7 @@ public class PathFingerprinter implements Fingerprinter
 
     for (List<Atom> path : paths)
     {
-      writer.write(path, result, aromatics);
+//      writer.write(path, result, aromatics);
     }
 
     return result;
