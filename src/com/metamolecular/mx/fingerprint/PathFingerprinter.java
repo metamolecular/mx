@@ -46,6 +46,7 @@ public class PathFingerprinter implements Fingerprinter
   private BloomFilter bloomFilter;
   private Walker walker;
   private RingFilter filter;
+  private Set<Atom> aromatics;
 
   public PathFingerprinter()
   {
@@ -58,6 +59,7 @@ public class PathFingerprinter implements Fingerprinter
     this.writer = new PathWriter(bloomFilter);
     this.walker = new DefaultWalker();
     this.filter = filter;
+    this.aromatics = new HashSet();
   }
 
   public RingFilter getRingFilter()
@@ -93,23 +95,28 @@ public class PathFingerprinter implements Fingerprinter
   public BitSet getFingerprint(Molecule molecule)
   {
     bloomFilter.clear();
-    Set<Atom> aromatics = new HashSet();
+    findAromatics(molecule);
+
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+
+      walker.walk(atom, writer);
+    }
+
+    return bloomFilter.toBitSet();
+  }
+
+  private void findAromatics(Molecule molecule)
+  {
+    aromatics.clear();
     filter.filterAtoms(molecule, aromatics);
 
     for (Atom atom : aromatics)
     {
       aromatics.add(atom);
     }
-    
+
     writer.setAromatics(aromatics);
-
-    for (int i = 0; i < molecule.countAtoms(); i++)
-    {
-      Atom atom = molecule.getAtom(i);
-      
-      walker.walk(atom, writer);
-    }
-
-    return bloomFilter.toBitSet();
   }
 }
