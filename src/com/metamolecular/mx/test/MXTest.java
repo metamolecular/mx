@@ -43,8 +43,6 @@ public class MXTest
     suite.addTestSuite(AtomTest.class);
     suite.addTestSuite(BondTest.class);
     suite.addTestSuite(MolfileReaderTest.class);
-    suite.addTestSuite(StepTest.class);
-    suite.addTestSuite(PathFinderTest.class);
     suite.addTestSuite(VirtualHydrogenCounterTest.class);
     suite.addTestSuite(SMILESTokenizerTest.class);
     suite.addTestSuite(SMILESReaderTest.class);
@@ -65,8 +63,7 @@ public class MXTest
     suite.addTestSuite(MolfileWriterTest.class);
     suite.addTestSuite(ReducerTest.class);
     suite.addTestSuite(TemplateCompilerTest.class);
-    suite.addTestSuite(PathFingerprinterTest.class);
-    suite.addTestSuite(PathWriterTest.class);    
+    suite.addTestSuite(PathFingerprinterTest.class);   
     suite.addTestSuite(DefaultBondMatcherTest.class);
     suite.addTestSuite(RingFilterTest.class);
     suite.addTestSuite(AromaticAtomFilterTest.class);
