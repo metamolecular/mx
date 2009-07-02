@@ -23,13 +23,17 @@ Features:
 
 Language:
 
-MX is written in Java and has been used with Scala in addition toRuby and Python
+MX is written in Java and has been used with Scala in addition to Ruby and Python
 through the JRuby and Jython interpreters.
 
 Dependencies:
 
 -  JDK 1.5 or higher
 -  Ant (to compile and run tests)
+
+License:
+
+MX is distributed under the MIT license. See the LICENSE file for details.
 
 Contributors:
 
@@ -41,4 +45,4 @@ John Jaeger               http://goeslightly.blogspot.com/
 History:
 
 MX was factored out of ChemWriter, the 2D chemical structure editor developed
-by Metamolecular, LLC. 
+by Metamolecular, LLC (http://metamolecular.com).
