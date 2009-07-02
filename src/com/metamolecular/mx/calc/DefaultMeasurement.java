@@ -1,5 +1,5 @@
 /*
- * MX Cheminformatics Tools for Java
+ * MX - Essential Cheminformatics
  * 
  * Copyright (c) 2007-2009 Metamolecular, LLC
  * 
@@ -26,7 +26,7 @@
 package com.metamolecular.mx.calc;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class DefaultMeasurement implements Measurement
 {

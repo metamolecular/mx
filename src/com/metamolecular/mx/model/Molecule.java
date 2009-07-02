@@ -1,9 +1,9 @@
 /*
- * MX Cheminformatics Tools for Java
+ * MX - Essential Cheminformatics
  * 
  * Copyright (c) 2007-2009 Metamolecular, LLC
  * 
- * http://metamolecular.com
+ * http://metamolecular.com/mx
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ package com.metamolecular.mx.model;
 import javax.swing.event.ChangeListener;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  * @author Duan Lian
  */
 public interface Molecule

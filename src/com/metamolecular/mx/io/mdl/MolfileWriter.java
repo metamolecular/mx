@@ -1,9 +1,9 @@
 /*
- * MX Cheminformatics Tools for Java
+ * MX - Essential Cheminformatics
  * 
  * Copyright (c) 2007-2009 Metamolecular, LLC
  * 
- * http://metamolecular.com
+ * http://metamolecular.com/mx
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.metamolecular.mx.io.mdl;
 
 import java.text.DecimalFormat;
@@ -36,7 +37,7 @@ import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.model.Superatom;
 
 /**
- * @author Richard L. Apodaca
+ * @author Richard L. Apodaca <rapodaca at metamolecular.com>
  */
 public class MolfileWriter
 {

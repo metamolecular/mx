@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="MX" default="compile" basedir=".">
   <!-- properties -->
-  <property name="full-name" value="MX Tools for Cheminformatics" />
+  <property name="full-name" value="MX - Essential Cheminformatics" />
   <property name="unix-name" value="mx" />
-  <property name="version" value="1.0-beta1" />
+  <property name="version" value="1.0-beta-2" />
   <property name="source.dir" location="src" />
   <property name="resource.dir" location="resources" />
   <property name="lib.dir" location="lib" />
@@ -14,10 +14,13 @@
   <property name="doc.dir" location="${build.dir}/doc" />
   <property name="dist.dir" location="${build.dir}/dist" />
   <property name="test.dir" location="${build.dir}/test" />
+  <property name="molfile.dir" location="${resource.dir}/molfiles" />
   <property name="testenv.dir" location ="testenv" />
-  <property name="lib-licenses.file" location="${lib.dir}/LICENSES.txt" />
-  <property name="license.file" location="LICENSE.txt" />
+  <property name="lib-licenses.file" location="${lib.dir}/LICENSES" />
+  <property name="license.file" location="LICENSE" />
+  <property name="readme.file" location="README" />
   <property name="junit.lib" value="${lib.dir}/junit-4.5.jar" />
+  <property name="mockito.lib" value="${lib.dir}/mockito-all-1.7.jar" />
   <property name="test.class" value = "com.metamolecular.mx.test.MXTest" />
   <!-- filesets -->
   <fileset dir="${lib.dir}" id="libs">
@@ -70,7 +73,7 @@
       <classpath>
         <fileset refid="libs" />
       </classpath>
-      <bottom><![CDATA[<i>Copyright &copy; 2007, 2008 <a href="http://metamolecular.com">Metamolecular, LLC</a>. All Rights Reserved.</i>]]>
+      <bottom><![CDATA[<i>Copyright &copy; 2007-2009 <a href="http://metamolecular.com">Metamolecular, LLC</a> and others. All Rights Reserved.</i>]]>
       </bottom>
     </javadoc>
   </target>
@@ -83,14 +86,20 @@
     <mkdir dir="${dist.dir}/src" />
     <mkdir dir="${dist.dir}/doc" />
     <mkdir dir="${dist.dir}/resources" />
+    <mkdir dir="${dist.dir}/resources/molfiles" />
     <copy file="${junit.lib}" todir="${dist.dir}/lib" />
+    <copy file="${mockito.lib}" todir="${dist.dir}/lib" />
     <copy file="${lib-licenses.file}" todir="${dist.dir}/lib" />
     <copy file="${license.file}" todir="${dist.dir}" />
+    <copy file="${readme.file}" todir="${dist.dir}" />
     <copy todir="${dist.dir}/src">
       <fileset dir="${source.dir}" includes="com/metamolecular/mx/**/*.java" />
     </copy>
     <copy todir="${dist.dir}/doc">
       <fileset dir="${doc.dir}" />
+    </copy>
+    <copy todir="${dist.dir}/resources/molfiles">
+      <fileset dir="${molfile.dir}" />
     </copy>
     <copy file="${resource.dir}/atomic_system.pdf" todir="${dist.dir}/resources" />
     <copy file="${resource.dir}/atomic_system.xml" todir="${dist.dir}/resources" />
