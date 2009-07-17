@@ -61,6 +61,8 @@ public class PathFingerprinter implements Fingerprinter
     this.walker = new DefaultWalker();
     this.filter = filter;
     this.aromatics = new HashSet();
+    
+    walker.setMaximumDepth(7);
   }
 
   public RingFilter getRingFilter()
@@ -97,8 +99,10 @@ public class PathFingerprinter implements Fingerprinter
   {
     bloomFilter.clear();
     findAromatics(molecule);
+    
+//    System.out.println(molecule.countAtoms());
 
-    for (int i = 0; i < molecule.countAtoms(); i++)
+    for (int i = 1; i < molecule.countAtoms(); i++)
     {
       Atom atom = molecule.getAtom(i);
 

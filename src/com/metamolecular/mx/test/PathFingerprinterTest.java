@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.fingerprint.PathFingerprinter;
@@ -46,6 +45,11 @@ public class PathFingerprinterTest extends TestCase
   protected void setUp() throws Exception
   {
     fingerprinter = new PathFingerprinter();
+  }
+  
+  public void testItStartsWithMaxDepthSeven()
+  {
+    assertEquals(7, fingerprinter.getMaximumPathDepth());
   }
 
   public void testItIsCreatedWithACustomRingFilter()

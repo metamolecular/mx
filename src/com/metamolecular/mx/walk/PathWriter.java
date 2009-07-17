@@ -74,7 +74,7 @@ public class PathWriter implements Reporter
   }
 
   public void atomFound(Atom atom)
-  {
+  {   
     if (atomPath.size() > 0 && (atomPath.size() != bondPath.size()))
     {
       throw new RuntimeException("Attempt to add Atom without first adding Bond");
