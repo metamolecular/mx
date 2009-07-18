@@ -99,8 +99,6 @@ public class PathFingerprinter implements Fingerprinter
   {
     bloomFilter.clear();
     findAromatics(molecule);
-    
-//    System.out.println(molecule.countAtoms());
 
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
