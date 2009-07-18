@@ -102,7 +102,7 @@ public class PathFingerprinter implements Fingerprinter
     
 //    System.out.println(molecule.countAtoms());
 
-    for (int i = 1; i < molecule.countAtoms(); i++)
+    for (int i = 0; i < molecule.countAtoms(); i++)
     {
       Atom atom = molecule.getAtom(i);
 
