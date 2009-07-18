@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.walk;
 
 import com.metamolecular.mx.model.Atom;
@@ -74,7 +73,7 @@ public class PathWriter implements Reporter
   }
 
   public void atomFound(Atom atom)
-  {   
+  {
     if (atomPath.size() > 0 && (atomPath.size() != bondPath.size()))
     {
       throw new RuntimeException("Attempt to add Atom without first adding Bond");
@@ -97,15 +96,14 @@ public class PathWriter implements Reporter
   {
     writePaths(0);
 
-    int index = atomPath.indexOf(atom) + 1;
+    int index = atomPath.indexOf(atom);
 
-    if (index == 0)
+    if (index == -1)
     {
       throw new RuntimeException("Attempt to branch from nonexistant atom " + atom);
     }
 
-    atomPath = atomPath.subList(0, atomPath.indexOf(atom) + 1);
-    bondPath = bondPath.subList(0, atomPath.indexOf(atom));
+    chop(index);
   }
 
   public void ringClosed(Bond bond)
@@ -134,6 +132,23 @@ public class PathWriter implements Reporter
     writePaths(ringSize);
   }
 
+  private void chop(int index)
+  {
+    int atomChopCount = atomPath.size() - index - 1;
+
+    for (int i = 0; i < atomChopCount; i++)
+    {
+      atomPath.remove(atomPath.size() - 1);
+    }
+
+    int bondChopCount = bondPath.size() - index;
+
+    for (int i = 0; i < bondChopCount; i++)
+    {
+      bondPath.remove(bondPath.size() - 1);
+    }
+  }
+
   private void writePaths(int ringSize)
   {
     if (!pathDirty)
@@ -143,10 +158,8 @@ public class PathWriter implements Reporter
 
     StringBuffer buffer = new StringBuffer();
 
-    for (int i = 0; i < atomPath.size(); i++)
+    for (Atom atom : atomPath)
     {
-      Atom atom = atomPath.get(i);
-
       write(atom, buffer);
 
       if (aromatics.contains(atom))
@@ -163,11 +176,11 @@ public class PathWriter implements Reporter
 
             break;
           }
-          
+
           if (bond.getType() == 3 && bondPath.contains(bond))
           {
             buffer.append("#");
-            
+
             break;
           }
         }
