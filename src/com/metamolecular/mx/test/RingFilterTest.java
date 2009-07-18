@@ -62,6 +62,26 @@ public class RingFilterTest extends TestCase
     
     when(finder.findRings(molecule)).thenReturn(rings);
   }
+  
+  public void testItFiltersAtomsFromRingCollection()
+  {
+    matchAll();
+    addRing(6);
+    
+    ringFilter.filterAtoms(6, rings, matches);
+    assertEquals(6, matches.size());
+  }
+  
+  public void testItFiltersAtomsUpToLimit()
+  {
+    matchAll();
+    addRing(6);
+    addRing(6);
+    addRing(6);
+    
+    ringFilter.filterAtoms(10, rings, matches);
+    assertEquals(12, matches.size());
+  }
 
   public void testItFindsAllAtomsWhenMatcherMatchesAllAtomsInSingleRing()
   {

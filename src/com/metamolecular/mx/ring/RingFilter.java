@@ -50,6 +50,22 @@ public class RingFilter
     comparator = new RingSizeComparator();
     this.filter = filter;
   }
+  
+  public void filterAtoms(int atomLimit, Collection<List<Atom>> rings, Collection<Atom> atoms)
+  {
+    for (List<Atom> ring : rings)
+    {
+      if (atoms.size() >= atomLimit)
+      {
+        break;
+      }
+      
+      if (ringMatches(ring))
+      {
+        atoms.addAll(ring);
+      }
+    }
+  }
 
   public void filterAtoms(Molecule molecule, Collection<Atom> atoms)
   {
