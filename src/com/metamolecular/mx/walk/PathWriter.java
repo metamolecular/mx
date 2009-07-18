@@ -128,6 +128,8 @@ public class PathWriter implements Reporter
     {
       throw new RuntimeException("Atom closes rings with size less than three " + inPath);
     }
+    
+    pathDirty = true;
 
     writePaths(ringSize);
   }

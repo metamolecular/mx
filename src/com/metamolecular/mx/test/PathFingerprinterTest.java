@@ -29,9 +29,11 @@ import com.metamolecular.mx.fingerprint.PathFingerprinter;
 import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
+import com.metamolecular.mx.model.MoleculeKit;
 import com.metamolecular.mx.ring.RingFilter;
 import java.util.BitSet;
 import junit.framework.TestCase;
+
 import static org.mockito.Mockito.*;
 
 /**

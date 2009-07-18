@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.metamolecular.mx.test;
 
 import com.metamolecular.mx.walk.PathWriter;
@@ -264,6 +263,34 @@ public class PathWriterTest extends TestCase
     sequence.verify(paths, times(1)).add("12");
     sequence.verify(paths, times(1)).add("123");
     sequence.verify(paths, times(1)).add("123-3");
+  }
+
+  public void testItWritesRingClosureWhenNoAtomsInBranch()
+  {
+    doNew();
+
+    Atom atom1 = mockAtom("1");
+    Atom atom2 = mockAtom("2");
+    Atom atom3 = mockAtom("3");
+    Atom atom4 = mockAtom("4");
+    Bond closure = mock(Bond.class);
+
+    when(closure.getMate(atom3)).thenReturn(atom1);
+
+    writer.walkStart(atom1);
+    writer.atomFound(atom1);
+    writer.bondFound(bond);
+    writer.atomFound(atom2);
+    writer.bondFound(bond);
+    writer.atomFound(atom3);
+    writer.bondFound(bond);
+    writer.atomFound(atom4);
+    writer.branchStart(atom3);
+    writer.ringClosed(closure);
+    writer.branchEnd(atom3);
+    writer.walkEnd(atom1);
+
+    verify(paths, times(1)).add("123-3");
   }
 
   public void testItWritesLongestLinearPathOnceWhenRingClosed()
