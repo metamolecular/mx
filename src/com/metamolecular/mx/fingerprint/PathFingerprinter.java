@@ -52,6 +52,8 @@ public class PathFingerprinter implements Fingerprinter
   private Set<Atom> aromatics;
   private RingFinder ringFinder;
   private int ringBitCount;
+  
+  private Set<String> paths;
 
   public PathFingerprinter()
   {
@@ -67,6 +69,8 @@ public class PathFingerprinter implements Fingerprinter
     this.aromatics = new HashSet();
     this.ringFinder = new HanserRingFinder();
     this.ringBitCount = 20;
+    
+    paths = new HashSet();
 
     walker.setMaximumDepth(7);
   }
@@ -121,33 +125,68 @@ public class PathFingerprinter implements Fingerprinter
   {
     return bloomFilter.getBitArraySize() + ringBitCount;
   }
+  
+  public Set<String> paths()
+  {
+    return paths;
+  }
 
   public BitSet getFingerprint(Molecule molecule)
   {
+    paths.clear();
+    this.bloomFilter = new BloomFilter(1024);
+    this.writer = new PathWriter(bloomFilter);
     bloomFilter.clear();
-    Collection<List<Atom>> rings = ringFinder.findRings(molecule);
-    findAromatics(molecule, rings);
+    findAromatics(molecule);
 
-    recordWalk(molecule);
-    
-    BitSet walkBits = bloomFilter.toBitSet();
-    BitSet result = new BitSet(getFingerprintLength());
-    
-    result.or(walkBits);
-//    writeRingBits(result, rings);
+    for (int i = 0; i < molecule.countAtoms(); i++)
+    {
+      Atom atom = molecule.getAtom(i);
+
+      walker.walk(atom, writer);
+    }
 
     return bloomFilter.toBitSet();
   }
-  
+
+  private void findAromatics(Molecule molecule)
+  {
+    aromatics.clear();
+    filter.filterAtoms(molecule, aromatics);
+
+    for (Atom atom : aromatics)
+    {
+      aromatics.add(atom);
+    }
+
+    writer.setAromatics(aromatics);
+  }
+
+//  public BitSet getFingerprint(Molecule molecule)
+//  {
+//    bloomFilter.clear();
+//    Collection<List<Atom>> rings = ringFinder.findRings(molecule);
+//    findAromatics(molecule, rings);
+//
+//    recordWalk(molecule);
+//    
+//    BitSet walkBits = bloomFilter.toBitSet();
+//    BitSet result = new BitSet(getFingerprintLength());
+//    
+//    result.or(walkBits);
+////    writeRingBits(result, rings);
+//
+//    return bloomFilter.toBitSet();
+//  }
   private void writeRingBits(BitSet bitset, Collection<List<Atom>> rings)
-  {    
+  {
     for (List<Atom> ring : rings)
     {
 //      System.out.println("ring: " + (ring.size() - 1));
       if (ring.size() < ringBitCount)
       {
         int index = bloomFilter.getBitArraySize() + (ring.size() - 4);
-        
+
         if (index < getFingerprintLength())
         {
           bitset.set(index);

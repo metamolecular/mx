@@ -116,7 +116,7 @@ public class PathWriterTest extends TestCase
   public void testItWritesTwoAtomsSeparatedByADoubleBond()
   {
     doNew();
-    Bond bond = mock(Bond.class);
+//    Bond bond = mock(Bond.class);
     when(bond.getType()).thenReturn(2);
     when(atom.getBonds()).thenReturn(new Bond[]
       {
@@ -139,6 +139,43 @@ public class PathWriterTest extends TestCase
 
     sequence.verify(paths).add(".%");
     sequence.verify(paths).add(".%.%");
+  }
+
+  public void testItWritesSaturatedAtomForFirstAtomOfDoubleBond()
+  {
+    doNew();
+
+    Atom atom1 = mockAtom("1");
+    Atom atom2 = mockAtom("2");
+    Atom atom3 = mockAtom("3");
+    Bond bond1 = mock(Bond.class);
+    Bond bond2 = mock(Bond.class);
+
+    when(bond1.getType()).thenReturn(1);
+    when(bond2.getType()).thenReturn(2);
+    when(atom1.getBonds()).thenReturn(new Bond[]
+      {
+        bond1
+      });
+    when(atom2.getBonds()).thenReturn(new Bond[]
+      {
+        bond1, bond2
+      });
+
+    writer.walkStart(atom1);
+    writer.atomFound(atom1);
+    writer.bondFound(bond1);
+    writer.atomFound(atom2);
+    writer.bondFound(bond2);
+    writer.atomFound(atom3);
+    writer.walkEnd(atom1);
+
+    InOrder sequence = inOrder(paths);
+
+    sequence.verify(paths, times(1)).add("1");
+    sequence.verify(paths, times(1)).add("12");
+    sequence.verify(paths, times(1)).add("12%");
+    sequence.verify(paths, times(1)).add("12%3%");
   }
 
   public void testItClearsBondPathWhenBranchStarted()

@@ -74,11 +74,19 @@ public class PathWriter implements Reporter
 
   public void atomFound(Atom atom)
   {
+//    System.out.println("atomFound: " + atom.getIndex());
     if (atomPath.size() > 0 && (atomPath.size() != bondPath.size()))
     {
       throw new RuntimeException("Attempt to add Atom without first adding Bond");
     }
     atomPath.add(atom);
+    
+//    for (Atom inpath : atomPath)
+//    {
+//      System.out.print(inpath.getIndex() + "-");
+//    }
+//    
+//    System.out.println();
 
     pathDirty = true;
   }
@@ -128,6 +136,8 @@ public class PathWriter implements Reporter
     {
       throw new RuntimeException("Atom closes rings with size less than three " + inPath);
     }
+    
+//    System.out.println("ringClosed: " + ringSize);
     
     pathDirty = true;
 
@@ -187,12 +197,20 @@ public class PathWriter implements Reporter
           }
         }
       }
+      
+//      System.out.println(buffer);
       output.add(buffer.toString());
     }
 
     if (ringSize != 0)
     {
+//      System.out.println(buffer);
       output.add(buffer.toString() + "-" + ringSize);
+    }
+    
+    else
+    {
+//      System.out.println("ring size 0: " +buffer);
     }
 
     pathDirty = false;
