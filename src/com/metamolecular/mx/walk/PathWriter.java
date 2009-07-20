@@ -74,19 +74,12 @@ public class PathWriter implements Reporter
 
   public void atomFound(Atom atom)
   {
-//    System.out.println("atomFound: " + atom.getIndex());
     if (atomPath.size() > 0 && (atomPath.size() != bondPath.size()))
     {
       throw new RuntimeException("Attempt to add Atom without first adding Bond");
     }
-    atomPath.add(atom);
     
-//    for (Atom inpath : atomPath)
-//    {
-//      System.out.print(inpath.getIndex() + "-");
-//    }
-//    
-//    System.out.println();
+    atomPath.add(atom);
 
     pathDirty = true;
   }
@@ -111,7 +104,7 @@ public class PathWriter implements Reporter
       throw new RuntimeException("Attempt to branch from nonexistant atom " + atom);
     }
 
-    chop(index);
+    chopPaths(index);
   }
 
   public void ringClosed(Bond bond)
@@ -136,15 +129,13 @@ public class PathWriter implements Reporter
     {
       throw new RuntimeException("Atom closes rings with size less than three " + inPath);
     }
-    
-//    System.out.println("ringClosed: " + ringSize);
-    
+
     pathDirty = true;
 
     writePaths(ringSize);
   }
 
-  private void chop(int index)
+  private void chopPaths(int index)
   {
     int atomChopCount = atomPath.size() - index - 1;
 
@@ -172,54 +163,75 @@ public class PathWriter implements Reporter
 
     for (Atom atom : atomPath)
     {
-      write(atom, buffer);
+      writeAtom(atom, buffer);
 
-      if (aromatics.contains(atom))
-      {
-        buffer.append("%");
-      }
-      else
-      {
-        for (Bond bond : atom.getBonds())
-        {
-          if (bond.getType() == 2 && bondPath.contains(bond))
-          {
-            buffer.append("%");
-
-            break;
-          }
-
-          if (bond.getType() == 3 && bondPath.contains(bond))
-          {
-            buffer.append("#");
-
-            break;
-          }
-        }
-      }
-      
-//      System.out.println(buffer);
       output.add(buffer.toString());
     }
 
     if (ringSize != 0)
     {
-//      System.out.println(buffer);
       output.add(buffer.toString() + "-" + ringSize);
-    }
-    
-    else
-    {
-//      System.out.println("ring size 0: " +buffer);
     }
 
     pathDirty = false;
   }
 
-  private void write(Atom atom, StringBuffer buffer)
+  private void writeAtom(Atom atom, StringBuffer buffer)
   {
-    String type = atom.getSymbol();
+    buffer.append(atom.getSymbol());
+    writeAtomModifier(atom, buffer);
+  }
 
-    buffer.append(type);
+  private void writeAtomModifier(Atom atom, StringBuffer buffer)
+  {
+    if (aromatics.contains(atom))
+    {
+      buffer.append("%");
+    }
+    else
+    {
+      for (Bond bond : atom.getBonds())
+      {
+        if (bond.getType() == 1)
+        {
+          continue;
+        }
+
+        int bondIndex = bondPath.indexOf(bond);
+
+        if (bondIndex == -1)
+        {
+          continue;
+        }
+
+        if (bond.getType() == 3)
+        {
+          buffer.append("#");
+          break;
+        }
+
+        if (bond.getType() == 2)
+        {
+          int atomIndex = atomPath.indexOf(atom);
+
+          if (bondIndex == atomIndex)
+          {
+            if (!bond.getMate(atom).equals(atomPath.get(0)))
+            {
+              output.add(buffer.toString());
+            }
+            
+            buffer.append("%");
+            break;
+          }
+
+          if (bondIndex == atomIndex - 1 || bondIndex == bondPath.size() - 1)
+          {
+            buffer.append("%");
+            break;
+          }
+        }
+      }
+    }
   }
 }

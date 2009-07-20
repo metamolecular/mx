@@ -124,6 +124,7 @@ public class PathWriterTest extends TestCase
       });
 
     Atom atom1 = mockAtom(".");
+        when(bond.getMate(atom)).thenReturn(atom1);
     when(atom1.getBonds()).thenReturn(new Bond[]
       {
         bond
@@ -140,7 +141,6 @@ public class PathWriterTest extends TestCase
     sequence.verify(paths).add(".%");
     sequence.verify(paths).add(".%.%");
   }
-
   public void testItWritesSaturatedAtomForFirstAtomOfDoubleBond()
   {
     doNew();
@@ -153,6 +153,7 @@ public class PathWriterTest extends TestCase
 
     when(bond1.getType()).thenReturn(1);
     when(bond2.getType()).thenReturn(2);
+    when(bond2.getMate(atom2)).thenReturn(atom3);
     when(atom1.getBonds()).thenReturn(new Bond[]
       {
         bond1
@@ -160,6 +161,10 @@ public class PathWriterTest extends TestCase
     when(atom2.getBonds()).thenReturn(new Bond[]
       {
         bond1, bond2
+      });
+    when(atom3.getBonds()).thenReturn(new Bond[]
+      {
+        bond2
       });
 
     writer.walkStart(atom1);
@@ -176,8 +181,57 @@ public class PathWriterTest extends TestCase
     sequence.verify(paths, times(1)).add("12");
     sequence.verify(paths, times(1)).add("12%");
     sequence.verify(paths, times(1)).add("12%3%");
+
+    verify(paths, times(4)).add(any(String.class));
   }
 
+  public void testItWritesDoubleBondForRingClosure()
+  {
+    doNew();
+
+    Atom atom1 = mockAtom("1");
+    Atom atom2 = mockAtom("2");
+    Atom atom3 = mockAtom("3");
+    Bond bond1 = mock(Bond.class);
+    Bond bond2 = mock(Bond.class);
+    Bond bond3 = mock(Bond.class);
+
+    when(bond1.getType()).thenReturn(1);
+    when(bond2.getType()).thenReturn(1);
+    when(bond3.getType()).thenReturn(2);
+    when(bond3.getMate(atom3)).thenReturn(atom1);
+    when(atom1.getBonds()).thenReturn(new Bond[]
+      {
+        bond1, bond3
+      });
+    when(atom2.getBonds()).thenReturn(new Bond[]
+      {
+        bond1, bond2
+      });
+    when(atom3.getBonds()).thenReturn(new Bond[]
+      {
+        bond2, bond3
+      });
+
+    writer.walkStart(atom1);
+    writer.atomFound(atom1);
+    writer.bondFound(bond1);
+    writer.atomFound(atom2);
+    writer.bondFound(bond2);
+    writer.atomFound(atom3);
+    writer.bondFound(bond3);
+    writer.ringClosed(bond3);
+    writer.walkEnd(atom1);
+
+    InOrder sequence = inOrder(paths);
+
+    sequence.verify(paths, times(1)).add("1%");
+    sequence.verify(paths, times(1)).add("1%2");
+    sequence.verify(paths, times(1)).add("1%23%");
+    sequence.verify(paths, times(1)).add("1%23%-3");
+
+    verify(paths, times(4)).add(any(String.class));
+  }
   public void testItClearsBondPathWhenBranchStarted()
   {
     doNew();
@@ -188,7 +242,7 @@ public class PathWriterTest extends TestCase
     Bond bond1 = mock(Bond.class);
     Bond bond2 = mock(Bond.class);
 
-    when(bond1.getType()).thenReturn(2);
+    when(bond1.getType()).thenReturn(1);
     when(atom1.getBonds()).thenReturn(new Bond[]
       {
         bond1
@@ -197,22 +251,29 @@ public class PathWriterTest extends TestCase
       {
         bond1, bond2
       });
+    when(atom3.getBonds()).thenReturn(new Bond[]
+      {
+        bond2
+      });
 
-    writer.walkStart(atom1);
-    writer.atomFound(atom1);
-    writer.bondFound(bond1);
+    writer.walkStart(atom2);
     writer.atomFound(atom2);
-    writer.branchStart(atom1);
+    writer.bondFound(bond1);
+    writer.atomFound(atom1);
+    writer.branchStart(atom2);
     writer.bondFound(bond2);
     writer.atomFound(atom3);
-    writer.branchEnd(atom1);
-    writer.walkEnd(atom1);
+    writer.branchEnd(atom2);
+    writer.walkEnd(atom2);
 
     InOrder sequence = inOrder(paths);
 
-    sequence.verify(paths, times(1)).add("1%");
-    sequence.verify(paths, times(1)).add("1%2%");
-    sequence.verify(paths, times(1)).add("13");
+    sequence.verify(paths, times(1)).add("2");
+    sequence.verify(paths, times(1)).add("21");
+    sequence.verify(paths, times(1)).add("2");
+    sequence.verify(paths, times(1)).add("23");
+
+    verify(paths, times(4)).add(any(String.class));
   }
 
   public void testItBacktracksWhenBranchStarted()
@@ -371,7 +432,7 @@ public class PathWriterTest extends TestCase
     }
   }
 
-  public void testItRaisesWhenClosingToNonexistantAtom()
+  public void testItThrowsWhenClosingToNonexistantAtom()
   {
     doNew();
 
@@ -422,7 +483,6 @@ public class PathWriterTest extends TestCase
       assertEquals("Atom closes rings with size less than three " + shorty, e.getMessage());
     }
   }
-
   private void doNew()
   {
     writer = new PathWriter(paths);

@@ -30,7 +30,6 @@ import com.metamolecular.mx.io.Molecules;
 import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
-import com.metamolecular.mx.model.MoleculeKit;
 import com.metamolecular.mx.ring.RingFilter;
 import java.util.BitSet;
 import junit.framework.TestCase;
@@ -285,63 +284,12 @@ public class PathFingerprinterTest extends TestCase
     assertTrue(match(propane, acetone));
   }
   
-//  public void testItDoesntMatchCyclooctaneToOctane()
-//  {
-//    BitSet cyclooctane = fingerprinter.getFingerprint(createCyclooctane());
-//    BitSet octane = fingerprinter.getFingerprint(createOctane());
-//    
-//    assertFalse(match(cyclooctane, octane));
-//  }
-  
-//  public void testItWorks()
-//  {
-//    fingerprinter.setMaximumPathDepth(8);
-//    BitSet query = fingerprinter.getFingerprint(query());
-//    
-//    Set<String> queryPaths = new HashSet(fingerprinter.paths());
-//    
-//    System.out.println("query");
-//    System.out.println(query);
-//    System.out.println("target");
-//    BitSet target = fingerprinter.getFingerprint(target());
-//    System.out.println(target);
-//    
-//    Set<String> targetPaths = new HashSet(fingerprinter.paths());
-//    
-//    for (String path : queryPaths)
-//    {
-//      if (!targetPaths.contains(path))
-//      {
-//        System.out.println("missing; " + path);
-//      }
-//    }
-//    
-//    for (int i = 0; i < query.size(); i++)
-//    {
-//      if (query.get(i) == true && !target.get(i) == true)
-//      {
-//        System.out.println("missing: " + i);
-//      }
-//    }
-//  }
-  
-  private Molecule target()
+  public void testItDoesntMatchCyclooctaneToOctane()
   {
-    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n 10 11  0  0  0  0  0  0  0  0  0 V2000\n    1.0607    2.5607    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0607   -1.0607    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5095   -0.6724    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266   -0.4635    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8083    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266    1.9635    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    1.5000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  3  2  1  0  0  0  0\n  4  3  1  0  0  0  0\n  5  4  2  0  0  0  0\n  6  3  1  0  0  0  0\n  7  6  1  0  0  0  0\n  8  7  1  0  0  0  0\n  9  8  1  0  0  0  0\n 10  9  1  0  0  0  0\n 10  2  1  0  0  0  0\n 10  6  1  0  0  0  0\nM  END";
-//    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n 12 13  0  0  0  0  0  0  0  0  0 V2000\n    1.0607    2.5607    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0607   -1.0607    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5095   -0.6724    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266   -0.4635    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8083    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9230    1.7537    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9230   -0.2537    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266    1.9635    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    1.5000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  3  2  1  0  0  0  0\n  4  3  1  0  0  0  0\n  5  4  2  0  0  0  0\n  6  3  1  0  0  0  0\n  7  6  1  0  0  0  0\n  8  7  1  0  0  0  0\n  9  8  1  0  0  0  0\n 10  8  1  0  0  0  0\n 11  8  1  0  0  0  0\n 12 11  1  0  0  0  0\n 12  2  1  0  0  0  0\n 12  6  1  0  0  0  0\nM  END";
-//    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n 19 21  0  0  0  0  0  0  0  0  0 V2000\n    1.0607    2.5607    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0607   -1.0607    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5095   -0.6724    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5702   -1.7331    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.9860   -1.2377    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.2561   -2.0357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4241   -3.5263    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.3634   -4.5869    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8728   -4.4190    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0748   -3.1489    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266   -0.4635    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8083    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9230    1.7537    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9230   -0.2537    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266    1.9635    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    1.5000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  3  2  1  0  0  0  0\n  4  3  1  0  0  0  0\n  5  4  2  0  0  0  0\n  6  5  1  0  0  0  0\n  7  6  1  0  0  0  0\n  8  7  1  0  0  0  0\n  9  8  1  0  0  0  0\n 10  9  1  0  0  0  0\n 11 10  1  0  0  0  0\n 12 11  1  0  0  0  0\n 12  6  1  0  0  0  0\n 13  3  1  0  0  0  0\n 14 13  1  0  0  0  0\n 15 14  1  0  0  0  0\n 16 15  1  0  0  0  0\n 17 15  1  0  0  0  0\n 18 15  1  0  0  0  0\n 19 18  1  0  0  0  0\n 19  2  1  0  0  0  0\n 19 13  1  0  0  0  0\nM  END";
-//    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n 30 32  0  0  0  0  0  0  0  0  0 V2000\n    1.0607    2.5607    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.0607   -1.0607    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5095   -0.6724    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5702   -1.7331    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    4.9860   -1.2377    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.2561   -2.0357    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4241   -3.5263    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.3634   -4.5869    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8728   -4.4190    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0748   -3.1489    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266   -0.4635    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8083    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9230    1.7537    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9230   -0.2537    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.9266    1.9635    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.3901    3.3901    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.3864    4.5048    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.8573    3.7020    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -5.3209    5.1286    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -6.7881    5.4404    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -7.2516    6.8670    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -6.2479    7.9817    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -8.7188    7.1789    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -9.1824    8.6055    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  -10.2042    6.9701    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -8.7712    5.6798    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5000    1.5000    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  2  0  0  0  0\n  3  2  1  0  0  0  0\n  4  3  1  0  0  0  0\n  5  4  2  0  0  0  0\n  6  5  1  0  0  0  0\n  7  6  1  0  0  0  0\n  8  7  1  0  0  0  0\n  9  8  1  0  0  0  0\n 10  9  1  0  0  0  0\n 11 10  1  0  0  0  0\n 12 11  1  0  0  0  0\n 12  6  1  0  0  0  0\n 13  3  1  0  0  0  0\n 14 13  1  0  0  0  0\n 15 14  1  0  0  0  0\n 16 15  1  0  0  0  0\n 17 15  1  0  0  0  0\n 18 15  1  0  0  0  0\n 19 18  1  0  0  0  0\n 20 19  2  0  0  0  0\n 21 19  1  0  0  0  0\n 22 21  1  0  0  0  0\n 23 22  1  0  0  0  0\n 24 23  1  0  0  0  0\n 25 24  2  0  0  0  0\n 26 24  1  0  0  0  0\n 27 26  1  0  0  0  0\n 28 26  1  0  0  0  0\n 29 26  1  0  0  0  0\n 30 18  1  0  0  0  0\n 30  2  1  0  0  0  0\n 30 13  1  0  0  0  0\nM  END";
+    BitSet cyclooctane = fingerprinter.getFingerprint(createCyclooctane());
+    BitSet octane = fingerprinter.getFingerprint(createOctane());
     
-    return MoleculeKit.readMolfile(m);
-  }
-  
-  private Molecule query()
-  {
-    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n  9 10  0  0  0  0  0  0  0  0  0 V2000\n    0.9900    4.9544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9900    3.5544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3900    3.5544    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3900    4.9544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    5.9443    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3799    5.9443    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5573    2.2229    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6900    1.4000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8226    2.2229    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  1  1  0  0  0  0\n  1  5  1  0  0  0  0\n  4  6  2  0  0  0  0\n  2  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9  3  1  0  0  0  0\nM  END";
-//    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n 11 12  0  0  0  0  0  0  0  0  0 V2000\n    0.9900    4.9544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9900    3.5544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3900    3.5544    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3900    4.9544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    5.9443    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3799    5.9443    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5573    2.2229    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6900    1.4000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8226    2.2229    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6900    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9374    0.7644    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  1  1  0  0  0  0\n  1  5  1  0  0  0  0\n  4  6  2  0  0  0  0\n  2  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9  3  1  0  0  0  0\n  8 10  1  0  0  0  0\n  8 11  1  0  0  0  0\nM  END";
-//    String m = "[NO NAME]\n  CHEMWRIT          2D\nCreated with ChemWriter - http://metamolecular.com/chemwriter\n 11 12  0  0  0  0  0  0  0  0  0 V2000\n    0.9900    4.9544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9900    3.5544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3900    3.5544    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    2.3900    4.9544    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    5.9443    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3799    5.9443    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5573    2.2229    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6900    1.4000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8226    2.2229    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6900    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9374    0.7644    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  1  1  0  0  0  0\n  1  5  1  0  0  0  0\n  4  6  2  0  0  0  0\n  2  7  1  0  0  0  0\n  7  8  1  0  0  0  0\n  8  9  1  0  0  0  0\n  9  3  1  0  0  0  0\n  8 10  1  0  0  0  0\n  8 11  1  0  0  0  0\nM  END";
-
-    return MoleculeKit.readMolfile(m);
+    assertFalse(match(cyclooctane, octane));
   }
 
   private boolean match(BitSet bitset, BitSet other)

@@ -133,56 +133,25 @@ public class PathFingerprinter implements Fingerprinter
 
   public BitSet getFingerprint(Molecule molecule)
   {
-    paths.clear();
-    this.bloomFilter = new BloomFilter(1024);
-    this.writer = new PathWriter(bloomFilter);
     bloomFilter.clear();
-    findAromatics(molecule);
+    Collection<List<Atom>> rings = ringFinder.findRings(molecule);
+    findAromatics(molecule, rings);
 
-    for (int i = 0; i < molecule.countAtoms(); i++)
-    {
-      Atom atom = molecule.getAtom(i);
+    recordWalk(molecule);
+    
+    BitSet walkBits = bloomFilter.toBitSet();
+    BitSet result = new BitSet(getFingerprintLength());
+    
+    result.or(walkBits);
+    writeRingBits(result, rings);
 
-      walker.walk(atom, writer);
-    }
-
-    return bloomFilter.toBitSet();
+    return result;
   }
-
-  private void findAromatics(Molecule molecule)
-  {
-    aromatics.clear();
-    filter.filterAtoms(molecule, aromatics);
-
-    for (Atom atom : aromatics)
-    {
-      aromatics.add(atom);
-    }
-
-    writer.setAromatics(aromatics);
-  }
-
-//  public BitSet getFingerprint(Molecule molecule)
-//  {
-//    bloomFilter.clear();
-//    Collection<List<Atom>> rings = ringFinder.findRings(molecule);
-//    findAromatics(molecule, rings);
-//
-//    recordWalk(molecule);
-//    
-//    BitSet walkBits = bloomFilter.toBitSet();
-//    BitSet result = new BitSet(getFingerprintLength());
-//    
-//    result.or(walkBits);
-////    writeRingBits(result, rings);
-//
-//    return bloomFilter.toBitSet();
-//  }
+  
   private void writeRingBits(BitSet bitset, Collection<List<Atom>> rings)
   {
     for (List<Atom> ring : rings)
     {
-//      System.out.println("ring: " + (ring.size() - 1));
       if (ring.size() < ringBitCount)
       {
         int index = bloomFilter.getBitArraySize() + (ring.size() - 4);
@@ -210,16 +179,5 @@ public class PathFingerprinter implements Fingerprinter
     aromatics.clear();
     filter.filterAtoms(molecule.countAtoms(), rings, aromatics);
     writer.setAromatics(aromatics);
-  }//  private void findAromatics(Molecule molecule)
-//  {
-//    aromatics.clear();
-//    filter.filterAtoms(molecule, aromatics);
-//
-//    for (Atom atom : aromatics)
-//    {
-//      aromatics.add(atom);
-//    }
-//
-//    writer.setAromatics(aromatics);
-//  }
+  }
 }
