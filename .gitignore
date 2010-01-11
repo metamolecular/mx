@@ -2,3 +2,5 @@ nbproject/*
 build/*
 testenv/*
 .DS_Store
+nbbuild.xml
+manifest.mf
