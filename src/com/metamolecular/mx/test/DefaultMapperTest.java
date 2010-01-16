@@ -117,6 +117,13 @@ public class DefaultMapperTest extends TestCase
     assertFalse(mapper.hasMap(naphthalene));
   }
 
+  public void testItShouldNotMatchBenzeneToCyclohexane()
+  {
+    Mapper mapper = new DefaultMapper(benzene);
+
+    assertFalse(mapper.hasMap(Molecules.createCyclohexane()));
+  }
+
   public void testItShouldNotMatchChlorobenzeneTo4ChloroIsoquinoline()
   {
     Mapper mapper = new DefaultMapper(chlorobenzene);
