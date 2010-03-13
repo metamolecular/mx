@@ -41,14 +41,21 @@ public class PathGraph
 
   private List<PathEdge> edges;
   private List<Atom> atoms;
+  private int maxRingSize;
 
   public PathGraph(Molecule molecule)
   {
     edges = new ArrayList();
     atoms = new ArrayList();
+    maxRingSize = -1;
 
     loadEdges(molecule);
     loadNodes(molecule);
+  }
+
+  public void setMaximumRingSize(int maxRingSize)
+  {
+    this.maxRingSize = maxRingSize;
   }
 
   public void printPaths()
@@ -102,7 +109,7 @@ public class PathGraph
     {
       for (int j = i + 1; j < edges.size(); j++)
       {
-        PathEdge splice = edges.get(j).splice(edges.get(i));
+        PathEdge splice = edges.get(j).splice(edges.get(i), maxRingSize);
 
         if (splice != null)
         {

@@ -80,6 +80,16 @@ public class PathEdgeTest extends TestCase
             hexane.getAtom(2)), splice.getAtoms());
   }
 
+  public void testItShouldSpliceHeadToTailWithMaxLength()
+  {
+    Molecule hexane = Molecules.createHexane();
+    PathEdge path1 = new PathEdge(Arrays.asList(hexane.getAtom(0), hexane.getAtom(1)));
+    PathEdge path2 = new PathEdge(Arrays.asList(hexane.getAtom(2), hexane.getAtom(1)));
+    PathEdge splice = path1.splice(path2, 2);
+
+    assertNull(splice);
+  }
+
   public void testItShouldSpliceTailToHead()
   {
     Molecule hexane = Molecules.createHexane();

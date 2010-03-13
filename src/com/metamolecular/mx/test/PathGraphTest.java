@@ -64,6 +64,24 @@ public class PathGraphTest extends TestCase
     assertEquals(1, cycles.size());
   }
 
+  public void testItReturnsNullWhenRemovingLastAtomOfMonocycleUsingMaxLength()
+  {
+    Molecule cyclohexane = Molecules.createCyclohexane();
+    PathGraph graph = new PathGraph(cyclohexane);
+
+    graph.setMaximumRingSize(5);
+
+    graph.remove(cyclohexane.getAtom(0));
+    graph.remove(cyclohexane.getAtom(1));
+    graph.remove(cyclohexane.getAtom(2));
+    graph.remove(cyclohexane.getAtom(3));
+    graph.remove(cyclohexane.getAtom(4));
+
+    List<PathEdge> cycles = graph.remove(cyclohexane.getAtom(5));
+
+    assertEquals(0, cycles.size());
+  }
+
   public void testItShouldReturnNoCyclesWhenCollapsingChain()
   {
     Molecule propane = Molecules.createPropane();

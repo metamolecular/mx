@@ -36,7 +36,6 @@ import java.util.List;
  */
 public class PathEdge
 {
-
   private List<Atom> atoms;
 
   public PathEdge(List<Atom> atoms)
@@ -66,6 +65,11 @@ public class PathEdge
 
   public PathEdge splice(PathEdge other)
   {
+    return splice(other, 15);
+  }
+
+  public PathEdge splice(PathEdge other, int maxLength)
+  {
     Atom intersection = getIntersection(other.atoms);
     List<Atom> newAtoms = new ArrayList(atoms);
 
@@ -88,6 +92,11 @@ public class PathEdge
       {
         newAtoms.add(other.atoms.get(i));
       }
+    }
+
+    if (newAtoms.size() > maxLength && maxLength > 0)
+    {
+      return null;
     }
     
     if (!isRealPath(newAtoms))

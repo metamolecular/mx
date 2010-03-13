@@ -38,22 +38,31 @@ import java.util.List;
 public class HanserRingFinder implements RingFinder
 {
   private List<List<Atom>> rings;
+  private int maxRingSize;
   
   public HanserRingFinder()
   {
     rings = new ArrayList();
+    maxRingSize = 15;
+  }
+
+  public void setMaximumRingSize(int max)
+  {
+    this.maxRingSize = max;
   }
   
   public Collection<List<Atom>> findRings(Molecule molecule)
   {
+    System.out.println(maxRingSize);
     rings.clear();
-    
+
     PathGraph graph = new PathGraph(molecule);
-    
+
+    graph.setMaximumRingSize(maxRingSize);
+
     for (int i = 0; i < molecule.countAtoms(); i++)
     {
       List<PathEdge> edges = graph.remove(molecule.getAtom(i));
-      
       for (PathEdge edge : edges)
       {
         List<Atom> ring = edge.getAtoms();
