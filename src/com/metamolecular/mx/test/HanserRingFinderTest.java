@@ -32,7 +32,6 @@ import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.model.MoleculeKit;
 import com.metamolecular.mx.ring.HanserRingFinder;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import junit.framework.TestCase;
 
@@ -68,7 +67,7 @@ public class HanserRingFinderTest extends TestCase
 
   public void testItFindsTwoRingsInNapthaleneWhenMaxRingSizeSetToSix()
   {
-    finder.setMaximumRingSize(7);
+    finder.setMaximumRingSize(6);
     Molecule naphthalene = Molecules.createNaphthalene();
     Collection rings = finder.findRings(naphthalene);
 
@@ -85,7 +84,7 @@ public class HanserRingFinderTest extends TestCase
 
   public void testItRespectsMaxRingSize() throws Exception
   {
-    finder.setMaximumRingSize(7);
+    finder.setMaximumRingSize(15);
     Molecule brevetoxin = MoleculeKit.readMolfile(brevetoxinMolfile);
     Collection<List<Atom>> rings = finder.findRings(brevetoxin);
     int maxRingSize = 0;
@@ -98,24 +97,6 @@ public class HanserRingFinderTest extends TestCase
       }
     }
 
-    assertEquals(6, maxRingSize);
+    assertEquals(15, maxRingSize - 1);
   }
-
-//  public void testItReturnsWithBrevetoxin() throws Exception
-//  {
-//    System.out.println("rings for b:");
-//    Molecule m = MoleculeKit.readMolfile(brevetoxinMolfile);
-//
-//    Collection<List<Atom>> rings = finder.findRings(m);
-//
-//    for (List<Atom> ring : rings)
-//    {
-//      System.out.print(ring.size() + " ");
-//      for (Atom atom : ring)
-//      {
-//        System.out.print(atom.getIndex() + "-");
-//      }
-//          System.out.println();
-//    }
-//  }
 }

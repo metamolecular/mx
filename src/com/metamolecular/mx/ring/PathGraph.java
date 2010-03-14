@@ -109,7 +109,7 @@ public class PathGraph
     {
       for (int j = i + 1; j < edges.size(); j++)
       {
-        PathEdge splice = edges.get(j).splice(edges.get(i), maxRingSize);
+        PathEdge splice = edges.get(j).splice(edges.get(i), maxRingSize + 1);
 
         if (splice != null)
         {

@@ -53,7 +53,6 @@ public class HanserRingFinder implements RingFinder
   
   public Collection<List<Atom>> findRings(Molecule molecule)
   {
-    System.out.println(maxRingSize);
     rings.clear();
 
     PathGraph graph = new PathGraph(molecule);
