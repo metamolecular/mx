@@ -31,11 +31,9 @@ import com.metamolecular.mx.model.Atom;
 import com.metamolecular.mx.model.DefaultMolecule;
 import com.metamolecular.mx.model.Molecule;
 import com.metamolecular.mx.model.MoleculeKit;
-import com.metamolecular.mx.ring.RingFilter;
 import java.util.BitSet;
 import junit.framework.TestCase;
 
-import static org.mockito.Mockito.*;
 
 /**
  * @author Richard L. Apodaca <rapodaca at metamolecular.com>
@@ -90,6 +88,13 @@ public class PathFingerprinterTest extends TestCase
     }
   }
 
+  public void testItReturnsWithBrevetoxin()
+  {
+    Molecule bt = MoleculeKit.readMolfile(brevetoxinMolfile);
+    fingerprinter.setMaximumRingSize(10);
+    fingerprinter.getFingerprint(bt);
+  }
+
   public void testItDoesntChangeFingerprintLengthAfterReservingRingBits()
   {
     fingerprinter.reserveRingBits(24);
@@ -97,13 +102,13 @@ public class PathFingerprinterTest extends TestCase
     assertEquals(1024, fingerprinter.getFingerprintLength());
   }
 
-  public void testItIsCreatedWithACustomRingFilter()
-  {
-    RingFilter filter = mock(RingFilter.class);
-    PathFingerprinter custom = new PathFingerprinter(filter);
-
-    assertEquals(filter, custom.getRingFilter());
-  }
+//  public void testItIsCreatedWithACustomRingFilter()
+//  {
+//    RingFilter filter = mock(RingFilter.class);
+//    PathFingerprinter custom = new PathFingerprinter(filter);
+//
+//    assertEquals(filter, custom.getRingFilter());
+//  }
 
   public void testItShouldCreateANonemptyFingerprint()
   {

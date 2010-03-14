@@ -45,6 +45,7 @@ import java.util.Set;
  */
 public class PathFingerprinter implements Fingerprinter
 {
+
   private PathWriter writer;
   private BloomFilter bloomFilter;
   private Walker walker;
@@ -52,28 +53,42 @@ public class PathFingerprinter implements Fingerprinter
   private Set<Atom> aromatics;
   private RingFinder ringFinder;
   private int ringBitCount;
-  
   private Set<String> paths;
 
   public PathFingerprinter()
   {
-    this(new RingFilter(new AromaticAtomFilter(), new HanserRingFinder()));
-  }
-
-  public PathFingerprinter(RingFilter filter)
-  {
     this.bloomFilter = new BloomFilter(1004);
     this.writer = new PathWriter(bloomFilter);
     this.walker = new DefaultWalker();
-    this.filter = filter;
-    this.aromatics = new HashSet();
     this.ringFinder = new HanserRingFinder();
+    this.filter = new RingFilter(new AromaticAtomFilter(), this.ringFinder);
+    this.aromatics = new HashSet();
     this.ringBitCount = 20;
-    
+
     paths = new HashSet();
 
     walker.setMaximumDepth(7);
   }
+
+//  public PathFingerprinter()
+//  {
+//    this(new RingFilter(new AromaticAtomFilter(), new HanserRingFinder()));
+//  }
+//
+//  public PathFingerprinter(RingFilter filter)
+//  {
+//    this.bloomFilter = new BloomFilter(1004);
+//    this.writer = new PathWriter(bloomFilter);
+//    this.walker = new DefaultWalker();
+//    this.filter = filter;
+//    this.aromatics = new HashSet();
+//    this.ringFinder = new HanserRingFinder();
+//    this.ringBitCount = 20;
+//
+//    paths = new HashSet();
+//
+//    walker.setMaximumDepth(7);
+//  }
 
   public int getRingBitCount()
   {
@@ -106,6 +121,16 @@ public class PathFingerprinter implements Fingerprinter
     walker.setMaximumDepth(maxDepth);
   }
 
+  public void setMaximumRingSize(int maxRingSize)
+  {
+    this.ringFinder.setMaximumRingSize(maxRingSize);
+  }
+
+  public int getMaximumRingSize()
+  {
+    return ringFinder.getMaximumRingSize();
+  }
+
   public int getMaximumPathDepth()
   {
     return walker.getMaximumDepth();
@@ -125,7 +150,7 @@ public class PathFingerprinter implements Fingerprinter
   {
     return bloomFilter.getBitArraySize() + ringBitCount;
   }
-  
+
   public Set<String> paths()
   {
     return paths;
@@ -138,16 +163,16 @@ public class PathFingerprinter implements Fingerprinter
     findAromatics(molecule, rings);
 
     recordWalk(molecule);
-    
+
     BitSet walkBits = bloomFilter.toBitSet();
     BitSet result = new BitSet(getFingerprintLength());
-    
+
     result.or(walkBits);
     writeRingBits(result, rings);
 
     return result;
   }
-  
+
   private void writeRingBits(BitSet bitset, Collection<List<Atom>> rings)
   {
     for (List<Atom> ring : rings)

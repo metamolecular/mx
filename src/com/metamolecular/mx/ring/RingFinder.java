@@ -36,5 +36,9 @@ import java.util.List;
  */
 public interface RingFinder
 {
+  public void setMaximumRingSize(int max);
+
+  public int getMaximumRingSize();
+  
   public Collection<List<Atom>> findRings(Molecule molecule);
 }

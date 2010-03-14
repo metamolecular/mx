@@ -43,12 +43,17 @@ public class HanserRingFinder implements RingFinder
   public HanserRingFinder()
   {
     rings = new ArrayList();
-    maxRingSize = 15;
+    maxRingSize = -1;
   }
 
   public void setMaximumRingSize(int max)
   {
     this.maxRingSize = max;
+  }
+
+  public int getMaximumRingSize()
+  {
+    return this.maxRingSize;
   }
   
   public Collection<List<Atom>> findRings(Molecule molecule)
