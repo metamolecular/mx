@@ -111,13 +111,8 @@ public class PathEdge
   {
     for (int i = 1; i < atoms.size() - 1; i++)
     {
-      for (int j = 1; j < atoms.size() - 1; j++)
+      for (int j = i + 1; j < atoms.size() - 1; j++)
       {
-        if (i == j)
-        {
-          continue;
-        }
-
         if (atoms.get(i) == atoms.get(j))
         {
           return false;
