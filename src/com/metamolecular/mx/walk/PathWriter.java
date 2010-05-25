@@ -53,6 +53,11 @@ public class PathWriter implements Reporter
     pathDirty = false;
   }
 
+  public void setOutput(Collection output)
+  {
+    this.output = output;
+  }
+
   public void setAromatics(Collection<Atom> aromatics)
   {
     this.aromatics.clear();

@@ -144,6 +144,7 @@ public class PathFingerprinter implements Fingerprinter
     }
 
     this.bloomFilter = new BloomFilter(length - ringBitCount);
+    this.writer.setOutput(bloomFilter);
   }
 
   public int getFingerprintLength()

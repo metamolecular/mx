@@ -301,11 +301,13 @@ public class PathFingerprinterTest extends TestCase
 
   public void testItCreatesCorrectFingerprintAfterFingerprintLengthSet()
   {
-    fingerprinter.setFingerprintLength(2048);
+    BitSet fp1 = fingerprinter.getFingerprint(Molecules.createNaphthalene());
+    
+    fingerprinter.setFingerprintLength(1024);
 
-    BitSet ethane2 = fingerprinter.getFingerprint(createEthane());
+    BitSet fp2 = fingerprinter.getFingerprint(Molecules.createNaphthalene());
 
-    assertFalse(ethane2.cardinality() == 0);
+    assertEquals(fp1, fp2);
   }
 
   private boolean match(BitSet bitset, BitSet other)
