@@ -299,6 +299,15 @@ public class PathFingerprinterTest extends TestCase
     assertFalse(match(cyclooctane, octane));
   }
 
+  public void testItCreatesCorrectFingerprintAfterFingerprintLengthSet()
+  {
+    fingerprinter.setFingerprintLength(2048);
+
+    BitSet ethane2 = fingerprinter.getFingerprint(createEthane());
+
+    assertFalse(ethane2.cardinality() == 0);
+  }
+
   private boolean match(BitSet bitset, BitSet other)
   {
     BitSet intersection = (BitSet) other;
